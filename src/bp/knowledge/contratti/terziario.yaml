@@ -1,0 +1,15 @@
+# Contratto collettivo del terziario, distribuzione e servizi (Confcommercio).
+#
+# Un file per contratto: `riconosci` sono le parole che, nel nome del CCNL stampato sul cedolino,
+# identificano il contratto (senza distinzione tra maiuscole e minuscole).
+
+nome: Terziario, distribuzione e servizi
+riconosci: [terziario, commercio]
+fonte: CCNL Terziario, distribuzione e servizi (Confcommercio)
+verificato: cedolini PAYLUL01 2025-2026 e HR1LULDIP 2023-2024
+
+# Mensilità oltre le dodici ordinarie e mese in cui si pagano. Il gestionale ne tiene conto per
+# stimare il reddito dell'anno e quindi la detrazione del mese.
+mensilita_aggiuntive:
+  - {nome: quattordicesima, mese: 6}
+  - {nome: tredicesima, mese: 12}

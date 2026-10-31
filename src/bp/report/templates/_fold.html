@@ -1,0 +1,7 @@
+{# Sezione richiudibile: il titolo resta sempre visibile. `key` lega la stessa sezione in mesi diversi. #}
+{% macro fold(key, title, open=false) -%}
+<details class="fold" data-fold="{{ key }}"{% if open %} open{% endif %}>
+  <summary><h2>{{ title }}</h2></summary>
+{{ caller() }}
+</details>
+{%- endmacro %}

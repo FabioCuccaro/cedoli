@@ -1,0 +1,45 @@
+# Regole per i redditi 2025. Ogni blocco indica la fonte e come è stato verificato.
+
+anno: 2025
+
+irpef:
+  fonte: Legge 30 dicembre 2024, n. 207 (Legge di bilancio 2025)
+  verificato: conguaglio annuale del cedolino 12/2025 (imposta lorda 12.484,50 su 45.270)
+  scaglioni:          # limite superiore annuo (null = oltre) e aliquota %
+    - {fino_a: 28000, aliquota: 23}
+    - {fino_a: 50000, aliquota: 35}
+    - {fino_a: null, aliquota: 43}
+
+detrazione_lavoro_dipendente:
+  fonte: art. 13 TUIR, come modificato dalla Legge 207/2024
+  verificato: conguaglio annuale del cedolino 12/2025 (detrazione 410,65 su 45.270)
+  # Importo annuo per fascia di reddito complessivo R: fisso + variabile * (limite - R) / ampiezza,
+  # prima del rapporto con i giorni.
+  fasce:
+    - {fino_a: 15000, fisso: 1955, variabile: 0}
+    - {fino_a: 28000, fisso: 1910, variabile: 1190, limite: 28000, ampiezza: 13000}
+    - {fino_a: 50000, fisso: 0, variabile: 1910, limite: 50000, ampiezza: 22000}
+    - {fino_a: null, fisso: 0, variabile: 0}
+
+inps:
+  fonte: aliquote a carico del dipendente stampate nei cedolini 2025
+  aliquote_dipendente:   # % per codice contributo
+    "005": 9.19     # FPLD/IVS
+    "006": 1.00     # IVS aggiuntivo oltre la prima fascia pensionabile
+    "035": 0.30     # CIGS
+    "124": 0.26667  # FIS, un terzo dello 0,80%; stampata 0,267
+
+tfr:
+  fonte: art. 2120 c.c.; contributo L. 297/1982
+  divisore: 13.5
+  contributo_rivalsa: 0.50   # % dell'imponibile previdenziale, sottratta dalla quota TFR
+
+ente_bilaterale:
+  fonte: dedotto dai cedolini (non stampato), torna su tutti i cedolini 2025-2026
+  aliquota_azienda: 0.10   # % di paga base + contingenza, entra nell'imponibile fiscale
+
+fringe_benefit:
+  fonte: Legge 207/2024, art. 1 commi 390-391 (2025-2027)
+  verificato: nei cedolini la soglia si supera a maggio e scatta il recupero dell'anno
+  soglia: 1000
+  soglia_con_figli: 2000

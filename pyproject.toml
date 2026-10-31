@@ -1,0 +1,37 @@
+[project]
+name = "busta-paga-beautify"
+version = "0.6.0"
+description = "Legge il PDF di una busta paga italiana, interamente in locale, e ne estrae voci, totali e controlli di quadratura."
+readme = "README.md"
+license = "LicenseRef-BustaChiara"
+license-files = ["LICENSE.md"]
+requires-python = ">=3.12"
+dependencies = [
+    "jinja2>=3.1.6",
+    "pdfplumber>=0.11",
+    "pydantic>=2.7",
+    "pyyaml>=6.0.3",
+    "typer>=0.12",
+]
+
+[project.scripts]
+bp = "bp.cli:app"
+
+[dependency-groups]
+build = [
+    "pyinstaller>=6",
+]
+dev = [
+    "pytest>=8",
+    "reportlab>=4",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.32,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "bp"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

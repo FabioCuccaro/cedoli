@@ -1,0 +1,274 @@
+# Glossario delle voci del layout PAYLUL01.
+#
+# Ogni voce: codice -> nome comune, spiegazione, tipo e indicatori usati dai controlli.
+# Tipi: competenza | trattenuta | figurativo | informativo | contributo | deducibile | imposta | addizionale
+# Indicatori:
+#   contributo_inps: contributo INPS a carico del dipendente (deducibile dal reddito)
+#   deducibile: trattenuta che riduce l'imponibile fiscale (previdenza complementare, cassa sanitaria)
+#   escluso_imponibili: importo pagato o trattenuto che non è retribuzione (es. rimborso 730, multe)
+#   riduce_imponibili: trattenuta che riduce la retribuzione imponibile (es. assenze)
+#   fringe: valore di un benefit in natura che conta per la soglia di esenzione
+#   fringe_tassato: quota di fringe benefit che entra negli imponibili perché la soglia è superata
+#   tfr: quota di TFR maturata nel mese
+#   ivs: contributo pensionistico principale, il suo imponibile è l'imponibile previdenziale del mese
+#   ente_bilaterale: contributo all'ente bilaterale, la cui quota c/azienda entra nell'imponibile fiscale
+#   fondo_pensione: contributo del dipendente al fondo pensione, il suo imponibile è la retribuzione utile TFR
+#   evidenzia: la spiegazione va mostrata tra le cose da sapere del mese
+# Le spiegazioni descrivono cosa la voce è in generale e cosa si vede nei cedolini;
+# dove il significato preciso dipende da accordi aziendali lo dicono.
+
+voci:
+  AA245:
+    nome: "Retribuzione ordinaria"
+    tipo: competenza
+    spiega: "Lo stipendio del mese: la retribuzione mensile divisa per 26 e moltiplicata per i giorni retribuiti, che in un mese intero sono 26. Nella colonna accanto c'è la paga di un giorno; nel mese di assunzione i giorni sono meno."
+  R4100:
+    nome: "Tredicesima"
+    tipo: competenza
+    spiega: "Mensilità aggiuntiva pagata a dicembre, pari a una retribuzione mensile per 12 mesi di servizio nell'anno."
+    evidenzia: true
+  R4200:
+    nome: "Quattordicesima"
+    tipo: competenza
+    spiega: "Mensilità aggiuntiva prevista dal CCNL Commercio, pagata con lo stipendio di giugno. Matura da luglio a giugno; se il rapporto è iniziato nel periodo è proporzionata ai mesi lavorati."
+    evidenzia: true
+  I3036:
+    nome: "Bonus STI"
+    tipo: competenza
+    spiega: "Premio variabile (Short Term Incentive) legato agli obiettivi. È retribuzione a tutti gli effetti, quindi è soggetto a contributi e IRPEF."
+    evidenzia: true
+  I0305:
+    nome: "Una tantum"
+    tipo: competenza
+    spiega: "Importo pagato una sola volta, ad esempio a titolo di premio o di arretrato. È soggetto a contributi e IRPEF."
+    evidenzia: true
+  F23352:
+    nome: "ROL non goduti pagati"
+    tipo: competenza
+    spiega: "Ore di riduzione dell'orario (ROL) dell'anno precedente non godute e pagate, alla tariffa oraria indicata."
+    evidenzia: true
+  D1200:
+    nome: "Festività non goduta"
+    tipo: competenza
+    spiega: "Una festività caduta di domenica o non goduta, pagata come una giornata di retribuzione."
+  D1201:
+    nome: "Festività soppressa non goduta"
+    tipo: competenza
+    spiega: "Il 4 novembre è una festività soppressa: se non viene goduta come giorno di riposo, viene pagata come una giornata di retribuzione."
+  PX101:
+    nome: "Integrazione carenza malattia"
+    tipo: competenza
+    spiega: "I primi giorni di malattia (carenza) non sono pagati dall'INPS; questa voce indica che l'azienda li paga al 100%."
+    evidenzia: true
+  PXR400:
+    nome: "Assenza per malattia"
+    tipo: trattenuta
+    riduce_imponibili: true
+    spiega: "Toglie dalla retribuzione i giorni di assenza per malattia, che vengono poi pagati con la voce di integrazione. Se le due voci si equivalgono, l'effetto sul netto è nullo."
+    evidenzia: true
+  L0100:
+    nome: "Rimborso IRPEF da 730"
+    tipo: competenza
+    escluso_imponibili: true
+    spiega: "Rimborso delle imposte risultante dalla dichiarazione dei redditi (modello 730), pagato dal datore di lavoro come sostituto d'imposta. Non è retribuzione e non è tassato."
+    evidenzia: true
+  TN0211:
+    nome: "Addebito multa auto aziendale"
+    tipo: trattenuta
+    escluso_imponibili: true
+    spiega: "Recupero di una multa presa con l'auto aziendale. Non riduce gli imponibili."
+    evidenzia: true
+  TN0233:
+    nome: "Sospeso finanziario negativo"
+    tipo: trattenuta
+    escluso_imponibili: true
+    spiega: "Trattenuta di un importo rimasto in sospeso da un periodo precedente. Il cedolino non dice a cosa si riferisce, quindi va chiesto all'ufficio paghe."
+    evidenzia: true
+  B0016:
+    nome: "Auto aziendale a uso promiscuo"
+    tipo: figurativo
+    fringe: true
+    spiega: "Valore convenzionale dell'uso privato dell'auto aziendale. È un benefit in natura (fringe benefit). Non è pagato in denaro, ma conta per la soglia di esenzione dei fringe benefit."
+  B3019:
+    nome: "Rimborso connessione internet"
+    tipo: figurativo
+    fringe: true
+    spiega: "Rimborso per la connessione internet di casa, stampato come valore figurativo: non si aggiunge al netto e viene trattato come fringe benefit, cioè conta nel limite annuo entro cui i benefit non sono tassati."
+  B4000:
+    nome: "Premi Recognition & Awards"
+    tipo: figurativo
+    fringe: true
+    spiega: "Premi aziendali in punti, convertibili in beni o servizi. Sono fringe benefit, quindi se la soglia annua è superata vengono tassati come retribuzione, anche se non arrivano in denaro."
+    evidenzia: true
+  FRIBMP:
+    nome: "Contatore fringe benefit"
+    tipo: informativo
+    spiega: "Totale dei fringe benefit dell'anno fino al mese precedente. Serve a capire se la soglia di esenzione è stata superata."
+  WFB03:
+    nome: "Fringe benefit tassati"
+    tipo: figurativo
+    fringe_tassato: true
+    spiega: "Quota di fringe benefit che entra negli imponibili contributivo e fiscale. Quando nell'anno si supera la soglia di esenzione, diventano tassati tutti i fringe benefit dell'anno, compresi quelli dei mesi precedenti: per questo nel mese del superamento la voce è alta e il netto scende."
+    evidenzia: true
+  TN4172:
+    nome: "Buoni pasto elettronici"
+    tipo: figurativo
+    spiega: "Buoni pasto ricevuti nel mese: quantità per valore del singolo buono. Quelli elettronici non sono tassati fino a 8 € al giorno, quindi con il valore che si vede di solito su questi cedolini (7 €) non entrano negli imponibili."
+  WEL131:
+    nome: "Welfare aziendale"
+    tipo: figurativo
+    spiega: "Servizi di welfare (attività ricreative, viaggi, corsi) pagati dall'azienda. Nei limiti di legge non sono tassati."
+  W80065:
+    nome: "TFR al fondo pensione"
+    tipo: figurativo
+    tfr: true
+    spiega: "Quota di TFR maturata nel mese e versata al fondo pensione complementare. La percentuale versata al fondo è nella colonna accanto (100% vuol dire tutto il TFR). Non entra nel netto."
+  W1100:
+    nome: "TFR al Fondo di Tesoreria INPS"
+    tipo: figurativo
+    tfr: true
+    spiega: "Quota di TFR maturata nel mese e versata al Fondo di Tesoreria dell'INPS, come avviene finché non si sceglie la previdenza complementare."
+  PM1385:
+    nome: "Conguaglio contributivo"
+    tipo: informativo
+    spiega: "Conguaglio dei contributi stampato solo a titolo informativo: non cambia il netto del mese. Il cedolino non dice a cosa si riferisce; se l'importo ti interessa, chiedi all'ufficio del personale."
+  FF105:
+    nome: "Ferie godute"
+    tipo: informativo
+    spiega: "Giorni di ferie goduti nel mese. Non cambiano lo stipendio, che resta quello ordinario."
+  FF305:
+    nome: "ROL goduti"
+    tipo: informativo
+    spiega: "Ore di riduzione dell'orario (ROL) godute nel mese."
+
+contributi:
+  D01:
+    nome: "Esonero contributivo (taglio del cuneo fiscale)"
+    tipo: contributo
+    contributo_inps: true
+    spiega: "Riduzione del contributo pensionistico a carico del dipendente prevista nel 2024 per le retribuzioni sotto una soglia mensile. È in colonna competenze perché aumenta il netto; la pensione non ne risente."
+    evidenzia: true
+  D21:
+    nome: "Esonero contributivo aggiuntivo"
+    tipo: contributo
+    contributo_inps: true
+    spiega: "Un punto in più di esonero del contributo pensionistico (Legge 197/2022), che si somma al taglio del cuneo fiscale per le retribuzioni più basse."
+    evidenzia: true
+  "005":
+    nome: "Contributo pensionistico INPS"
+    tipo: contributo
+    contributo_inps: true
+    ivs: true
+    spiega: "Quota a carico del dipendente del contributo per la pensione (Fondo pensioni lavoratori dipendenti, IVS), calcolata sull'imponibile previdenziale arrotondato all'euro."
+  "006":
+    nome: "Contributo pensionistico aggiuntivo INPS"
+    tipo: contributo
+    contributo_inps: true
+    spiega: "Contributo dell'1% sulla parte di retribuzione che supera la prima fascia di retribuzione pensionabile. Durante l'anno si calcola mese per mese e a dicembre si ricalcola sull'anno intero."
+    evidenzia: true
+  006CNG:
+    nome: "Conguaglio contributo aggiuntivo INPS"
+    tipo: contributo
+    contributo_inps: true
+    spiega: "Ricalcolo annuale del contributo aggiuntivo dell'1%. Se nell'anno la retribuzione non ha superato la soglia, quanto trattenuto nei mesi viene restituito. Il rimborso riduce le trattenute."
+    evidenzia: true
+  "035":
+    nome: "Contributo cassa integrazione straordinaria"
+    tipo: contributo
+    contributo_inps: true
+    spiega: "Quota a carico del dipendente del contributo per la cassa integrazione guadagni straordinaria."
+  "124":
+    nome: "Contributo Fondo di Integrazione Salariale"
+    tipo: contributo
+    contributo_inps: true
+    spiega: "Quota a carico del dipendente (un terzo) del contributo al Fondo di Integrazione Salariale dell'INPS. Il cedolino stampa l'aliquota troncata a tre decimali."
+  FFB:
+    nome: "Contributo al fondo pensione (dipendente)"
+    tipo: contributo
+    deducibile: true
+    fondo_pensione: true
+    spiega: "Contributo del dipendente al fondo pensione complementare. È deducibile, quindi riduce l'imponibile fiscale."
+  R45:
+    nome: "Cassa sanitaria quadri (Qu.A.S.)"
+    tipo: contributo
+    deducibile: true
+    spiega: "Quota annuale del dipendente alla cassa di assistenza sanitaria integrativa per i quadri del commercio. Si paga una volta l'anno, di solito a gennaio o nel mese di assunzione, ed è deducibile."
+    evidenzia: true
+  V05:
+    nome: "Ente bilaterale"
+    tipo: contributo
+    ente_bilaterale: true
+    spiega: "Contributo all'ente bilaterale del commercio: una piccola percentuale (stampata accanto) di una base retributiva, raddoppiata nei mesi con una mensilità aggiuntiva. Se anche l'azienda versa una quota, questa non compare tra le voci ma entra nell'imponibile fiscale; dipende dall'azienda e dall'anno."
+  V52:
+    nome: "Quadrifor"
+    tipo: contributo
+    spiega: "Quota annuale del dipendente all'istituto per la formazione dei quadri del terziario. Si paga una volta l'anno, di solito a gennaio o nel mese di assunzione."
+    evidenzia: true
+
+deducibili:
+  F00065:
+    nome: "Contributi al fondo pensione deducibili"
+    tipo: deducibile
+    spiega: "Totale dei contributi al fondo pensione del mese (dipendente e azienda) che rientrano nella deducibilità. È un valore informativo."
+  R00045:
+    nome: "Contributi alla cassa sanitaria deducibili"
+    tipo: deducibile
+    spiega: "Totale annuo dei contributi alla cassa sanitaria quadri (dipendente e azienda), entro il limite di deducibilità. È un valore informativo."
+
+imposta:
+  WZF051:
+    nome: "Trattamento integrativo"
+    tipo: imposta
+    spiega: "Trattamento integrativo (l'ex bonus da 100 €) pagato nel mese. Spetta a chi ha un reddito basso: il programma paghe lo calcola sul reddito che prevede per l'anno, che dopo un cambio di lavoro può risultare più basso di quello vero. A dicembre, o con il 730, si ricalcola sul reddito effettivo e può dover essere restituito."
+    evidenzia: true
+  WZF053:
+    nome: "Trattamento integrativo da restituire"
+    tipo: imposta
+    spiega: "Al conguaglio di fine anno il trattamento integrativo ricevuto nei mesi precedenti risulta non spettante, di solito perché il reddito vero dell'anno è più alto della stima: va restituito."
+    evidenzia: true
+  WZF061:
+    nome: "Restituzione rateizzata del trattamento integrativo"
+    tipo: imposta
+    spiega: "Se l'importo da restituire supera 60 €, la legge permette di restituirlo a rate: questa voce lo riaccredita, e le rate si trattengono nei mesi successivi."
+    evidenzia: true
+  WZF063:
+    nome: "Prima rata del trattamento integrativo da restituire"
+    tipo: imposta
+    spiega: "La prima delle rate con cui si restituisce il trattamento integrativo non spettante dell'anno."
+    evidenzia: true
+  WCC001:
+    nome: "Reddito da un altro datore di lavoro"
+    tipo: informativo
+    spiega: "Il reddito imponibile dell'anno ricevuto da un datore di lavoro precedente (dalla sua CU). Il conguaglio di fine anno lo somma al reddito di questa azienda per calcolare l'IRPEF giusta dell'anno."
+    evidenzia: true
+  WCC010:
+    nome: "Giorni di detrazione con un altro datore di lavoro"
+    tipo: informativo
+    spiega: "I giorni dell'anno lavorati presso il datore di lavoro precedente: nel conguaglio danno diritto alla detrazione per lavoro dipendente insieme a quelli di questa azienda."
+  WCC300:
+    nome: "IRPEF già pagata con un altro datore di lavoro"
+    tipo: informativo
+    spiega: "L'IRPEF trattenuta nell'anno dal datore di lavoro precedente, scalata nel conguaglio da quella dovuta."
+  WCC310:
+    nome: "Addizionale regionale già pagata con un altro datore di lavoro"
+    tipo: informativo
+    spiega: "L'addizionale regionale trattenuta nell'anno dal datore di lavoro precedente."
+  WCC320:
+    nome: "Addizionale comunale già pagata con un altro datore di lavoro"
+    tipo: informativo
+    spiega: "L'addizionale comunale trattenuta nell'anno dal datore di lavoro precedente."
+  WZF064:
+    nome: "Restituzione trattamento integrativo"
+    tipo: imposta
+    spiega: "Rata di restituzione del trattamento integrativo (ex bonus) dell'anno precedente, ricevuto in più rispetto a quanto spettava dopo il conguaglio."
+    evidenzia: true
+
+addizionali:
+  "001":
+    nome: "Addizionale regionale IRPEF"
+    tipo: addizionale
+    spiega: "Imposta regionale sul reddito dell'anno precedente, calcolata a conguaglio e trattenuta a rate nell'anno successivo. La colonna figurativa mostra il totale ancora da trattenere."
+  "002":
+    nome: "Addizionale comunale IRPEF"
+    tipo: addizionale
+    spiega: "Imposta comunale sul reddito. Per l'anno precedente si paga il saldo a rate; per l'anno in corso si paga un acconto a rate da marzo."

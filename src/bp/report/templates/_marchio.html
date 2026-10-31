@@ -1,0 +1,36 @@
+{# Logo e intestazione dell'app. I colori vengono dalle variabili di _stile.css, quindi seguono il tema chiaro o scuro. #}
+{% macro logo(size=28, label=None) -%}
+<svg class="logo" width="{{ size }}" height="{{ size }}" viewBox="0 0 64 64" {% if label %}role="img" aria-label="{{ label }}"{% else %}aria-hidden="true"{% endif %}>
+  <rect width="64" height="64" rx="14" style="fill: var(--brand)"></rect>
+  <rect x="19" y="22" width="7" height="16" rx="1.5" style="fill: var(--brand-2)"></rect>
+  <rect x="28.5" y="15" width="7" height="23" rx="1.5" style="fill: var(--brand-2)"></rect>
+  <rect x="38" y="9" width="7" height="29" rx="1.5" style="fill: var(--brand-2)"></rect>
+  <path d="M12 30 H52 V49 A4 4 0 0 1 48 53 H16 A4 4 0 0 1 12 49 Z" fill="#ffffff"></path>
+  <path d="M12.5 31 L32 43.5 L51.5 31" fill="none" stroke-width="2.6" stroke-linejoin="round" style="stroke: var(--brand)"></path>
+</svg>
+{%- endmacro %}
+
+{% macro bar(right='') -%}
+<div class="brandbar">
+  <span class="brand">{{ logo(28) }}<span>Busta chiara</span></span>
+  <div class="right">
+    <select class="theme" aria-label="Tema">
+      <option value="">Tema automatico</option>
+      <option value="light">Tema chiaro</option>
+      <option value="dark">Tema scuro</option>
+    </select>
+    {{ right }}
+  </div>
+</div>
+<script>
+(function () {
+  var sel = document.currentScript.previousElementSibling.querySelector("select.theme");
+  sel.value = document.documentElement.dataset.theme || "";
+  sel.addEventListener("change", function () {
+    if (sel.value) document.documentElement.dataset.theme = sel.value;
+    else delete document.documentElement.dataset.theme;
+    try { if (sel.value) localStorage.setItem("bp-tema", sel.value); else localStorage.removeItem("bp-tema"); } catch (e) {}
+  });
+})();
+</script>
+{%- endmacro %}

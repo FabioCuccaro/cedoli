@@ -1,0 +1,200 @@
+# Glossario delle voci del layout HR1LULDIP (Zucchetti).
+#
+# Stesso formato e stessi indicatori di paylul01.yaml. Le voci con lo stesso codice e "C/Ditta"
+# accanto sono la quota a carico dell'azienda, stampata come importo figurativo.
+
+voci:
+  Z00001:
+    nome: "Retribuzione ordinaria"
+    tipo: competenza
+    spiega: "Lo stipendio del mese per le ore lavorate: la retribuzione mensile divisa per 168 ore e moltiplicata per le ore retribuite. Ferie, permessi e festività del mese hanno voci a parte con la stessa tariffa oraria."
+  Z00250:
+    nome: "Ferie godute"
+    tipo: competenza
+    spiega: "Le ore di ferie prese nel mese, pagate come ore lavorate. Si scalano dal saldo ferie in fondo al cedolino."
+  Z00255:
+    nome: "Permessi ROL goduti"
+    tipo: competenza
+    spiega: "Le ore di permesso per riduzione dell'orario (ROL) prese nel mese, pagate come ore lavorate. Si scalano dal saldo permessi in fondo al cedolino."
+  ZP0100:
+    nome: "Festività godute"
+    tipo: informativo
+    spiega: "Le ore di festività cadute nel mese. Sono già pagate dentro la retribuzione mensile, per questo non hanno importo."
+  Z01138:
+    nome: "Festività non godute"
+    tipo: competenza
+    spiega: "Festività cadute di domenica o soppresse (come il 4 novembre) che, non potendo essere godute, vengono pagate."
+    evidenzia: true
+  "000541":
+    nome: "Indennità per orario non limitato"
+    tipo: competenza
+    spiega: "Importo fisso mensile riconosciuto a chi lavora senza un limite di orario rigido, a compenso dell'eventuale lavoro oltre l'orario contrattuale. È retribuzione: paga contributi e IRPEF."
+  "005827":
+    nome: "Indennità per orario non limitato"
+    tipo: competenza
+    spiega: "Importo riconosciuto a compenso dell'eventuale superamento dell'orario contrattuale, al posto degli straordinari. È retribuzione: paga contributi e IRPEF."
+  ZP0001:
+    nome: "Integrazione malattia"
+    tipo: competenza
+    spiega: "Nei giorni di malattia l'azienda paga la parte di retribuzione non coperta dall'INPS, così lo stipendio resta pieno."
+    evidenzia: true
+  "004300":
+    nome: "Rimborso spese (figurativo)"
+    tipo: figurativo
+    spiega: "Rimborso di spese indicato per memoria: non si somma al netto di questo cedolino."
+  "004574":
+    nome: "Buoni pasto elettronici"
+    tipo: figurativo
+    spiega: "Valore dei buoni pasto elettronici del mese: giorni per valore del buono. Non è pagato in busta paga e, entro il limite di esenzione per buono, non paga né contributi né IRPEF."
+  "004585":
+    nome: "Buoni pasto elettronici"
+    tipo: figurativo
+    spiega: "Valore dei buoni pasto elettronici del mese: giorni per valore del buono. Non è pagato in busta paga e, entro il limite di esenzione per buono, non paga né contributi né IRPEF."
+  "002160":
+    nome: "Buoni pasto elettronici"
+    tipo: figurativo
+    spiega: "Valore dei buoni pasto elettronici del mese: giorni per valore del buono. Non è pagato in busta paga e, entro il limite di esenzione per buono, non paga né contributi né IRPEF."
+  Z52152:
+    nome: "Welfare aziendale"
+    tipo: figurativo
+    spiega: "Valore di servizi di welfare (opere e servizi di utilità sociale) usati tramite l'azienda. Non è denaro in busta paga e non è tassato."
+    evidenzia: true
+  "000142":
+    nome: "Premio MBO"
+    tipo: competenza
+    spiega: "Premio legato al raggiungimento degli obiettivi (Management by Objectives) dell'anno indicato. È retribuzione: paga contributi e IRPEF."
+    evidenzia: true
+  "006540":
+    nome: "Premio MBO"
+    tipo: competenza
+    spiega: "Premio legato al raggiungimento degli obiettivi (Management by Objectives). È retribuzione: paga contributi e IRPEF."
+    evidenzia: true
+  "003601":
+    nome: "Tredicesima"
+    tipo: competenza
+    spiega: "Mensilità aggiuntiva pari a una retribuzione mensile per 12 mesi di servizio nell'anno. Se il rapporto finisce prima di dicembre si pagano i ratei maturati."
+    evidenzia: true
+  "003602":
+    nome: "Quattordicesima"
+    tipo: competenza
+    spiega: "Mensilità aggiuntiva prevista dal CCNL del terziario, pagata a giugno. Matura da luglio a giugno; se il rapporto finisce prima si pagano i ratei maturati."
+    evidenzia: true
+  "006010":
+    nome: "Ferie non godute pagate"
+    tipo: competenza
+    spiega: "Ore di ferie maturate e non prese, pagate quando il rapporto di lavoro finisce."
+    evidenzia: true
+  "006012":
+    nome: "Permessi ROL non goduti pagati"
+    tipo: competenza
+    spiega: "Ore di permesso ROL maturate e non prese, pagate quando il rapporto di lavoro finisce."
+    evidenzia: true
+  Z02001:
+    nome: "Assenza per inizio o fine rapporto"
+    tipo: trattenuta
+    riduce_imponibili: true
+    spiega: "Toglie dalla retribuzione mensile le ore del mese prima dell'assunzione o dopo la cessazione, che non sono dovute."
+    evidenzia: true
+
+contributi:
+  Z00000:
+    nome: "Contributo pensionistico INPS"
+    tipo: contributo
+    contributo_inps: true
+    ivs: true
+    spiega: "Quota a carico del dipendente del contributo per la pensione (IVS), calcolata sull'imponibile previdenziale arrotondato all'euro."
+  Z00010:
+    nome: "Contributo pensionistico aggiuntivo INPS"
+    tipo: contributo
+    contributo_inps: true
+    spiega: "Un punto in più di contributo pensionistico sulla parte di retribuzione dell'anno oltre la prima fascia pensionabile. Con la sigla CNG è un conguaglio, anche negativo, sui mesi precedenti."
+  Z00055:
+    nome: "Fondo di integrazione salariale"
+    tipo: contributo
+    contributo_inps: true
+    spiega: "Contributo al FIS (D.Lgs. 148/2015) per le aziende con più di 15 dipendenti: finanzia l'integrazione dello stipendio in caso di riduzione o sospensione dell'attività."
+  Z00087:
+    nome: "Contributo cassa integrazione straordinaria"
+    tipo: contributo
+    contributo_inps: true
+    spiega: "Contributo CIGS a carico del dipendente, per la cassa integrazione straordinaria."
+  Z00317:
+    nome: "Esonero contributivo 2023 (taglio del cuneo fiscale)"
+    tipo: contributo
+    contributo_inps: true
+    spiega: "Riduzione del contributo pensionistico a carico del dipendente prevista per il 2023 per le retribuzioni sotto una soglia mensile: la percentuale (stampata accanto) è salita da luglio. È in colonna competenze perché aumenta il netto; la pensione non ne risente."
+    evidenzia: true
+  Z00346:
+    nome: "Esonero contributivo 2024 (taglio del cuneo fiscale)"
+    tipo: contributo
+    contributo_inps: true
+    spiega: "Riduzione del contributo pensionistico a carico del dipendente prevista per il 2024 per le retribuzioni sotto una soglia mensile (6 o 7% secondo la retribuzione). È in colonna competenze perché aumenta il netto; la pensione non ne risente."
+    evidenzia: true
+  Z31000:
+    nome: "Fondo EST (assistenza sanitaria)"
+    tipo: contributo
+    deducibile: true
+    spiega: "Contributo al Fondo EST, la cassa di assistenza sanitaria integrativa del commercio. La quota del dipendente riduce l'imponibile fiscale; la riga C/Ditta è la quota versata dall'azienda."
+  "003041":
+    nome: "Ente bilaterale"
+    tipo: contributo
+    ente_bilaterale: true
+    spiega: "Contributo all'ente bilaterale del commercio, calcolato su paga base e contingenza. La riga C/Ditta è la quota dell'azienda, che entra nell'imponibile fiscale."
+
+imposta:
+  F00880:
+    nome: "Rimborso da 730"
+    tipo: imposta
+    escluso_imponibili: true
+    spiega: "Credito IRPEF risultante dalla dichiarazione dei redditi (730), restituito in busta paga. Non è retribuzione."
+    evidenzia: true
+  F08993:
+    nome: "Reddito di riferimento del conguaglio"
+    tipo: informativo
+    spiega: "Il reddito dell'anno usato nel conguaglio di fine anno per calcolare le detrazioni."
+  F09000:
+    nome: "Detrazione per lavoro dipendente dell'anno"
+    tipo: informativo
+    spiega: "La detrazione spettante per tutto l'anno, ricalcolata nel conguaglio sul reddito effettivo."
+  F09100:
+    nome: "Conguaglio IRPEF di fine anno"
+    tipo: imposta
+    spiega: "Differenza tra l'IRPEF dovuta sull'intero anno e quella già trattenuta mese per mese: se positiva è trattenuta, se negativa è restituita."
+    evidenzia: true
+  F09443:
+    nome: "Reddito di riferimento del conguaglio di cessazione"
+    tipo: informativo
+    spiega: "Il reddito dell'anno fino alla fine del rapporto, usato nel conguaglio di cessazione per calcolare le detrazioni."
+  F09500:
+    nome: "Detrazione per lavoro dipendente fino alla cessazione"
+    tipo: informativo
+    spiega: "La detrazione spettante per il periodo lavorato nell'anno, ricalcolata quando il rapporto finisce."
+  F09600:
+    nome: "Conguaglio IRPEF di cessazione"
+    tipo: imposta
+    spiega: "Quando il rapporto finisce l'IRPEF dell'anno si ricalcola sul periodo lavorato: se negativo è IRPEF trattenuta in più e restituita."
+    evidenzia: true
+
+addizionali:
+  F09110:
+    nome: "Addizionale regionale"
+    tipo: addizionale
+    spiega: "Addizionale regionale IRPEF dell'anno indicato, trattenuta a rate nell'anno successivo. Il residuo è quanto resta da trattenere."
+  F09130:
+    nome: "Addizionale comunale"
+    tipo: addizionale
+    spiega: "Saldo dell'addizionale comunale IRPEF dell'anno indicato, trattenuto a rate nell'anno successivo. Il residuo è quanto resta da trattenere."
+  F09140:
+    nome: "Acconto addizionale comunale"
+    tipo: addizionale
+    spiega: "Acconto dell'addizionale comunale IRPEF dell'anno in corso, trattenuto a rate. Il residuo è quanto resta da trattenere."
+  F09610:
+    nome: "Addizionale regionale alla cessazione"
+    tipo: addizionale
+    spiega: "Quando il rapporto finisce, le rate di addizionale regionale ancora da trattenere sono trattenute tutte insieme."
+    evidenzia: true
+  F09630:
+    nome: "Addizionale comunale alla cessazione"
+    tipo: addizionale
+    spiega: "Quando il rapporto finisce, le rate di addizionale comunale ancora da trattenere sono trattenute tutte insieme."
+    evidenzia: true

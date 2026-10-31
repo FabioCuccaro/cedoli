@@ -1,0 +1,16 @@
+# Dati reali: mai nel repository
+data/
+*.pdf
+!tests/fixtures/**/*.pdf
+*.duckdb
+*.sqlite
+*.parquet
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+dist/
+build/
+*.egg-info/

@@ -1,0 +1,212 @@
+{# Corpo del report di un mese: si aspetta `m`, il contesto prodotto da bp.report.context,
+   e facoltativamente `extra`, sezioni da mostrare dopo "Da sapere questo mese".
+   Le sezioni si aprono e chiudono; aperte all'inizio solo quelle principali. #}
+{% from "_fold.html" import fold %}
+{% set p, title, kind, extraction_ok, counts = m.p, m.title, m.kind, m.extraction_ok, m.counts %}
+{% set tiles, facts, steps, highlights, checks, sections, tfr = m.tiles, m.facts, m.steps, m.highlights, m.checks, m.sections, m.tfr %}
+{% set d = m.deduction %}
+  <header>
+    <h1>Cedolino {{ title }}</h1>
+    <p class="sub">{{ kind }}{% if p.contract.ccnl %} · {{ p.contract.ccnl }}{% endif %}{% if p.contract.qualifica %} · {{ p.contract.qualifica }}{% endif %}{% if p.contract.employer %} · {{ p.contract.employer }}{% endif %}</p>
+  </header>
+
+  {% call fold("riepilogo", "Riepilogo del cedolino", open=true) %}
+    <div class="card banner">
+      {% if extraction_ok %}
+        <span><span class="pill ok">Lettura verificata</span> i totali ricostruiti coincidono con quelli stampati.</span>
+      {% else %}
+        <span><span class="pill bad">La lettura non quadra</span> i numeri di questo report potrebbero essere sbagliati.</span>
+      {% endif %}
+      <span>Controlli: {% for label, n in counts.items() if n %}{{ n }} {{ label }}{% if not loop.last %} · {% endif %}{% endfor %}</span>
+    </div>
+    {% if not extraction_ok %}
+    <div class="card review">
+      <p><strong>Cosa vuol dire "la lettura non quadra".</strong> Busta chiara ha letto i numeri del PDF, ma sommandoli non
+        ritrova i totali stampati: qualche voce è stata letta male o saltata. Il problema è nella lettura, non nella tua busta paga.</p>
+      <p>Confronta i numeri di questo report con il PDF prima di fidarti. Di solito succede con un cedolino dalla forma
+        diversa dal solito (più pagine, voci molto lunghe, un tipo di cedolino nuovo): vale la pena segnalarlo, così lo si corregge.</p>
+    </div>
+    {% endif %}
+    {% if m.to_review %}
+    <div class="card review">
+      <p><strong>{{ m.to_review|length }} controll{{ 'o' if m.to_review|length == 1 else 'i' }} da guardare.</strong>
+        Il valore stampato non coincide con quello che Busta chiara ricalcola con le regole note:</p>
+      <ul>
+        {% for row in m.to_review %}
+        <li>{{ row.c.title or row.c.check_id }}{% if row.diff is not none %}: stampato {{ row.c.expected|euro }} €,
+          ricalcolato {{ row.c.actual|euro }} € (differenza {{ row.diff|euro(sign=true) }} €){% endif %}</li>
+        {% endfor %}
+      </ul>
+      <p><strong>Non vuol dire per forza che la busta paga sia sbagliata.</strong> Le cause più comuni, dalla più probabile:
+        un caso che Busta chiara non conosce ancora (una voce nuova, un accordo aziendale, una regola del tuo contratto);
+        un calcolo che usa dati non stampati sul cedolino (mesi precedenti, un altro datore di lavoro nello stesso anno);
+        solo raramente un errore in busta.</p>
+      <p><strong>Cosa fare.</strong> Guarda se questo mese ha qualcosa di particolare (assunzione, malattia, conguaglio, premi,
+        arretrati). Se la differenza supera qualche euro e non trovi il motivo, chiedi all'ufficio paghe indicando la voce,
+        il valore stampato e quello che ti aspettavi. Il dettaglio di ogni calcolo è in <em>Controlli di coerenza</em>, più sotto.</p>
+    </div>
+    {% endif %}
+  <section class="tiles">
+    {% for label, value, note in tiles %}
+    <div class="card tile {{ label|lower }}"><div class="label">{{ label }}</div><div class="value">{{ value|euro }} €</div><div class="label">{{ note }}</div></div>
+    {% endfor %}
+  </section>
+  <section class="card facts">
+    {% for label, value in facts if value is not none %}
+    <div><span>{{ label }}</span><span class="num">{{ value|euro }} €</span></div>
+    {% endfor %}
+  </section>
+  {% endcall %}
+
+  {% if highlights %}
+  {% call fold("sapere", "Da sapere questo mese", open=true) %}
+  <section class="card">
+    <ul class="highlights">
+      {% for h in highlights %}
+      <li><strong>{{ h.name }}</strong>{% if h.amount is not none %} ({{ h.kind }} {{ h.amount|euro }} €){% endif %}: {{ h.explain }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endcall %}
+  {% endif %}
+  {{ extra|default('') }}
+
+  {% call fold("lordo-netto", "Dal lordo al netto") %}
+  <section class="card wf">
+    {% for row in steps %}
+      {% set neg = row.s.amount < 0 %}
+      {% set total = loop.first or loop.last %}
+      <div class="row {{ 'total' if total }}">
+        <div class="label"><strong>{{ row.s.label }}</strong><div class="note">{{ row.s.note }}</div></div>
+        <div class="track"><div class="bar {{ 'neg' if neg }}" style="width: {{ '%.1f'|format(row.pct) }}%"></div></div>
+        <div class="num amount {{ 'neg' if neg }}">{{ row.s.amount|euro }} €{% if not loop.first and row.of_gross is not none %}<div class="note">{{ row.of_gross|percent }} del lordo</div>{% endif %}</div>
+      </div>
+    {% endfor %}
+  </section>
+  {% endcall %}
+
+  {% if d %}
+  {% call fold("detrazione", "Detrazione per lavoro dipendente") %}
+  <section class="card deduction">
+    <p class="lead">
+      {% if d.remaining %}
+        Il gestionale non conosce ancora il tuo reddito dell'anno, quindi lo stima: prende l'imponibile già
+        maturato e ci aggiunge l'imponibile di questo mese ripetuto per ogni mensilità ancora da pagare.
+        Sulla stima calcola la detrazione annua e te ne dà la parte che corrisponde ai giorni del mese.
+      {% else %}
+        A dicembre il reddito dell'anno è noto: la detrazione annua si calcola sul reddito vero, e la differenza
+        con quanto hai ricevuto nei mesi finisce nel conguaglio IRPEF.
+      {% endif %}
+    </p>
+    {% if d.remaining and not d.contract %}
+    <p class="hint">Il contratto{% if p.contract.ccnl %} ({{ p.contract.ccnl }}){% endif %} non è tra quelli che Busta chiara conosce:
+      nella stima conto solo la tredicesima. Se il contratto prevede altre mensilità, la stima del gestionale è più alta.</p>
+    {% endif %}
+    <div class="calc">
+      <div><span>Imponibile fiscale dell'anno fino a questo mese</span><span class="num">{{ d.income_to_date|euro }} €</span></div>
+      {% if d.remaining %}
+      <div><span>+ imponibile del mese {{ d.month_income|euro }} € × {{ d.months_left }} mensilità ancora da pagare ({{ d.remaining|join(', ') }})</span><span class="num">{{ (d.projected - d.income_to_date)|euro }} €</span></div>
+      <div class="total"><span>Reddito dell'anno stimato</span><span class="num">{{ d.projected|euro }} €</span></div>
+      {% endif %}
+      <div><span>Detrazione annua: {{ d.band }}</span><span class="num">{{ d.annual|euro }} €</span></div>
+      <div class="total"><span>Detrazione del mese: {{ d.annual|euro }} × {{ d.days }} / {{ m.days_in_year }}</span><span class="num">{{ d.computed|euro }} €</span></div>
+      <div class="muted"><span>Stampata sul cedolino {% if d.matches %}✅{% else %}❔{% endif %}</span><span class="num">{{ d.printed|euro }} €</span></div>
+      {% if d.year_to_date is not none %}
+      <div class="muted"><span>{{ "Detrazione definitiva dell'anno" if not d.remaining else "Detrazioni ricevute nell'anno finora" }}</span><span class="num">{{ d.year_to_date|euro }} €</span></div>
+      {% endif %}
+    </div>
+    {% if d.annual == 0 and d.remaining %}
+    <p>Il reddito stimato supera 50.000 €, quindi questo mese non hai detrazione. Succede nei mesi con
+      imponibile alto (fringe benefit tassati, quattordicesima, bonus), perché la stima lo moltiplica per tutte
+      le mensilità che restano. Le detrazioni già ricevute non vengono tolte adesso: il conto definitivo si fa a dicembre.</p>
+    {% elif d.remaining and d.projected > 28000 %}
+    <p class="muted">Tra 28.000 e 50.000 € di reddito la detrazione scende in linea retta fino a zero: ogni 1.000 € di
+      reddito stimato in più valgono circa 87 € di detrazione annua in meno.</p>
+    {% endif %}
+  </section>
+  {% endcall %}
+  {% endif %}
+
+  {% call fold("controlli", "Controlli di coerenza") %}
+  <section class="card scroll">
+    <table>
+      <thead><tr><th></th><th>Controllo</th><th class="num hide-sm">Stampato</th><th class="num hide-sm">Ricalcolato</th></tr></thead>
+      <tbody>
+      {% for row in checks %}
+        <tr class="check">
+          <td title="{{ row.label }}">{{ row.icon }}</td>
+          <td>
+            <div class="{{ row.cls }}">{{ row.c.title or row.c.check_id }}</div>
+            <div class="formula">{{ row.c.formula }}</div>
+            {% if row.c.detail %}<div class="detail">{{ row.c.detail }}</div>{% endif %}
+            {% if row.c.expected is not none %}<div class="formula show-sm">Stampato {{ row.c.expected|euro }} · ricalcolato {{ row.c.actual|euro }}</div>{% endif %}
+            {% if row.c.status == "anomalo" and row.diff is not none %}<div class="detail bad">Differenza {{ row.diff|euro(sign=true) }} €: vedi "controlli da guardare" nel riepilogo.</div>{% endif %}
+          </td>
+          <td class="num hide-sm">{{ row.c.expected|euro }}</td>
+          <td class="num hide-sm">{{ row.c.actual|euro }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <p class="formula muted">Un controllo coerente vuol dire che il numero si ricostruisce con le regole note, non che il cedolino sia corretto in ogni sua parte.</p>
+  </section>
+  {% endcall %}
+
+  {% for section in sections %}
+  {% call fold("sezione-" ~ loop.index, section.title) %}
+  <section class="card scroll">
+    <table>
+      <thead><tr><th class="hide-sm">Codice</th><th>Voce</th><th class="num">Importo</th></tr></thead>
+      <tbody>
+      {% for r in section.rows %}
+        <tr>
+          <td class="code hide-sm">{{ r.code }}</td>
+          <td>
+            <details>
+              <summary><span class="{{ '' if r.known else 'unknown' }}">{{ r.name }}</span>
+                <span class="printed">· {{ r.printed }}{% if r.note %} · {{ r.note }}{% endif %}</span></summary>
+              <p>{{ r.explain }}</p>
+              {% if r.details %}<p>{{ r.details }}</p>{% endif %}
+            </details>
+          </td>
+          <td class="num">{% if r.amount is not none %}{{ r.amount|euro }} €<div class="kind {{ r.kind }}">{{ r.kind }}</div>{% else %}<span class="kind">{{ r.details }}</span>{% endif %}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <p class="formula muted">Le spiegazioni delle voci sono indicative: fanno fede i numeri del cedolino. Per un dubbio su una voce chiedi all'ufficio del personale.</p>
+  </section>
+  {% endcall %}
+  {% endfor %}
+
+  {% call fold("retribuzione", "Retribuzione, ferie e TFR") %}
+  <section class="card scroll">
+    <table>
+      <thead><tr><th>Elemento della retribuzione mensile</th><th class="num">Importo</th></tr></thead>
+      <tbody>
+      {% for name, value in p.salary_elements.items() %}
+        <tr><td>{% if name == "TOTALE" %}<strong>Totale</strong>{% else %}{{ name }}{% endif %}</td><td class="num">{{ value|euro }} €</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% if p.leave %}
+    <table style="margin-top: 16px">
+      <thead><tr><th></th><th class="num">Residuo AP</th><th class="num">Maturate</th><th class="num">Godute</th><th class="num">Saldo</th></tr></thead>
+      <tbody>
+      {% for b in p.leave %}
+        <tr><td>{{ "Ferie" if b.kind == "FERIE" else "ROL" }} ({{ b.unit or ("giorni" if b.kind == "FERIE" else "ore") }})</td>
+          <td class="num">{{ b.residue_ap|number }}</td><td class="num">{{ b.maturate|number }}</td>
+          <td class="num">{{ b.godute|number }}</td><td class="num"><strong>{{ b.saldo|number }}</strong></td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+    <table style="margin-top: 16px">
+      <tbody>
+      {% for label, value in tfr if value is not none %}
+        <tr><td>{{ label }}</td><td class="num">{{ value|euro }} €</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </section>
+  {% endcall %}

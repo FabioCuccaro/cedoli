@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Busta chiara</title>
+{% include "_testa.html" %}
+<style>
+{% include "_stile.css" %}
+.drop { display: block; margin-top: 20px; border: 2px dashed var(--line); border-radius: 14px; padding: 36px 16px; text-align: center; background: var(--surface); cursor: pointer; }
+.drop:hover, .drop.over { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 5%, var(--surface)); }
+.drop strong { font-size: 18px; }
+.drop input { display: none; }
+#log { list-style: none; padding: 0; margin: 12px 0 0; }
+#log li { padding: 4px 0; }
+.actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 24px; }
+.btn.secondary { background: var(--surface); color: var(--accent); border: 1px solid var(--accent); }
+.btn { display: inline-block; padding: 10px 16px; border-radius: 10px; background: var(--accent); color: var(--on-accent); text-decoration: none; font-weight: 600; }
+button.del { background: none; border: 1px solid var(--line); color: var(--muted); border-radius: 6px; padding: 2px 8px; cursor: pointer; font: inherit; font-size: 13px; }
+button.del.confirm { border-color: var(--neg); color: var(--neg); }
+button.quit { background: none; border: 1px solid var(--line); color: var(--muted); border-radius: 10px; padding: 8px 14px; cursor: pointer; font: inherit; font-size: 14px; white-space: nowrap; }
+button.quit:hover { border-color: var(--neg); color: var(--neg); }
+.ok { color: var(--pos); } .bad { color: var(--neg); } .warn { color: var(--warn); }
+</style>
+</head>
+<body>
+{% from "_marchio.html" import bar %}
+<main>
+  {% set quit %}<button class="quit" id="quit" title="Spegne l'app su questo computer. Per riaprirla, lanciala di nuovo.">Chiudi l'app</button>{% endset %}
+  {{ bar(quit) }}
+  <h1>Le tue buste paga</h1>
+  <p class="sub">Tutto resta su questo computer: i PDF vengono letti qui e salvati solo nella cartella indicata in fondo alla pagina.</p>
+
+  <label class="drop" id="drop">
+    <input type="file" id="files" accept="application/pdf,.pdf" multiple>
+    <strong>Trascina qui i PDF dei cedolini</strong><br>
+    <span class="sub">oppure clicca per sceglierli. Puoi caricarne quanti vuoi insieme.</span>
+  </label>
+  <ul id="log" aria-live="polite"></ul>
+
+  {% if rows %}
+  <div class="actions">
+    <a class="btn" href="/storico">Apri lo storico</a>
+    <a class="btn secondary" href="/storico/scarica" title="Un file HTML che si apre senza l'app, da qualsiasi dispositivo: per esempio da salvare sul NAS. Contiene i cedolini caricati fino a oggi.">Scarica storico</a>
+    <span class="sub">{{ rows|length }} cedolin{{ 'o' if rows|length == 1 else 'i' }} in archivio</span>
+  </div>
+  <h2>Cedolini</h2>
+  <div class="card">
+  <table>
+    <thead><tr><th>Mese</th><th class="num">Competenze</th><th class="num">Netto</th><th>Controlli</th><th></th></tr></thead>
+    <tbody>
+    {% for r in rows %}
+    <tr>
+      <td><a href="/mese/{{ r.sha }}">{{ r.label }}</a></td>
+      <td class="num">{{ r.gross|euro }} €</td>
+      <td class="num">{{ r.net|euro }} €</td>
+      <td>{% if not r.ok %}<span class="pill bad">La lettura non quadra</span>{% elif r.anomalies %}<span class="pill warn">{{ r.anomalies }} da guardare</span>{% else %}<span class="pill ok">Tutto torna</span>{% endif %}</td>
+      <td class="num"><button class="del" data-sha="{{ r.sha }}">Rimuovi</button></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% endif %}
+
+  {% if unreadable %}
+  <h2>File che non si riescono a leggere</h2>
+  <p class="sub">Sono nella cartella dell'archivio ma non entrano nell'elenco né nello storico. Puoi rimuoverli; se è un cedolino, prova a scaricarlo di nuovo e a caricarlo.</p>
+  <div class="card">
+  <table>
+    <tbody>
+    {% for sha, message in unreadable.items() %}
+    <tr>
+      <td><code>{{ sha[:12] }}…</code></td>
+      <td>{{ message }}</td>
+      <td class="num"><button class="del" data-sha="{{ sha }}">Rimuovi</button></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% endif %}
+
+  <footer>
+    Busta chiara {{ version }} · Archivio: <code>{{ data_dir }}</code>{% if donate %} · <a href="{{ donate }}" target="_blank" rel="noopener">Ti è utile? Sostieni Busta chiara su Ko-fi</a>{% endif %}<br>
+    Strumento informativo gratuito per uso personale: le spiegazioni sono indicative e possono sbagliare. Non è consulenza del lavoro né fiscale: per una verifica chiedi all'ufficio del personale, a un consulente del lavoro o a un CAF.
+  </footer>
+</main>
+<script>
+(function () {
+  var drop = document.getElementById("drop"), input = document.getElementById("files"), log = document.getElementById("log");
+
+  function note(text, cls) {
+    var li = document.createElement("li");
+    li.textContent = text;
+    if (cls) li.className = cls;
+    log.appendChild(li);
+    return li;
+  }
+
+  // Per una busta paga di un formato non ancora supportato: salva solo la struttura, senza dati personali.
+  // L'app non invia nulla: dopo il salvataggio mostra cosa contiene il file e i link per mandarlo a mano.
+  function offerAnonymous(li, f, send) {
+    var b = document.createElement("button");
+    b.className = "del anon";
+    b.textContent = "Salva struttura anonima";
+    b.title = "Un file con la sola forma del cedolino: ogni cifra diventa 9 e nomi, indirizzi, IBAN e codice fiscale diventano X. Aprilo e controllalo prima di condividerlo.";
+    var help = document.createElement("div");
+    help.className = "sub";
+    help.textContent = "Per aiutare a supportare questo formato puoi salvarne la struttura anonima, controllarla e mandarla tu a chi mantiene l'app.";
+    b.addEventListener("click", async function () {
+      try {
+        var res = await fetch("/anonimo", { method: "POST", headers: { "X-BP": "1" }, body: f });
+        if (!res.ok) { b.textContent = "Non riuscito"; return; }
+        var text = await res.text();
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([text], { type: "application/json" }));
+        a.download = "struttura_anonima.json";
+        a.click();
+        URL.revokeObjectURL(a.href);
+        b.textContent = "Salvata";
+        showSend(help, JSON.parse(text), send || {});
+      } catch (e) { b.textContent = "Non riuscito"; }
+    });
+    li.appendChild(document.createTextNode(" "));
+    li.appendChild(b);
+    li.appendChild(help);
+  }
+
+  function showSend(box, dump, send) {
+    box.replaceChildren();
+    var d = document.createElement("details");
+    d.className = "check-anon";
+    d.open = true;
+    var s = document.createElement("summary");
+    s.textContent = "1. Controlla cosa contiene il file";
+    var pre = document.createElement("pre");
+    pre.textContent = dump.pagine.map(function (rows, i) {
+      return "— pagina " + (i + 1) + " —\n" + rows.map(function (r) { return r.testo; }).join("\n");
+    }).join("\n\n");
+    d.append(s, pre);
+    var p = document.createElement("p");
+    p.textContent = "2. Se va bene, mandalo. Il messaggio si apre già scritto ma senza allegato: aggiungi tu struttura_anonima.json, il file che hai appena salvato (di solito in Download). Non allegare il PDF. Busta chiara non invia nulla da sola. ";
+    [["email", "Invia per email (allega il file)"], ["issue", "Apri una segnalazione su GitHub (allega il file)"]].forEach(function (k) {
+      if (!send[k[0]]) return;
+      var l = document.createElement("a");
+      l.className = "btn secondary";
+      l.href = send[k[0]];
+      l.target = "_blank";
+      l.rel = "noopener noreferrer";
+      l.textContent = k[1];
+      p.append(l, " ");
+    });
+    box.append(d, p);
+  }
+
+  async function upload(files) {
+    var pdfs = Array.prototype.filter.call(files, function (f) { return /\.pdf$/i.test(f.name) || f.type === "application/pdf"; });
+    if (!pdfs.length) { note("Nessun PDF tra i file scelti.", "bad"); return; }
+    var changed = false;
+    for (var i = 0; i < pdfs.length; i++) {
+      var f = pdfs[i];
+      try {
+        var res = await fetch("/carica", { method: "POST", headers: { "X-BP": "1" }, body: f });
+        var r = await res.json();
+        var li = note((r.ok ? "✅ " : "❌ ") + f.name + ": " + (r.label ? r.label + ", " : "") + r.message, r.ok ? "ok" : "bad");
+        if (r.new_format) offerAnonymous(li, f, r.send);
+        changed = changed || r.new;
+      } catch (e) {
+        note("❌ " + f.name + ": il programma non risponde, è ancora aperto?", "bad");
+      }
+    }
+    if (changed) { note("Aggiorno l'elenco…"); setTimeout(function () { location.reload(); }, 800); }
+  }
+
+  input.addEventListener("change", function () { upload(input.files); input.value = ""; });
+  ["dragenter", "dragover"].forEach(function (t) {
+    drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.add("over"); });
+  });
+  ["dragleave", "drop"].forEach(function (t) {
+    drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.remove("over"); });
+  });
+  drop.addEventListener("drop", function (e) { upload(e.dataTransfer.files); });
+  // Un PDF lasciato cadere fuori dalla zona non deve far aprire il file al browser.
+  window.addEventListener("dragover", function (e) { e.preventDefault(); });
+  window.addEventListener("drop", function (e) { e.preventDefault(); });
+
+  document.getElementById("quit").addEventListener("click", async function () {
+    try { await fetch("/chiudi", { method: "POST", headers: { "X-BP": "1" } }); } catch (e) { /* già chiusa */ }
+    var main = document.querySelector("main"), brand = main.querySelector(".brandbar");
+    brand.querySelector(".right").remove();
+    main.replaceChildren(brand);
+    main.insertAdjacentHTML("beforeend", "<h1>Busta chiara è chiusa</h1>" +
+      "<p class=\"sub\">Puoi chiudere questa scheda. Per riaprire l'app lanciala di nuovo dal menu o con un doppio clic.</p>");
+  });
+
+  document.addEventListener("click", async function (e) {
+    var b = e.target.closest && e.target.closest("button.del");
+    if (!b) return;
+    if (!b.classList.contains("confirm")) { b.classList.add("confirm"); b.textContent = "Conferma"; return; }
+    await fetch("/elimina/" + b.dataset.sha, { method: "POST", headers: { "X-BP": "1" } });
+    location.reload();
+  });
+})();
+</script>
+</body>
+</html>

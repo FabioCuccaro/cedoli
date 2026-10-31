@@ -1,0 +1,9 @@
+# Contratto collettivo dei metalmeccanici dell'industria (Federmeccanica-Assistal).
+
+nome: Metalmeccanici industria
+riconosci: [metalmeccanic]
+fonte: CCNL Metalmeccanici industria, tredicesima mensilità a dicembre, nessuna quattordicesima
+verificato: non ancora su cedolini reali
+
+mensilita_aggiuntive:
+  - {nome: tredicesima, mese: 12}

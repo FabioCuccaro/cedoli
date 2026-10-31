@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Storico cedolini</title>
+{% include "_testa.html" %}
+<style>
+{% include "_stile.css" %}
+:root { --s-net: var(--accent); --s-ded: var(--accent-2); --grid: var(--line); }
+.top h1 { font-size: 24px; }
+.yearfilter { margin-top: 16px; }
+.yearfilter .flabel { font-size: 14px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+.seg { display: flex; flex-wrap: wrap; gap: 8px; }
+.seg button { font: inherit; font-size: 16px; font-weight: 600; min-width: 64px; padding: 9px 18px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; }
+.seg button:hover { border-color: var(--accent); }
+.seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+[data-year].off { display: none !important; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.chart { position: relative; height: 236px; margin: 0 0 0 44px; }
+.plot { position: absolute; inset: 16px 0 0 0; }
+.chart .tick { position: absolute; left: 0; right: 0; border-top: 1px solid var(--grid); }
+.chart .tick span { position: absolute; right: calc(100% + 6px); top: -8px; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.bars { position: absolute; inset: 0; display: flex; align-items: flex-end; gap: 2px; }
+.bar { text-decoration: none; flex: 1 1 0; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+  gap: 2px; background: none; border: 0; padding: 0 3px; cursor: pointer; border-radius: 4px; }
+.bar .ded, .bar .net { width: 100%; max-width: 32px; }
+.bar .rate { font-size: 10px; line-height: 1; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; margin-bottom: 2px; }
+.bar.sel .rate { color: var(--text); font-weight: 700; }
+.bar .ded { background: var(--s-ded); border-radius: 4px 4px 0 0; }
+.bar .net { background: var(--s-net); }
+.bar:hover, .bar:focus-visible { background: color-mix(in srgb, var(--text) 6%, transparent); outline: none; }
+.bar.sel { background: color-mix(in srgb, var(--text) 10%, transparent); }
+.xlabels { display: flex; gap: 2px; margin-left: 44px; font-size: 11px; color: var(--muted); }
+.xlabels div { flex: 1 1 0; min-width: 0; text-align: center; white-space: nowrap; overflow: visible; line-height: 1.3; padding-top: 4px; }
+.xlabels .sel { color: var(--text); font-weight: 700; }
+.xlabels .yr { display: block; color: var(--text); }
+.tip { position: absolute; z-index: 2; pointer-events: none; background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 8px 10px; font-size: 13px; box-shadow: 0 4px 16px rgb(0 0 0 / .12); white-space: nowrap; }
+.tip div { display: flex; justify-content: space-between; gap: 16px; }
+.tip i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
+nav.months { position: sticky; top: 0; z-index: 3; display: flex; gap: 8px; align-items: center; padding: 10px 0; margin-top: 16px;
+  background: var(--bg); border-bottom: 1px solid var(--line); }
+nav.months select { flex: 1 1 auto; min-width: 0; font: inherit; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--text); }
+nav.months button { font: inherit; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface);
+  color: var(--text); cursor: pointer; white-space: nowrap; }
+nav.months button:disabled { opacity: .4; cursor: default; }
+.month { padding-top: 8px; }
+.month + .month { border-top: 2px solid var(--line); margin-top: 32px; }
+.js .month + .month { border-top: 0; margin-top: 0; }
+.delta { font-size: 20px; font-weight: 600; }
+.pos { color: var(--pos); } .neg { color: var(--neg); }
+.changes td.note { color: var(--muted); font-size: 12px; }
+.lead { margin-top: 0; }
+h3 { font-size: 15px; margin: 20px 0 6px; }
+.dtab .dbar { display: flex; align-items: center; gap: 8px; min-width: 120px; }
+.dtab .dbar span { display: block; height: 10px; border-radius: 0 3px 3px 0; background: var(--s-net); min-width: 0; flex: 0 0 auto; }
+.nowrap { white-space: nowrap; }
+.dtab tr.zero td { color: var(--muted); }
+.hint { color: var(--muted); font-size: 13px; margin: 8px 0 0; }
+@media (max-width: 600px) {
+  .chart { height: 180px; margin-left: 36px; } .xlabels { margin-left: 36px; font-size: 10px; }
+  .xlabels .lg { display: none; } .bar { padding: 0 1px; }
+  .bar .rate { font-size: 9px; } .bar .rate .pc { display: none; }
+  nav.months .lbl { display: none; }
+  .dtab .dbar { min-width: 0; gap: 4px; } .dtab th, .dtab td { padding: 6px 4px; }
+}
+@media (min-width: 601px) { .xlabels .sm { display: none; } }
+</style>
+</head>
+<body>
+{% from "_fold.html" import fold %}
+{% from "_marchio.html" import bar %}
+<main>
+  {{ bar() }}
+  <section class="top">
+    <h1>Storico cedolini</h1>
+    <div data-year="">
+    <p class="sub">{{ months|length }} cedolini, da {{ first|lower }} a {{ last|lower }}. Clicca un mese per aprirlo.</p>
+    {% if total_rate is not none %}<p class="sub">Sull'intero periodo le trattenute sono il <strong>{{ total_rate|percent }}</strong> del lordo: {{ total_deductions|euro }} € su {{ total_gross|euro }} €.</p>{% endif %}
+    </div>
+    {% if years|length > 1 %}
+    {% for y in years %}
+    <div data-year="{{ y.year }}" class="off">
+    <p class="sub">{{ y.count }} cedolin{{ 'o' if y.count == 1 else 'i' }} nel {{ y.year }}, da {{ y.first|lower }} a {{ y.last|lower }}. Clicca un mese per aprirlo.</p>
+    {% if y.rate is not none %}<p class="sub">Nel {{ y.year }} le trattenute sono il <strong>{{ y.rate|percent }}</strong> del lordo: {{ y.deductions|euro }} € su {{ y.gross|euro }} €.</p>{% endif %}
+    </div>
+    {% endfor %}
+    <div class="yearfilter">
+      <div class="flabel" id="anno-label">Anno</div>
+      <div class="seg" role="group" aria-labelledby="anno-label">
+        <button type="button" data-filter="" aria-pressed="true">Tutti</button>
+        {% for y in years %}<button type="button" data-filter="{{ y.year }}" aria-pressed="false">{{ y.year }}</button>{% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </section>
+
+  {% call fold("grafico", "Mese per mese", open=true) %}
+  <section class="card" id="overview">
+    <div class="legend">
+      <span><i style="background: var(--s-net)"></i>Netto</span>
+      <span><i style="background: var(--s-ded)"></i>Trattenute</span>
+      <span>Altezza della colonna: competenze</span>
+      <span>Sopra la colonna: trattenute in % del lordo</span>
+    </div>
+    <div class="chart" role="img" aria-label="Netto e trattenute per mese, in euro. I valori sono nella tabella qui sotto.">
+      <div class="plot">
+      {% for t in ticks %}<div class="tick" style="bottom: {{ '%.2f'|format(t.pct) }}%"><span>{{ t.value|euro|replace(',00', '') }}</span></div>{% endfor %}
+      <div class="bars">
+        {% for m in months %}
+        <a class="bar" href="#{{ m.id }}" data-i="{{ loop.index0 }}" data-year="{{ m.year }}" aria-label="{{ m.label }}: netto {{ m.net|euro }} euro, trattenute {{ m.rate|percent }} del lordo">
+          <span class="rate">{{ '%.0f'|format(m.rate) if m.rate is not none }}<span class="pc">%</span></span>
+          <span class="ded" style="height: {{ '%.2f'|format(m.h_ded) }}%"></span>
+          <span class="net" style="height: {{ '%.2f'|format(m.h_net) }}%"></span>
+        </a>
+        {% endfor %}
+      </div>
+      </div>
+    </div>
+    <div class="xlabels" aria-hidden="true">
+      {% for m in months %}<div data-i="{{ loop.index0 }}" data-year="{{ m.year }}"><span class="lg">{{ m.short }}</span><span class="sm">{{ m.short[:-1] if m.short.endswith('ª') else m.short[0]|upper }}</span>{% if m.year_start %}<span class="yr">{{ m.year }}</span>{% endif %}</div>{% endfor %}
+    </div>
+    <details style="margin-top: 12px">
+      <summary>Vedi i dati in tabella</summary>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Mese</th><th class="num">Competenze</th><th class="num">Trattenute</th><th class="num">Netto</th><th class="num">Trattenute / lordo</th><th class="num hide-sm">Netto vs precedente</th></tr></thead>
+          <tbody>
+          {% for m in months %}
+            <tr data-year="{{ m.year }}"><td><a href="#{{ m.id }}">{{ m.label }}</a>{% if not m.ok %} <span class="bad" title="La lettura del PDF non quadra">❌</span>{% endif %}</td>
+              <td class="num">{{ m.gross|euro }}</td><td class="num">{{ m.deductions|euro }}</td><td class="num"><strong>{{ m.net|euro }}</strong></td><td class="num">{{ m.rate|percent }}</td>
+              <td class="num hide-sm">{% if m.vs %}<span class="{{ 'pos' if m.vs.delta > 0 else 'neg' if m.vs.delta < 0 }}">{{ m.vs.delta|euro(sign=True) }}</span>{% endif %}</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+  {% endcall %}
+
+  <nav class="months" aria-label="Scegli il cedolino">
+    <button type="button" id="prev" aria-label="Cedolino precedente">‹ <span class="lbl">Precedente</span></button>
+    <select id="pick" aria-label="Cedolino">
+      {% for m in months %}<option value="{{ m.id }}">{{ m.label }}</option>{% endfor %}
+    </select>
+    <button type="button" id="next" aria-label="Cedolino successivo"><span class="lbl">Successivo</span> ›</button>
+    <button type="button" id="foldall" aria-pressed="false" title="Mostra solo i titoli delle sezioni">⊟ <span class="lbl">Solo titoli</span></button>
+  </nav>
+  <p class="hint">Puoi usare anche le frecce ← → della tastiera.</p>
+
+  {% for item in months %}
+  <article class="month" id="m-{{ item.id }}">  {# id diverso dal frammento dell'URL (#2026-09): altrimenti il browser salta da solo al mese, a metà pagina, a ogni apertura con quell'indirizzo #}
+    {% set m = item.m %}
+    {% set extra %}
+    {% set vs = item.vs %}
+    {% set diff_title = "Cosa è cambiato rispetto " ~ (vs.label|rispetto_a if vs else "al mese prima") %}
+    {% call fold("diff", diff_title, open=true) %}
+    <section class="card scroll">
+      {% if not vs %}
+        <p>È il primo cedolino di questo tipo nello storico: non c'è un mese precedente da confrontare.</p>
+      {% else %}
+        <p>Netto <span class="delta {{ 'pos' if vs.delta > 0 else 'neg' if vs.delta < 0 }}">{{ vs.delta|euro(sign=True) }} €</span>
+          rispetto {{ vs.label|rispetto_a|replace(vs.label|lower, '') }}<a href="#{{ vs.id }}">{{ vs.label|lower }}</a>. Ecco le voci che spiegano la differenza.</p>
+        {% if vs.changes %}
+        <table class="changes">
+          <thead><tr><th>Voce</th><th class="num hide-sm">Prima</th><th class="num hide-sm">Ora</th><th class="num">Effetto sul netto</th></tr></thead>
+          <tbody>
+          {% for c in vs.changes %}
+            <tr><td>{{ c.label }}{% if c.note %}<div class="note">{{ c.note }}</div>{% endif %}
+                <div class="formula show-sm">{{ c.before|euro }} → {{ c.after|euro }}</div></td>
+              <td class="num hide-sm">{{ c.before|euro }}</td><td class="num hide-sm">{{ c.after|euro }}</td>
+              <td class="num {{ 'pos' if c.effect > 0 else 'neg' }}">{{ c.effect|euro(sign=True) }} €</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        <p class="hint">Importi con il segno dell'effetto sul netto: le trattenute sono negative.</p>
+        {% endif %}
+        {% if vs.fringe %}
+        <p>I fringe benefit tassati passano da {{ vs.fringe[0]|euro }} € a {{ vs.fringe[1]|euro }} €. Non arrivano in busta,
+          ma entrano negli imponibili: spiegano quindi parte della differenza su IRPEF e contributi.</p>
+        {% endif %}
+      {% endif %}
+    </section>
+    {% endcall %}
+    {% endset %}
+    {% include "_mese.html" %}
+
+  </article>
+  {% endfor %}
+
+  {% if deduction_years %}
+  {% call fold("detrazioni-anni", "Detrazioni mese per mese, anno per anno") %}
+  <section class="card scroll" id="detrazioni">
+    <p class="lead">Ogni mese il gestionale stima il reddito dell'anno: l'imponibile già maturato più quello del mese,
+      ripetuto per le mensilità ancora da pagare. Sulla stima calcola la detrazione annua per lavoro dipendente e te ne
+      dà la quota dei giorni del mese. Oltre 50.000 € di reddito stimato la detrazione del mese è zero.</p>
+    {% for y in deduction_years %}
+    <div class="dyear" data-year="{{ y.year }}">
+    <h3>{{ y.title }}</h3>
+    {% if y.several_employers %}
+    <p>Nel {{ y.year }} hai avuto più datori di lavoro. Fino al conguaglio ognuno calcola IRPEF e detrazioni solo sul
+      reddito che paga lui, quindi le stime dei mesi non tengono conto dell'altro. Il conto dell'anno si chiude con il
+      conguaglio di dicembre, se il nuovo datore di lavoro ha ricevuto la CU del precedente (voci "altri soggetti"),
+      altrimenti con la dichiarazione dei redditi (730).</p>
+    {% endif %}
+    <table class="dtab">
+      <thead><tr><th>Mese</th><th class="num hide-sm">Reddito stimato</th><th class="num hide-sm">Detrazione annua</th>
+        <th>Del mese</th><th class="num">Ricevute <span class="hide-sm">nell'anno</span></th></tr></thead>
+      <tbody>
+      {% for r in y.rows %}
+        <tr class="{{ 'zero' if r.d.printed == 0 }}">
+          <td><a href="#{{ r.id }}"><span class="hide-sm">{{ r.label }}</span><span class="show-sm">{{ r.label.split()[0][:3] }}</span></a><div class="formula show-sm nowrap">stima {{ r.d.projected|euro|replace(',00', '') }}</div></td>
+          <td class="num hide-sm">{{ r.d.projected|euro }}</td>
+          <td class="num hide-sm">{{ r.d.annual|euro }}</td>
+          <td><div class="dbar"><span style="width: {{ '%.1f'|format(r.d.printed / y.max * 70) }}%"></span><b class="num">{{ r.d.printed|euro }}</b></div></td>
+          <td class="num">{% if loop.last and y.received is not none %}{{ y.received|euro }}{% else %}{{ r.d.year_to_date|euro }}{% endif %}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% if y.final is not none %}
+    <p>Con il reddito vero dell'anno ({{ y.last.projected|euro }} €) la detrazione spettante è <strong>{{ y.final|euro }} €</strong>.
+      Nei mesi ne avevi ricevute {{ y.received|euro }} €:
+      {% if y.returned > 0 %}la differenza di <strong>{{ y.returned|euro }} €</strong> è stata recuperata con il conguaglio di dicembre.
+      {% elif y.returned < 0 %}la differenza di <strong>{{ (-y.returned)|euro }} €</strong> ti è stata riconosciuta con il conguaglio di dicembre.
+      {% else %}nessuna differenza da conguagliare.{% endif %}</p>
+    {% elif y.over_limit %}
+    <p>Finora nel {{ y.year }} hai ricevuto <strong>{{ y.last.year_to_date|euro }} €</strong> di detrazioni. Con l'ultima stima
+      ({{ y.last_label|lower }}: {{ y.last.projected|euro }} €) il reddito dell'anno supera 50.000 €. Se a dicembre il reddito vero
+      resterà sopra quella soglia, la detrazione dell'anno sarà zero e il conguaglio recupererà quanto ricevuto.</p>
+    {% else %}
+    <p>Finora nel {{ y.year }} hai ricevuto <strong>{{ y.last.year_to_date|euro }} €</strong> di detrazioni. Il conto definitivo si fa a dicembre.</p>
+    {% endif %}
+    </div>
+    {% endfor %}
+  </section>
+  {% endcall %}
+  {% endif %}
+
+
+  <footer>
+    Storico generato in locale il {{ today }} da Busta chiara {{ version }}, parser {{ parsers|join(', ') }}. Nessun dato è stato inviato fuori dal computer.
+    Strumento informativo gratuito per uso personale: le spiegazioni sono indicative e possono sbagliare. Non è consulenza del lavoro né fiscale: per una verifica chiedi all'ufficio del personale, a un consulente del lavoro o a un CAF.
+  </footer>
+</main>
+<div class="tip" id="tip" hidden></div>
+<script>
+(function () {
+  var data = {{ months_js|tojson }};
+  var months = document.querySelectorAll("article.month");
+  var bars = document.querySelectorAll(".bar");
+  var labels = document.querySelectorAll(".xlabels div");
+  var pick = document.getElementById("pick");
+  var prev = document.getElementById("prev"), next = document.getElementById("next");
+  var current = -1, year = "";
+  document.documentElement.classList.add("js");
+
+  function visible(i) { return !year || String(data[i].year) === year; }
+  function step(from, dir) {
+    for (var i = from + dir; i >= 0 && i < data.length; i += dir) if (visible(i)) return i;
+    return -1;
+  }
+  // Filtro per anno: mostra solo grafico, tabella, riepilogo, mesi e detrazioni di quell'anno.
+  function setYear(y, keep) {
+    year = y;
+    document.querySelectorAll("[data-filter]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.filter === y ? "true" : "false"); });
+    document.querySelectorAll("[data-year]").forEach(function (el) {
+      el.classList.toggle("off", el.dataset.year === "" ? !!y : !!y && el.dataset.year !== y);
+    });
+    Array.prototype.forEach.call(pick.options, function (o, j) { o.hidden = o.disabled = !visible(j); });
+    try { if (y) localStorage.setItem("bp-anno", y); else localStorage.removeItem("bp-anno"); } catch (e) {}
+    if (!keep) show(current >= 0 && visible(current) ? current : step(data.length, -1));
+  }
+
+  function indexOf(id) {
+    for (var i = 0; i < data.length; i++) if (data[i].id === id) return i;
+    return -1;
+  }
+  function show(i, scroll) {
+    if (i < 0 || i >= data.length || !visible(i)) return;
+    current = i;
+    months.forEach(function (el, j) { el.hidden = j !== i; });
+    bars.forEach(function (el, j) { el.classList.toggle("sel", j === i); el.setAttribute("aria-current", j === i ? "true" : "false"); });
+    labels.forEach(function (el, j) { el.classList.toggle("sel", j === i); });
+    pick.value = data[i].id;
+    prev.disabled = step(i, -1) < 0;
+    next.disabled = step(i, 1) < 0;
+    document.title = "Storico cedolini · " + data[i].label;
+    // Dentro un'anteprima (iframe srcdoc) l'indirizzo non si può cambiare: la navigazione funziona lo stesso.
+    try {
+      if (location.hash !== "#" + data[i].id) history.replaceState(null, "", "#" + data[i].id);
+    } catch (e) { /* indirizzo non modificabile */ }
+    if (scroll) document.querySelector("nav.months").scrollIntoView({ block: "start" });
+  }
+  function fromHash(scroll) {
+    var i = indexOf(decodeURIComponent(location.hash.slice(1)));
+    if (i >= 0 && !visible(i)) setYear("", true);  // un mese di un altro anno: si torna a tutti gli anni
+    show(i >= 0 ? i : step(data.length, -1), scroll && i >= 0);
+  }
+
+  prev.addEventListener("click", function () { show(step(current, -1)); });
+  next.addEventListener("click", function () { show(step(current, 1)); });
+  pick.addEventListener("change", function () { show(indexOf(pick.value)); });
+  window.addEventListener("hashchange", function () { fromHash(true); });
+  document.addEventListener("keydown", function (e) {
+    var t = e.target.tagName;
+    if (t === "SELECT" || t === "INPUT" || t === "TEXTAREA" || e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.key === "ArrowLeft") { show(step(current, -1)); e.preventDefault(); }
+    if (e.key === "ArrowRight") { show(step(current, 1)); e.preventDefault(); }
+  });
+  // Collegamenti interni (per esempio al mese di confronto): aprono il mese senza ricaricare.
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var i = indexOf(a.getAttribute("href").slice(1));
+    if (i < 0) return;
+    e.preventDefault();
+    if (!visible(i)) setYear("", true);
+    show(i, !a.classList.contains("bar"));
+  });
+
+  var tip = document.getElementById("tip");
+  function euro(v) { return v.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €"; }
+  function row(color, label, value) {
+    return "<div><span>" + (color ? '<i style="background: var(' + color + ')"></i>' : "") + label + "</span><strong>" + euro(value) + "</strong></div>";
+  }
+  function showTip(el) {
+    var d = data[+el.dataset.i];
+    tip.innerHTML = "<strong>" + d.label + "</strong>" + row("", "Competenze", d.gross) + row("--s-ded", "Trattenute", d.deductions) + row("--s-net", "Netto", d.net) +
+      "<div><span>Trattenute / lordo</span><strong>" + d.rate + "</strong></div>";
+    tip.hidden = false;
+    var r = el.getBoundingClientRect(), w = tip.offsetWidth;
+    var x = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), document.documentElement.clientWidth - w - 8);
+    tip.style.left = x + window.scrollX + "px";
+    tip.style.top = r.top + window.scrollY - tip.offsetHeight - 6 + "px";
+  }
+  bars.forEach(function (el) {
+    el.addEventListener("pointerenter", function () { showTip(el); });
+    el.addEventListener("focus", function () { showTip(el); });
+    el.addEventListener("pointerleave", function () { tip.hidden = true; });
+    el.addEventListener("blur", function () { tip.hidden = true; });
+  });
+
+  // Sezioni richiudibili: la stessa sezione resta aperta o chiusa in tutti i mesi.
+  var folds = document.querySelectorAll("details.fold");
+  var defaults = Array.prototype.map.call(folds, function (el) { return el.open; });
+  var syncing = false;
+  folds.forEach(function (el) {
+    el.addEventListener("toggle", function () {
+      if (syncing) return;
+      syncing = true;
+      document.querySelectorAll('details.fold[data-fold="' + el.dataset.fold + '"]').forEach(function (o) {
+        if (o.open !== el.open) o.open = el.open;
+      });
+      setTimeout(function () { syncing = false; });
+    });
+  });
+  var foldall = document.getElementById("foldall");
+  foldall.addEventListener("click", function () {
+    var collapse = foldall.getAttribute("aria-pressed") !== "true";
+    syncing = true;
+    folds.forEach(function (el, j) { el.open = collapse ? false : defaults[j]; });
+    setTimeout(function () { syncing = false; });
+    foldall.setAttribute("aria-pressed", collapse ? "true" : "false");
+    foldall.innerHTML = collapse ? '⊞ <span class="lbl">Riapri</span>' : '⊟ <span class="lbl">Solo titoli</span>';
+    foldall.title = collapse ? "Riapri le sezioni principali" : "Mostra solo i titoli delle sezioni";
+  });
+
+  document.querySelectorAll("[data-filter]").forEach(function (b) {
+    b.addEventListener("click", function () { setYear(b.dataset.filter); });
+  });
+  var saved = "";
+  try { saved = localStorage.getItem("bp-anno") || ""; } catch (e) {}
+  if (saved && document.querySelector('[data-filter="' + saved + '"]')) setYear(saved, true);
+  fromHash(false);
+})();
+</script>
+</body>
+</html>
