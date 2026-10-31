@@ -2,6 +2,10 @@
 
 Le versioni seguono `MAGGIORE.MINORE.CORREZIONE`. Il numero in uso si vede in fondo all'app e con `bp --version`.
 
+## 0.7.1 (31/10/2026)
+
+- Il pulsante per una donazione volontaria ora ha l'aspetto di quello di Ko-fi: azzurro, con la tazza e il cuore, e dice *Offrimi un caffè*. Sta sempre in alto accanto a *Chiudi l'app* ed è disegnato dentro l'app, perché l'immagine originale di Ko-fi verrebbe scaricata da Internet.
+
 ## 0.7.0 (31/10/2026)
 
 - Il README del repository pubblico ha il pulsante ufficiale di Ko-fi. Nell'app resta il pulsante *♥ Sostieni*, disegnato in locale: un'immagine caricata da Ko-fi farebbe uscire una richiesta dal computer.
