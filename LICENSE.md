@@ -8,7 +8,7 @@ Busta chiara è gratuita per uso personale, e il suo codice si può leggere per 
 
 Puoi, gratis:
 
-- installare e usare l'app pubblicata da Fabio Cuccaro per leggere le **tue** buste paga, o quelle di una persona che te lo chiede, senza farti pagare;
+- installare e usare l'app pubblicata da Fabio Cuccaro (lo zip ufficiale, oppure il pacchetto installato senza modifiche dal repository pubblico ufficiale, per esempio con `uv tool install`) per leggere le **tue** buste paga, o quelle di una persona che te lo chiede, senza farti pagare;
 - passare ad altri lo zip ufficiale così com'è, senza modificarlo e senza chiedere soldi.
 
 Non puoi:

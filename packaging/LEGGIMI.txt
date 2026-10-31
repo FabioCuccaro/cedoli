@@ -44,7 +44,7 @@ Non serve fidarsi sulla parola. Basta una di queste prove:
 - Nel browser: premi F12, scheda "Rete", ricarica la pagina. Ogni richiesta
   va a 127.0.0.1.
 Solo "Apri su GitHub" e "Invia per email", nella pagina di un formato non
-supportato, e "Sostieni Busta chiara su Ko-fi", in fondo alla pagina, portano
+supportato, e "Sostieni", in alto nella pagina (donazione su Ko-fi), portano
 fuori: sono normali link, si aprono solo se li clicchi tu e non contengono nulla
 del cedolino.
 

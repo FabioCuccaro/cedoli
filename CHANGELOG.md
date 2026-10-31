@@ -2,6 +2,12 @@
 
 Le versioni seguono `MAGGIORE.MINORE.CORREZIONE`. Il numero in uso si vede in fondo all'app e con `bp --version`.
 
+## 0.7.0 (31/10/2026)
+
+- Il README del repository pubblico ha il pulsante ufficiale di Ko-fi. Nell'app resta il pulsante *♥ Sostieni*, disegnato in locale: un'immagine caricata da Ko-fi farebbe uscire una richiesta dal computer.
+- Il link per una donazione volontaria su Ko-fi ora è un piccolo pulsante *♥ Sostieni* in alto, accanto a *Chiudi l'app*, invece che in fondo alla pagina.
+- Il repository pubblico ha un README breve, per chi usa l'app: cosa fa, privacy, come si installa, formati supportati e limiti. I dettagli tecnici sono in `TECNICO.md`.
+
 ## 0.6.0 (31/10/2026)
 
 - Busta chiara ha una licenza scritta (`LICENZA.md`, anche dentro lo zip): l'app è gratuita per uso personale e si può passare ad altri così com'è; il codice si può leggere per verificarla, ma non riutilizzare.

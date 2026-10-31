@@ -104,6 +104,8 @@ def test_donation_link_only_when_configured(tmp_path, monkeypatch):
     monkeypatch.setattr(contribute, "KOFI", "bustachiara")
     html = render_archive([], str(tmp_path))
     assert 'href="https://ko-fi.com/bustachiara"' in html
+    # In alto, nell'intestazione, non in fondo alla lista dei cedolini.
+    assert html.index("ko-fi.com") < html.index("<h1>")
     problems, links = external_problems(html)
     assert not problems and all(_allowed_link(h) for h in links)
 

@@ -20,13 +20,15 @@ button.del { background: none; border: 1px solid var(--line); color: var(--muted
 button.del.confirm { border-color: var(--neg); color: var(--neg); }
 button.quit { background: none; border: 1px solid var(--line); color: var(--muted); border-radius: 10px; padding: 8px 14px; cursor: pointer; font: inherit; font-size: 14px; white-space: nowrap; }
 button.quit:hover { border-color: var(--neg); color: var(--neg); }
+a.support { border: 1px solid var(--brand-2); color: var(--text); border-radius: 10px; padding: 7px 12px; font-size: 14px; text-decoration: none; white-space: nowrap; }
+a.support:hover { background: var(--brand-2); color: #1d1d1d; }
 .ok { color: var(--pos); } .bad { color: var(--neg); } .warn { color: var(--warn); }
 </style>
 </head>
 <body>
 {% from "_marchio.html" import bar %}
 <main>
-  {% set quit %}<button class="quit" id="quit" title="Spegne l'app su questo computer. Per riaprirla, lanciala di nuovo.">Chiudi l'app</button>{% endset %}
+  {% set quit %}{% if donate %}<a class="support" href="{{ donate }}" target="_blank" rel="noopener" title="Busta chiara è gratuita: se ti è utile puoi sostenerla con una donazione volontaria su Ko-fi. Si apre nel browser.">♥ Sostieni</a>{% endif %}<button class="quit" id="quit" title="Spegne l'app su questo computer. Per riaprirla, lanciala di nuovo.">Chiudi l'app</button>{% endset %}
   {{ bar(quit) }}
   <h1>Le tue buste paga</h1>
   <p class="sub">Tutto resta su questo computer: i PDF vengono letti qui e salvati solo nella cartella indicata in fondo alla pagina.</p>
@@ -82,7 +84,7 @@ button.quit:hover { border-color: var(--neg); color: var(--neg); }
   {% endif %}
 
   <footer>
-    Busta chiara {{ version }} · Archivio: <code>{{ data_dir }}</code>{% if donate %} · <a href="{{ donate }}" target="_blank" rel="noopener">Ti è utile? Sostieni Busta chiara su Ko-fi</a>{% endif %}<br>
+    Busta chiara {{ version }} · Archivio: <code>{{ data_dir }}</code><br>
     Strumento informativo gratuito per uso personale: le spiegazioni sono indicative e possono sbagliare. Non è consulenza del lavoro né fiscale: per una verifica chiedi all'ufficio del personale, a un consulente del lavoro o a un CAF.
   </footer>
 </main>
