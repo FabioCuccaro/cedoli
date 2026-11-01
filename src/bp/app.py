@@ -18,7 +18,7 @@ from pathlib import Path
 
 from bp import __version__, contribute, extract
 from bp.anonymize import anonymize
-from bp.archive import Archive
+from bp.archive import Archive, default_dir
 from bp.report import month_label, render, render_archive, render_history
 
 MAX_UPLOAD = 20 * 1024 * 1024
@@ -200,7 +200,9 @@ def close_running(port: int, wait: float = 5.0) -> bool:
     return False
 
 
-def serve(data_dir: Path, port: int = DEFAULT_PORT, open_browser: bool = True) -> None:
+def serve(data_dir: Path | None, port: int = DEFAULT_PORT, open_browser: bool = True) -> None:
+    """Avvia l'app. Senza data_dir usa la cartella dati dell'utente, decisa solo dopo aver chiuso una
+    versione precedente ancora aperta: così la cartella col vecchio nome è libera e si può rinominare."""
     running = running_version(port) if port else None
     if running is not None and running != __version__:
         # Dopo un aggiornamento la vecchia app resta aperta con i file nuovi sotto: la chiudiamo e ripartiamo.
@@ -213,6 +215,8 @@ def serve(data_dir: Path, port: int = DEFAULT_PORT, open_browser: bool = True) -
         if open_browser:
             webbrowser.open(url)
         return
+    if data_dir is None:
+        data_dir = default_dir()
     try:
         server = make_server(Archive(data_dir), port)
     except OSError:  # porta occupata da un altro programma: ne prendiamo una libera

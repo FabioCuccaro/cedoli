@@ -225,3 +225,52 @@ def test_new_format_offers_anonymous_structure(server, tmp_path):
     # Un PDF che non è una busta paga non propone l'export.
     r = json.loads(call(base + "/carica", b"non sono un pdf")[1])
     assert not r.get("new_format") and not r.get("send")
+
+
+def _linux_data_home(monkeypatch, tmp_path):
+    monkeypatch.setattr("bp.archive.sys.platform", "linux")
+    monkeypatch.setenv("XDG_DATA_HOME", str(tmp_path))
+    return tmp_path
+
+
+def test_old_data_folder_is_renamed_keeping_payslips(monkeypatch, tmp_path):
+    from bp.archive import default_dir
+
+    base = _linux_data_home(monkeypatch, tmp_path)
+    (base / "BustaPagaBeautify" / "cedolini").mkdir(parents=True)
+    (base / "BustaPagaBeautify" / "cedolini" / "a.pdf").write_bytes(b"%PDF")
+    assert default_dir() == base / "Cedoli"
+    assert (base / "Cedoli" / "cedolini" / "a.pdf").read_bytes() == b"%PDF"
+    assert not (base / "BustaPagaBeautify").exists()
+
+
+def test_new_data_folder_wins_and_old_one_is_left_alone(monkeypatch, tmp_path):
+    from bp.archive import default_dir
+
+    base = _linux_data_home(monkeypatch, tmp_path)
+    (base / "Cedoli").mkdir()
+    (base / "BustaPagaBeautify").mkdir()
+    assert default_dir() == base / "Cedoli"
+    assert (base / "BustaPagaBeautify").exists()
+
+
+def test_old_data_folder_is_used_if_it_cannot_be_renamed(monkeypatch, tmp_path):
+    from pathlib import Path
+
+    from bp.archive import default_dir
+
+    base = _linux_data_home(monkeypatch, tmp_path)
+    (base / "BustaPagaBeautify").mkdir()
+
+    def busy(self, target):
+        raise PermissionError("in uso")
+
+    monkeypatch.setattr(Path, "rename", busy)
+    assert default_dir() == base / "BustaPagaBeautify"
+
+
+def test_first_start_creates_the_new_folder_name(monkeypatch, tmp_path):
+    from bp.archive import default_dir
+
+    base = _linux_data_home(monkeypatch, tmp_path)
+    assert default_dir() == base / "Cedoli"

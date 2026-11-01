@@ -44,7 +44,7 @@
 
 <main>
 
-<section class="hero">
+<section class="hero home">
   <div class="wrap grid">
     <div>
       <span class="eyebrow">Gratuita · senza Internet · senza account</span>
@@ -54,26 +54,14 @@
         <a class="btn" href="https://github.com/FabioCuccaro/cedoli/releases/latest/download/Cedoli-windows.zip">Scarica per Windows</a>
         <a class="btn secondary" href="verifica.html">Come lo puoi verificare</a>
       </div>
-      <p class="small">Versione <span class="version"><!--versione-->0.9.0<!--/versione--></span> · zip di circa <!--dimensione-->38 MB<!--/dimensione--> · anche per <a href="scarica.html#linux">Linux e macOS</a></p>
+      <p class="small">Versione <span class="version"><!--versione-->0.10.0<!--/versione--></span> · zip di circa <!--dimensione-->38 MB<!--/dimensione--> · anche per <a href="scarica.html#linux">Linux e macOS</a></p>
     </div>
-    <figure class="shot">
-      <img class="light-only" src="img/app-mese.png" width="1100" height="1400" alt="Report di un mese in Cedolì: competenze, trattenute, netto e controlli">
-      <img class="dark-only" src="img/app-mese-scuro.png" width="1100" height="1400" alt="Report di un mese in Cedolì, tema scuro" loading="lazy">
-      <figcaption>Le immagini mostrano cedolini inventati.</figcaption>
-    </figure>
-  </div>
-</section>
-
-<section id="video" class="demo">
-  <div class="wrap">
-    <h2>In 30 secondi</h2>
-    <p class="intro">Trascini il PDF, leggi il mese spiegato, vedi se qualche numero non torna e ritrovi tutto nello storico. Il video non ha audio e usa cedolini inventati.</p>
-    <figure class="shot">
-      <video controls muted playsinline preload="none" poster="video/cedoli-demo.jpg" width="1280" height="720">
+    <figure id="video" class="shot demo">
+      <video controls muted playsinline preload="none" poster="video/cedoli-demo.jpg" width="1280" height="720" aria-label="Cedolì in 30 secondi: trascini il PDF, leggi il mese spiegato, vedi cosa controllare e ritrovi tutto nello storico">
         <source src="video/cedoli-demo.mp4" type="video/mp4">
         <a href="video/cedoli-demo.mp4">Scarica il video dimostrativo</a>
       </video>
-      <figcaption>Il video si scarica solo quando premi play (meno di 1 MB) e arriva da questo stesso sito.</figcaption>
+      <figcaption>Cedolì in 30 secondi, senza audio e con cedolini inventati. Il video (meno di 1 MB) si scarica da questo sito solo quando premi play.</figcaption>
     </figure>
   </div>
 </section>
@@ -85,6 +73,18 @@
       <a class="card link" href="verifica.html"><div class="ico" aria-hidden="true">✓</div><h3>Nessun dato esce dal PC</h3><p>Niente Internet, niente account, niente cloud. E non devi fidarti sulla parola: lo puoi verificare in cinque minuti.</p><span class="more">Come verificarlo →</span></a>
       <a class="card link" href="scarica.html"><div class="ico" aria-hidden="true">⤓</div><h3>Gratuita, per Windows</h3><p>Uno zip da estrarre, senza installazione né permessi di amministratore. Anche per Linux e macOS.</p><span class="more">Scarica e istruzioni →</span></a>
     </div>
+  </div>
+</section>
+
+<section class="trio">
+  <div class="wrap">
+    <h2>Tre schermate, tutto quello che serve</h2>
+    <div class="row">
+      <figure><div class="shot"><img class="light-only" src="img/app-elenco.png" width="1100" height="760" alt="Elenco dei cedolini con la zona di caricamento" loading="lazy"><img class="dark-only" src="img/app-elenco-scuro.png" width="1100" height="760" alt="Elenco dei cedolini con la zona di caricamento, tema scuro" loading="lazy"></div><figcaption><strong>Le tue buste paga</strong>Trascini i PDF e li ritrovi tutti qui, con netto ed esito dei controlli.</figcaption></figure>
+      <figure><div class="shot"><img class="light-only" src="img/app-mese.png" width="1100" height="1400" alt="Report di un mese" loading="lazy"><img class="dark-only" src="img/app-mese-scuro.png" width="1100" height="1400" alt="Report di un mese, tema scuro" loading="lazy"></div><figcaption><strong>Il mese spiegato</strong>Ogni voce, i conti dal lordo al netto e cosa controllare.</figcaption></figure>
+      <figure><div class="shot"><img class="light-only" src="img/app-storico.png" width="1100" height="1400" alt="Storico dei cedolini con il grafico mese per mese" loading="lazy"><img class="dark-only" src="img/app-storico-scuro.png" width="1100" height="1400" alt="Storico dei cedolini con il grafico mese per mese, tema scuro" loading="lazy"></div><figcaption><strong>Lo storico</strong>Netto e trattenute mese dopo mese, e cosa è cambiato.</figcaption></figure>
+    </div>
+    <p class="small center">Le immagini mostrano cedolini inventati. <a href="funzioni.html#come-appare">Tutte le funzioni →</a></p>
   </div>
 </section>
 
@@ -103,7 +103,7 @@
 
 <footer>
   <div class="wrap">
-    <div class="foot-support"><span>Cedolì è gratuita e senza pubblicità. Se ti è utile, puoi sostenerla.</span><a class="btn-cafe" href="https://ko-fi.com/busta_chiara"><svg width="20" height="16" viewBox="0 0 26 20" aria-hidden="true"><path d="M2 3h17v9a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M19 6h2.5a3.3 3.3 0 0 1 0 6.6H19" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M10.5 14s-3.6-2.2-3.6-4.4c0-1.2.8-2 1.8-2 .8 0 1.4.4 1.8 1 .4-.6 1-1 1.8-1 1 0 1.8.8 1.8 2 0 2.2-3.6 4.4-3.6 4.4z" fill="currentColor"/></svg>Offrimi un caffè</a></div>
+    <div class="foot-support"><span>Cedolì è gratuita e senza pubblicità. Se ti è utile, puoi sostenerla.</span><a class="btn-cafe" href="https://ko-fi.com/cedoli"><svg width="20" height="16" viewBox="0 0 26 20" aria-hidden="true"><path d="M2 3h17v9a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M19 6h2.5a3.3 3.3 0 0 1 0 6.6H19" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M10.5 14s-3.6-2.2-3.6-4.4c0-1.2.8-2 1.8-2 .8 0 1.4.4 1.8 1 .4-.6 1-1 1.8-1 1 0 1.8.8 1.8 2 0 2.2-3.6 4.4-3.6 4.4z" fill="currentColor"/></svg>Offrimi un caffè</a></div>
     <nav class="foot-nav" aria-label="Tutte le pagine"><a href="./">Home</a><a href="funzioni.html">Cosa fa</a><a href="verifica.html">Privacy</a><a href="scarica.html">Scarica</a><a href="sostieni.html">Sostieni</a><a href="legale.html">Note legali e privacy</a></nav>
     <div><strong>Cedolì</strong> · uso personale gratuito · il codice si può leggere per verificarlo, non riutilizzare (<a href="https://github.com/FabioCuccaro/cedoli/blob/main/LICENSE.md">licenza</a>).</div>
     <div>Le spiegazioni sono indicative e possono sbagliare: non sono consulenza del lavoro né fiscale e fanno fede i numeri del cedolino. Per una verifica chiedi all'ufficio del personale, a un consulente del lavoro o a un CAF.</div>

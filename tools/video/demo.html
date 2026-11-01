@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Cedolì: video dimostrativo</title>
+<!--
+  Scene del video della home (docs/video/). Ogni fotogramma è render(t), con t in secondi:
+  registra.js chiama render() per ogni fotogramma, fa lo screenshot e FFmpeg li unisce.
+  Aperta nel browser con ?t=12.5 mostra quel momento, senza ?t si anima in tempo reale.
+  Le immagini in img/ vengono da cattura.js, con cedolini sintetici.
+-->
+<style>
+  :root { --bg:#f6f4ef; --surface:#fff; --text:#1c1f24; --muted:#5f6670; --line:#e2ded5; --accent:#23507a; --accent-2:#e0a43a; --soft:#e8eef4; --bad:#c0392b; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1280px; height: 720px; overflow: hidden; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+  .abs { position: absolute; }
+  .brand { display: flex; align-items: center; gap: 18px; font-weight: 800; letter-spacing: -.02em; }
+  .logo .b { fill: var(--accent); } .logo .o { fill: var(--accent-2); } .logo .s { stroke: var(--accent); }
+
+  #intro, #outro { left: 0; top: 0; width: 1280px; height: 720px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  #intro .brand, #outro .brand { font-size: 64px; }
+  #intro h1 { font-size: 46px; line-height: 1.15; letter-spacing: -.02em; margin: 34px 0 0; max-width: 900px; }
+  #intro h1 em { font-style: normal; color: var(--accent); }
+
+  #caption { left: 64px; top: 0; width: 350px; height: 720px; display: flex; flex-direction: column; justify-content: center; }
+  .cap { position: absolute; left: 0; width: 350px; }
+  .cap .n { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 800; font-size: 20px; margin-bottom: 18px; }
+  .cap h2 { font-size: 38px; line-height: 1.15; letter-spacing: -.02em; margin: 0 0 14px; }
+  .cap p { font-size: 21px; line-height: 1.45; color: var(--muted); margin: 0; }
+
+  #win { left: 450px; top: 56px; width: 776px; height: 608px; background: var(--surface); border-radius: 16px; border: 1px solid var(--line);
+    box-shadow: 0 24px 60px rgba(20,30,45,.16); overflow: hidden; }
+  #bar { height: 40px; background: #eceae4; display: flex; align-items: center; gap: 8px; padding: 0 16px; border-bottom: 1px solid var(--line); }
+  #bar i { width: 12px; height: 12px; border-radius: 50%; background: #d6d2c8; display: block; }
+  #bar span { margin-left: 18px; flex: 1; height: 24px; border-radius: 8px; background: #f8f7f3; font-size: 13px; color: var(--muted); display: flex; align-items: center; padding-left: 12px; }
+  #view { position: absolute; left: 0; top: 40px; width: 776px; height: 568px; overflow: hidden; background: var(--bg); }
+  .shot { position: absolute; left: 0; top: 0; width: 1100px; transform-origin: 0 0; }
+  .ring { position: absolute; border: 4px solid var(--accent-2); border-radius: 14px; box-shadow: 0 0 0 9999px rgba(28,31,36,.18); }
+  #wipe { position: absolute; background: #fff; }
+  #pdf { width: 92px; height: 116px; background: #fff; border: 2px solid var(--line); border-radius: 10px; box-shadow: 0 12px 30px rgba(20,30,45,.22);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-weight: 800; color: var(--bad); font-size: 18px; }
+  #pdf svg { width: 40px; height: 40px; color: var(--accent); }
+  #cursor { width: 26px; height: 26px; }
+  #badge { right: 24px; bottom: 18px; font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; }
+
+  #outro .wifi { width: 150px; height: 150px; color: var(--accent); }
+  #outro .wifi .cut { stroke: var(--bad); }
+  #outro h2 { font-size: 48px; letter-spacing: -.02em; margin: 26px 0 8px; }
+  #outro p { font-size: 26px; color: var(--muted); margin: 0; }
+  #outro .end { margin-top: 0; }
+  #outro .url { margin-top: 26px; font-size: 30px; font-weight: 800; color: #fff; background: var(--accent); padding: 12px 30px; border-radius: 14px; }
+</style>
+</head>
+<body>
+
+<div id="intro" class="abs">
+  <div class="brand">
+    <svg class="logo" width="96" height="96" viewBox="0 0 64 64" aria-hidden="true"><rect class="b" width="64" height="64" rx="14"/><rect class="o" x="19" y="22" width="7" height="16" rx="1.5"/><rect class="o" x="28.5" y="15" width="7" height="23" rx="1.5"/><rect class="o" x="38" y="9" width="7" height="29" rx="1.5"/><path d="M12 30 H52 V49 A4 4 0 0 1 48 53 H16 A4 4 0 0 1 12 49 Z" fill="#fff"/><path class="s" d="M12.5 31 L32 43.5 L51.5 31" fill="none" stroke-width="2.6" stroke-linejoin="round"/></svg>
+    Cedolì
+  </div>
+  <h1 id="intro-h">La tua busta paga, spiegata.<br><em>Sul tuo computer.</em></h1>
+</div>
+
+<div id="caption" class="abs">
+  <div class="cap" id="c1"><div class="n">1</div><h2>Trascini il PDF del cedolino</h2><p>Quello che ti dà l'azienda, anche più mesi insieme.</p></div>
+  <div class="cap" id="c2"><div class="n">2</div><h2>Ti spiega il mese</h2><p>Netto, trattenute e ogni voce particolare, con parole semplici.</p></div>
+  <div class="cap" id="c3"><div class="n">3</div><h2>Rifà i conti</h2><p>Se un numero non torna te lo dice, con la differenza in euro e cosa chiedere.</p></div>
+  <div class="cap" id="c4"><div class="n">4</div><h2>Tiene lo storico</h2><p>Mese dopo mese, tredicesima compresa.</p></div>
+</div>
+
+<div id="win" class="abs">
+  <div id="bar"><i></i><i></i><i></i><span>127.0.0.1 · solo su questo computer</span></div>
+  <div id="view">
+    <img class="shot" id="s-elenco" src="img/elenco.png" alt="">
+    <img class="shot" id="s-mese" src="img/mese.png" alt="">
+    <img class="shot" id="s-storico" src="img/storico.png" alt="">
+    <div id="wipe"></div>
+    <div class="ring" id="ring"></div>
+  </div>
+</div>
+
+<div id="pdf" class="abs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h8l5 5v15H6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 2v5h5M9 13h7M9 17h5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>PDF</div>
+<svg id="cursor" class="abs" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 2l17 10-7.5 1.6L9 21z" fill="#1c1f24" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
+<div id="badge" class="abs">Dati di esempio</div>
+
+<div id="outro" class="abs">
+  <svg class="wifi" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+    <path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r="1.2" fill="currentColor"/>
+    <path class="cut" id="cut" d="M3 3l18 18" stroke-width="2.2" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+  </svg>
+  <h2 id="o-h">Funziona anche senza Internet</h2>
+  <p id="o-p">Nessun dato esce dal computer. Niente account, niente cloud.</p>
+  <div class="brand end" id="o-brand">
+    <div class="url">Gratis su cedoli.it</div>
+  </div>
+</div>
+
+<script>
+// Durata totale in secondi: registra.js la legge da qui.
+const DURATA = 28;
+const $ = id => document.getElementById(id);
+const clamp = x => Math.max(0, Math.min(1, x));
+const ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+// Avanzamento da 0 a 1 tra a e b, con accelerazione dolce.
+const seg = (t, a, b) => ease(clamp((t - a) / (b - a)));
+// Visibile tra a e b, con dissolvenza di f secondi in entrata e in uscita.
+const vis = (t, a, b, f = .4) => Math.min(seg(t, a, a + f), 1 - seg(t, b - f, b));
+const lerp = (a, b, k) => a + (b - a) * k;
+const set = (el, o) => Object.assign($(el).style, o);
+
+// Posizione dello screenshot nella finestra: y = pixel CSS dell'app in cima alla vista, s = scala.
+const S0 = 776 / 1100;
+function camera(el, y, s, x = 0) { set(el, { transform: `translate(${-x * s}px, ${-y * s}px) scale(${s})` }); }
+// Riquadro evidenziato, in coordinate CSS dell'app, trasformate come lo screenshot.
+function ring(o, r, y, s, x = 0) {
+  set('ring', { opacity: o, left: (r[0] - x) * s - 8 + 'px', top: (r[1] - y) * s - 8 + 'px', width: (r[2] - r[0]) * s + 16 + 'px', height: (r[3] - r[1]) * s + 16 + 'px' });
+}
+
+function render(t) {
+  // 1. Apertura
+  set('intro', { opacity: vis(t, -1, 3.6, .6), transform: `translateY(${lerp(14, 0, seg(t, 0, 1))}px)` });
+  set('intro-h', { opacity: seg(t, .5, 1.3) });
+
+  // Finestra, didascalie e scritta "dati di esempio" dalla scena 2 alla 5
+  const w = vis(t, 3.4, 23.2, .6);
+  set('win', { opacity: w, transform: `translateY(${lerp(30, 0, seg(t, 3.4, 4.2))}px)` });
+  set('badge', { opacity: w });
+  set('c1', { opacity: vis(t, 3.6, 8.6) });
+  set('c2', { opacity: vis(t, 8.6, 13.4) });
+  set('c3', { opacity: vis(t, 13.4, 18.6) });
+  set('c4', { opacity: vis(t, 18.6, 23.2) });
+  for (const id of ['c1', 'c2', 'c3', 'c4']) $(id).style.transform = `translateY(${-90 + (1 - +$(id).style.opacity) * 16}px)`;
+
+  // 2. Trascini il PDF: l'icona va dalla didascalia al riquadro, poi si apre il mese
+  const fly = seg(t, 4.6, 6.4);
+  const px = lerp(150, 450 + 550 * S0 - 46, fly), py = lerp(560, 56 + 40 + 128 * S0 + 14, fly) - Math.sin(fly * Math.PI) * 90;
+  set('pdf', { opacity: vis(t, 4.2, 6.8, .3), left: px + 'px', top: py + 'px', transform: `rotate(${lerp(-8, 0, fly)}deg) scale(${lerp(1, .8, seg(t, 6.2, 6.8))})` });
+  set('cursor', { opacity: vis(t, 4.2, 7.2, .3), left: px + 60 + 'px', top: py + 70 + 'px' });
+  set('s-elenco', { opacity: 1 - seg(t, 7.6, 8.2) });
+  camera('s-elenco', 0, S0);
+
+  // 2-3. Il mese: netto, poi le voci particolari, poi i controlli da guardare
+  set('s-mese', { opacity: seg(t, 7.6, 8.2) * (1 - seg(t, 18.4, 19)) });
+  let y = 0, s = S0;
+  y = lerp(y, 540, seg(t, 9.2, 10.4));       // riquadri competenze, trattenute, netto
+  y = lerp(y, 860, seg(t, 11.4, 12.4));      // "Da sapere questo mese"
+  y = lerp(y, 330, seg(t, 13.6, 14.8));      // controlli da guardare
+  s = lerp(s, .8, seg(t, 13.6, 14.8));
+  const x = lerp(0, 70, seg(t, 13.6, 14.8));
+  camera('s-mese', y, s, x);
+
+  // 4. Lo storico: le colonne compaiono da sinistra a destra
+  set('s-storico', { opacity: seg(t, 18.4, 19) });
+  const ys = lerp(0, 90, seg(t, 19.2, 20.2));
+  camera('s-storico', ys, S0);
+  const k = seg(t, 19.6, 21.6);
+  set('wipe', { opacity: t > 18.4 && t < 23.2 ? 1 : 0, left: lerp(180, 1004, k) * S0 + 'px', top: (396 - ys) * S0 + 'px', width: (1004 - lerp(180, 1004, k)) * S0 + 'px', height: 232 * S0 + 'px' });
+
+  // Riquadri evidenziati
+  if (t < 13.4) {
+    const o1 = vis(t, 10.4, 11.4, .3), o2 = vis(t, 12.4, 13.4, .3);
+    if (o1 > 0) ring(o1, [713, 625, 1013, 735], y, s);
+    else ring(o2, [86, 916, 1014, 1076], y, s);
+  } else if (t < 18.6) ring(vis(t, 14.8, 18.4, .3), [86, 348, 1014, 604], y, s, x);
+  else ring(vis(t, 21.6, 23, .3), [86, 344, 1014, 704], ys, S0);
+
+  // 5. Chiusura
+  set('outro', { opacity: seg(t, 23.2, 23.8) });
+  $('cut').style.strokeDashoffset = 1 - seg(t, 23.8, 24.6);
+  set('o-h', { opacity: seg(t, 24.2, 24.8) });
+  set('o-p', { opacity: seg(t, 24.8, 25.4) });
+  set('o-brand', { opacity: seg(t, 25.8, 26.4), transform: `scale(${lerp(.9, 1, seg(t, 25.8, 26.4))})` });
+}
+
+const q = new URLSearchParams(location.search);
+if (q.has('t')) render(+q.get('t'));
+else if (!q.has('fermo')) { const t0 = performance.now(); (function loop() { render(((performance.now() - t0) / 1000) % DURATA); requestAnimationFrame(loop); })(); }
+</script>
+</body>
+</html>

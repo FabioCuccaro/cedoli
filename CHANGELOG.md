@@ -2,6 +2,15 @@
 
 Le versioni seguono `MAGGIORE.MINORE.CORREZIONE`. Il numero in uso si vede in fondo all'app e con `bp --version`.
 
+## 0.10.0 (01/11/2026)
+
+- La pagina per le donazioni su Ko-fi è ora ko-fi.com/cedoli.
+- La cartella dove l'app tiene i cedolini si chiama ora `Cedoli` (su Windows `%LOCALAPPDATA%\Cedoli`). Al primo avvio la vecchia cartella `BustaPagaBeautify` viene rinominata da sola: i cedolini già caricati restano.
+- Il sito è diviso in pagine: home, cosa fa, privacy, scarica, sostieni e note legali, con lo stesso menu in alto e in fondo.
+- Nella home del sito c'è un video di 30 secondi che mostra l'app al lavoro, con cedolini inventati, accanto al titolo. Sta sul sito stesso e si scarica solo se premi play.
+- Il sito usa tutta la larghezza degli schermi grandi, e la home mostra le tre schermate dell'app affiancate.
+- Il sito ha una pagina di **note legali**: cosa è e cosa non è Cedolì, a chi chiedere quando un numero non torna, limiti di responsabilità, termini d'uso e privacy voce per voce. Dove una voce della solita informativa non si applica, è scritto perché.
+
 ## 0.9.0 (01/11/2026)
 
 - Il sito ha un indirizzo suo: **cedoli.it**.

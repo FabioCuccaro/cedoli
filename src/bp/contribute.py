@@ -14,7 +14,7 @@ REPO = "https://github.com/FabioCuccaro/cedoli-segnalazioni"
 # Indirizzo a cui mandare le strutture anonime. Vuoto: l'app propone solo la segnalazione su GitHub.
 EMAIL = "bustachiara.segnalazioni@proton.me"
 # Nome della pagina Ko-fi per le donazioni volontarie. Vuoto: l'app non mostra il link.
-KOFI = "busta_chiara"
+KOFI = "cedoli"
 
 SUBJECT = "Cedolì: nuovo formato di busta paga"
 TEXT = (

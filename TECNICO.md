@@ -2,7 +2,7 @@
 
 # Cedolì
 
-Fino alla versione 0.8.0 si chiamava *Busta chiara*: il nome è cambiato perché ne esisteva già uno uguale, un servizio online che carica le buste paga su Internet. I repository pubblici sono `cedoli` e `cedoli-segnalazioni`; la cartella dei dati (`BustaPagaBeautify`) e il comando `bp` non cambiano.
+Fino alla versione 0.8.0 si chiamava *Busta chiara*: il nome è cambiato perché ne esisteva già uno uguale, un servizio online che carica le buste paga su Internet. I repository pubblici sono `cedoli` e `cedoli-segnalazioni`; il comando `bp` non cambia. Dalla 0.10.0 la cartella dei dati si chiama `Cedoli`: al primo avvio l'app rinomina da sola quella vecchia, `BustaPagaBeautify`, e se non ci riesce (per esempio perché è aperta in un altro programma) continua a usarla.
 
 Repository `busta_paga_beautify`, comando `bp`. Legge il PDF di una busta paga italiana **interamente in locale**, ne estrae voci e totali e verifica che i numeri letti ricostruiscano i totali stampati. Nessun dato esce dal computer.
 
@@ -43,6 +43,10 @@ In tutti i casi si apre il browser su `http://127.0.0.1:8573/`, una pagina servi
   <source media="(prefers-color-scheme: dark)" srcset="docs/img/app-storico-scuro.png">
   <img src="docs/img/app-storico.png" alt="Storico dei cedolini">
 </picture>
+
+**Video.** Sul sito c'è un [video di 30 secondi](https://cedoli.it/) con l'app al lavoro, sempre con cedolini inventati.
+
+[![Fotogramma del video dimostrativo: il report di un mese spiegato](docs/video/cedoli-demo.jpg)](https://cedoli.it/)
 
 **Aspetto.** Logo "busta e grafico" (una busta da cui escono tre barre), blu inchiostro e ocra su carta calda. Tutte le pagine hanno tema chiaro e scuro: seguono il sistema, oppure si sceglie *Tema chiaro* o *Tema scuro* dal menu in alto, e la scelta resta per le aperture successive. I colori sono variabili in `src/bp/report/templates/_stile.css`, il logo è in `_marchio.html` e in [`packaging/icona.svg`](packaging/icona.svg). Gli screenshot qui sopra seguono il tema chiaro o scuro di chi legge.
 
@@ -89,7 +93,7 @@ uv sync
 uv run bp app
 ```
 
-Si apre il browser su una pagina servita solo da questo computer (`127.0.0.1`): trascini i PDF, vedi l'elenco dei cedolini, il report di ogni mese e lo storico. I PDF caricati restano in una cartella personale (`%LOCALAPPDATA%\BustaPagaBeautify` su Windows, `~/Library/Application Support/BustaPagaBeautify` su macOS, `~/.local/share/BustaPagaBeautify` su Linux; si cambia con `--cartella`). Un file che non si riesce a leggere non viene tenuto. L'app usa sempre l'indirizzo `http://127.0.0.1:8573/`, quindi si può salvare nei segnalibri; se è già aperta, un secondo avvio apre solo il browser (ma se quella aperta è una versione diversa, per esempio dopo un aggiornamento, la chiude e parte la nuova), e se la porta è occupata da un altro programma ne sceglie una libera. Il tasto *Chiudi l'app* spegne il programma (come chiudere la finestra del terminale o premere Ctrl+C).
+Si apre il browser su una pagina servita solo da questo computer (`127.0.0.1`): trascini i PDF, vedi l'elenco dei cedolini, il report di ogni mese e lo storico. I PDF caricati restano in una cartella personale (`%LOCALAPPDATA%\Cedoli` su Windows, `~/Library/Application Support/Cedoli` su macOS, `~/.local/share/Cedoli` su Linux; si cambia con `--cartella`; fino alla 0.9.0 si chiamava `BustaPagaBeautify` e viene rinominata al primo avvio). Un file che non si riesce a leggere non viene tenuto. L'app usa sempre l'indirizzo `http://127.0.0.1:8573/`, quindi si può salvare nei segnalibri; se è già aperta, un secondo avvio apre solo il browser (ma se quella aperta è una versione diversa, per esempio dopo un aggiornamento, la chiude e parte la nuova), e se la porta è occupata da un altro programma ne sceglie una libera. Il tasto *Chiudi l'app* spegne il programma (come chiudere la finestra del terminale o premere Ctrl+C).
 
 **Quando un file non si legge.** Il file non viene tenuto e l'app dice perché, in parole semplici:
 
@@ -254,15 +258,17 @@ Cedolì è gratuita per uso personale ma non è open source: vedi [`LICENSE.md`]
 
 Lo sviluppo resta in questo repository privato. A ogni release il workflow `windows` copia il sorgente della versione (senza cronologia e senza `.github/` e `.claude/`) e lo zip nel repository pubblico [FabioCuccaro/cedoli](https://github.com/FabioCuccaro/cedoli), da cui chiunque può scaricare l'app e leggere il codice. Lì il README è [`packaging/README_pubblico.md`](packaging/README_pubblico.md), breve e per chi usa l'app; questo README diventa `TECNICO.md`. Va aggiornato quando cambia qualcosa di visibile per chi usa l'app (formati, installazione, privacy). Serve il segreto `BUSTA_CHIARA_PUBBLICO_TOKEN` (token con permesso *Contents: read and write* solo su quel repository); senza, il passo viene saltato con un avviso.
 
-Le donazioni volontarie passano da Ko-fi, su [ko-fi.com/busta_chiara](https://ko-fi.com/busta_chiara): il pulsante *Offrimi un caffè*, in alto nell'app accanto a *Chiudi l'app*, viene da `KOFI` in `src/bp/contribute.py` (vuoto = link nascosto). Ha l'aspetto del pulsante ufficiale di Ko-fi ma è disegnato nella pagina (CSS e SVG), perché l'immagine originale verrebbe scaricata da Internet. È un normale link, si apre solo se lo clicchi.
+Le donazioni volontarie passano da Ko-fi, su [ko-fi.com/cedoli](https://ko-fi.com/cedoli): il pulsante *Offrimi un caffè*, in alto nell'app accanto a *Chiudi l'app*, viene da `KOFI` in `src/bp/contribute.py` (vuoto = link nascosto). Ha l'aspetto del pulsante ufficiale di Ko-fi ma è disegnato nella pagina (CSS e SVG), perché l'immagine originale verrebbe scaricata da Internet. È un normale link, si apre solo se lo clicchi.
 
 ## Sito
 
-Il sito di Cedolì è in [`docs/`](docs/): due pagine statiche, `index.html` (cosa fa, come funziona, privacy, download, formati supportati, sostieni) e `verifica.html` (le prove passo passo per controllare che nulla esca dal PC), più `sito.css`, `sito.js` (solo il selettore del tema), `icona.svg` e gli screenshot di `docs/img/`, gli stessi del README, fatti con cedolini sintetici. Per vederlo in locale basta aprire `docs/index.html` nel browser, oppure `python -m http.server -d docs`.
+Il sito di Cedolì è in [`docs/`](docs/): pagine statiche con lo stesso menu, `index.html` (home: titolo con il video accanto, tre riquadri verso le altre pagine, le tre schermate dell'app affiancate), `funzioni.html` (cosa fa e giro dell'app con gli screenshot), `verifica.html` (privacy: perché nessun dato esce dal PC e le prove passo passo per controllarlo), `scarica.html` (download, istruzioni, impronta dello zip, buste paga supportate), `sostieni.html` (Ko-fi e altri modi per aiutare) e `legale.html` (note legali: cosa è e cosa non è, limiti di responsabilità, termini d'uso e privacy voce per voce, con il motivo di ogni "non si applica"). Tutte hanno lo stesso menu in alto, lo stesso piè di pagina con il menu completo e un invito discreto a offrire un caffè su Ko-fi. Accanto alle pagine ci sono `sito.css`, `sito.js` (solo il selettore del tema), `icona.svg`, `CNAME` (il dominio cedoli.it), gli screenshot di `docs/img/`, gli stessi del README, fatti con cedolini sintetici, e il video dimostrativo della home in `docs/video/` (meno di 1 MB, si scarica solo quando si preme play; si rigenera con gli script di [`tools/video/`](tools/video/README.md)). Su desktop le pagine usano fino a 1320 px di larghezza; sotto gli 820 px tutto va su una colonna. Per vederlo in locale basta aprire `docs/index.html` nel browser, oppure `python -m http.server -d docs`.
 
-Mantiene la stessa promessa dell'app: niente cookie, tracker, statistiche, font o script esterni. Ogni pagina ha una Content-Security-Policy che vieta al browser di caricare qualsiasi cosa da altri siti, e `tests/test_sito.py` fallisce se compare una risorsa esterna, uno stile o uno script in linea, un file locale mancante o un link verso un indirizzo non previsto (repository pubblici di Cedolì, Ko-fi, email delle segnalazioni, documentazione di uv e di GitHub).
+Mantiene la stessa promessa dell'app: niente cookie, tracker, statistiche, font o script esterni. Ogni pagina ha una Content-Security-Policy che vieta al browser di caricare qualsiasi cosa da altri siti, e `tests/test_sito.py` fallisce se compare una risorsa esterna, uno stile o uno script in linea, un file locale mancante o un link verso un indirizzo non previsto (repository pubblici di Cedolì, Ko-fi, email delle segnalazioni, documentazione di uv e di GitHub, sito del Garante privacy). Controlla anche che ogni pagina abbia lo stesso menu e il pulsante del caffè, che i segnaposto della release siano validi e che il video sia locale e non si scarichi prima del play.
 
 **Pubblicazione.** `docs/` arriva nel repository pubblico [FabioCuccaro/cedoli](https://github.com/FabioCuccaro/cedoli) con il resto del sorgente, a ogni release, e GitHub Pages lo pubblica su <https://cedoli.it/> (nel repository pubblico: *Settings* → *Pages* → *Deploy from a branch* → `main`, cartella `/docs`, con *Enforce HTTPS*). Il dominio è registrato su Aruba e viene da `docs/CNAME`: nel DNS ci sono quattro record A verso 185.199.108.153, .109.153, .110.153 e .111.153, un CNAME `www` verso `fabiocuccaro.github.io` e il TXT di verifica del dominio nelle impostazioni Pages dell'account. Il vecchio indirizzo `fabiocuccaro.github.io/cedoli/` rimanda a cedoli.it. Prima di copiarlo, il workflow `windows` aggiorna in `docs/*.html` i segnaposto `<!--versione-->`, `<!--data-->` (dalla riga del `CHANGELOG.md`), `<!--dimensione-->` e `<!--sha256-->` dello zip appena costruito: il sito mostra sempre l'ultima versione con la sua impronta, senza modifiche a mano. I valori in questo repository sono quelli dell'ultima release al momento della modifica e servono solo per l'anteprima. Il pulsante di download punta a `releases/latest/download/Cedoli-windows.zip`, che GitHub fa corrispondere all'ultima release.
+
+**Aggiornare solo il sito.** Per pubblicare modifiche a `docs/` senza una release: su GitHub *Actions* → *Aggiorna sito* → *Run workflow* (da `main`). Il workflow `sito` controlla il sito con `tests/test_sito.py`, copia `docs/` nel repository pubblico tenendo versione, data, dimensione e impronta dell'ultima release già pubblicata, e GitHub Pages lo mette online in un paio di minuti. Il sorgente pubblico non cambia. Il sito non deve descrivere funzioni che l'ultima release non ha ancora: quelle aspettano la release.
 
 ## Versioni
 
@@ -318,12 +324,20 @@ src/bp/
 ├── app.py            # server locale di bp app
 └── cli.py            # comandi bp import / report / storico / app / inspect / verifica / anonimo / struttura
 tools/
-└── segnalazioni.py   # pagina locale delle segnalazioni ricevute (usa la rete, fuori dall'app)
-docs/                 # sito pubblico (GitHub Pages): index.html, verifica.html, sito.css, sito.js
-└── img/              # screenshot del README e del sito (tema chiaro e scuro), fatti con cedolini sintetici
+├── segnalazioni.py   # pagina locale delle segnalazioni ricevute (usa la rete, fuori dall'app)
+└── video/            # scene HTML e script (Playwright + FFmpeg) che generano il video del sito
+docs/                 # sito pubblico su cedoli.it (GitHub Pages): index, funzioni, verifica, scarica, sostieni, legale
+├── sito.css, sito.js # stile e selettore del tema, gli unici file condivisi
+├── CNAME             # dominio cedoli.it
+├── img/              # screenshot del README e del sito (tema chiaro e scuro), fatti con cedolini sintetici
+└── video/            # video dimostrativo della home e la sua copertina
+.github/workflows/
+├── test.yml          # test a ogni PR
+├── windows.yml       # eseguibile Windows; con un tag vX.Y.Z release e copia nel repository pubblico
+└── sito.yml          # "Aggiorna sito": pubblica solo docs/, a mano, senza release
 packaging/
-├── Cedoli.py      # avvio dell'eseguibile: senza argomenti apre l'app
-├── Cedoli.spec    # configurazione PyInstaller
+├── Cedoli.py         # avvio dell'eseguibile: senza argomenti apre l'app
+├── Cedoli.spec       # configurazione PyInstaller
 ├── icona.svg         # logo dell'app; Cedoli.ico (icona dell'eseguibile) è generata da qui
 ├── LEGGIMI.txt       # istruzioni per chi riceve lo zip
 └── README_pubblico.md # README del repository pubblico cedoli
@@ -335,7 +349,7 @@ tests/
 ├── conftest.py       # controllo zero rete attivo in tutti i test
 ├── test_zero_rete.py # ogni funzione dell'app senza rete; pagine senza risorse esterne
 ├── test_import_rete.py # nessuna libreria di rete o telemetria nel codice dell'app
-├── test_sito.py      # il sito non carica nulla da fuori e i segnaposto della release sono validi
+├── test_sito.py      # il sito non carica nulla da fuori, stesso menu su tutte le pagine, segnaposto della release validi
 └── test_*.py
 ```
 

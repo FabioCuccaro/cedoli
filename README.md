@@ -6,7 +6,7 @@
 
 Gratuita per uso personale.
 
-**[Scarica l'ultima versione per Windows](https://github.com/FabioCuccaro/cedoli/releases/latest)** · [cedoli.it](https://cedoli.it/)
+**[Scarica l'ultima versione per Windows](https://github.com/FabioCuccaro/cedoli/releases/latest)** · sito: [cedoli.it](https://cedoli.it/) ([cosa fa](https://cedoli.it/funzioni.html) · [privacy](https://cedoli.it/verifica.html) · [scarica](https://cedoli.it/scarica.html) · [note legali](https://cedoli.it/legale.html))
 
 <a href='https://ko-fi.com/O3Z529TU5Z' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi5.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
@@ -16,6 +16,10 @@ Gratuita per uso personale.
 </picture>
 
 *Le immagini mostrano cedolini inventati.*
+
+[![Guarda il video di 30 secondi su cedoli.it](docs/video/cedoli-demo.jpg)](https://cedoli.it/)
+
+*Guarda il [video di 30 secondi](https://cedoli.it/) sul sito.*
 
 ## Cosa fa
 
@@ -29,7 +33,7 @@ Gratuita per uso personale.
 
 Cedolì non usa Internet. La pagina che vedi nel browser è servita dal tuo computer (`127.0.0.1`) e non è raggiungibile da altri. I cedolini restano in una cartella sul tuo PC: per cancellare tutto basta eliminarla.
 
-Non serve fidarsi sulla parola: puoi usarla in modalità aereo, oppure bloccarla nel firewall di Windows, e funziona lo stesso. Le istruzioni passo passo sono in `LEGGIMI.txt` dentro lo zip. Il codice è qui per chi vuole controllarlo.
+Non serve fidarsi sulla parola: puoi usarla in modalità aereo, oppure bloccarla nel firewall di Windows, e funziona lo stesso. Le prove passo passo sono sul sito, nella pagina [Privacy](https://cedoli.it/verifica.html), e in `LEGGIMI.txt` dentro lo zip. Il codice è qui per chi vuole controllarlo. Perché quasi tutta la solita informativa privacy qui non si applica lo spiega la pagina [Note legali](https://cedoli.it/legale.html).
 
 ## Come si usa
 
@@ -54,11 +58,11 @@ Se la tua busta paga ha un altro formato, l'app te lo dice e ti mostra almeno co
 
 ## Limiti
 
-Le spiegazioni sono indicative e possono sbagliare. Cedolì non è consulenza del lavoro né fiscale: fanno fede i numeri del cedolino. Per una verifica chiedi all'ufficio del personale, a un consulente del lavoro o a un CAF.
+Le spiegazioni sono indicative e possono sbagliare. Cedolì non è consulenza del lavoro né fiscale: fanno fede i numeri del cedolino. Per una verifica chiedi all'ufficio del personale, a un consulente del lavoro o a un CAF. I dettagli sono nelle [note legali](https://cedoli.it/legale.html).
 
 ## Sostieni il progetto
 
-Cedolì è gratuita e la sviluppo nel tempo libero. Se ti è utile, puoi [offrirmi un caffè su Ko-fi](https://ko-fi.com/busta_chiara): mi aiuta ad aggiornare le regole fiscali ogni anno e ad aggiungere nuovi formati.
+Cedolì è gratuita e la sviluppo nel tempo libero. Se ti è utile, puoi [offrirmi un caffè su Ko-fi](https://ko-fi.com/cedoli): mi aiuta ad aggiornare le regole fiscali ogni anno e ad aggiungere nuovi formati.
 
 <a href='https://ko-fi.com/O3Z529TU5Z' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi5.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 

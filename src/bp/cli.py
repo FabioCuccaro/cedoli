@@ -128,9 +128,8 @@ def app_cmd(
 ) -> None:
     """Apre l'app nel browser: trascini i PDF e vedi report e storico. Il server è raggiungibile solo da questo computer."""
     from bp.app import serve
-    from bp.archive import default_dir
 
-    serve(cartella or default_dir(), porta, not no_browser)
+    serve(cartella, porta, not no_browser)
 
 
 @app.command()

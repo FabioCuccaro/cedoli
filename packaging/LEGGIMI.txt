@@ -26,7 +26,7 @@ ogni cedolino nuovo.
 PRIVACY
 Il programma non usa Internet: la pagina nel browser è servita dal tuo computer
 e non è raggiungibile da altri. I PDF caricati vengono copiati in
-    %LOCALAPPDATA%\BustaPagaBeautify
+    %LOCALAPPDATA%\Cedoli
 (incollalo nella barra degli indirizzi di Esplora file per aprire la cartella).
 Per cancellare tutto basta eliminare quella cartella.
 

@@ -9,18 +9,33 @@ from pathlib import Path
 from bp import history
 from bp.models import Payslip
 
-APP_DIR_NAME = "BustaPagaBeautify"
+APP_DIR_NAME = "Cedoli"
+# Nome della cartella fino alla 0.9.0: al primo avvio di una versione nuova viene rinominata in APP_DIR_NAME.
+OLD_APP_DIR_NAME = "BustaPagaBeautify"
+
+
+def _data_base() -> Path:
+    if sys.platform == "win32":
+        return Path(os.environ.get("LOCALAPPDATA") or Path.home() / "AppData" / "Local")
+    if sys.platform == "darwin":
+        return Path.home() / "Library" / "Application Support"
+    return Path(os.environ.get("XDG_DATA_HOME") or Path.home() / ".local" / "share")
 
 
 def default_dir() -> Path:
-    """La cartella dei dati personali dell'utente: mai dentro il programma, mai in rete."""
-    if sys.platform == "win32":
-        base = Path(os.environ.get("LOCALAPPDATA") or Path.home() / "AppData" / "Local")
-    elif sys.platform == "darwin":
-        base = Path.home() / "Library" / "Application Support"
-    else:
-        base = Path(os.environ.get("XDG_DATA_HOME") or Path.home() / ".local" / "share")
-    return base / APP_DIR_NAME
+    """La cartella dei dati personali dell'utente: mai dentro il programma, mai in rete.
+
+    Se c'è ancora solo la cartella col vecchio nome la rinomina, così i cedolini già caricati restano.
+    Se non si riesce (per esempio un altro programma la tiene aperta) continua a usare quella vecchia.
+    """
+    base = _data_base()
+    new, old = base / APP_DIR_NAME, base / OLD_APP_DIR_NAME
+    if not new.exists() and old.is_dir():
+        try:
+            old.rename(new)
+        except OSError:
+            return old
+    return new
 
 
 @dataclass

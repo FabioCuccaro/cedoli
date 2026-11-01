@@ -1,6 +1,6 @@
 [project]
 name = "busta-paga-beautify"
-version = "0.9.0"
+version = "0.10.0"
 description = "Legge il PDF di una busta paga italiana, interamente in locale, e ne estrae voci, totali e controlli di quadratura."
 readme = "README.md"
 license = "LicenseRef-Cedoli"
