@@ -3,10 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Il browser stesso vieta a questa pagina di caricare qualsiasi cosa da altri siti. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; media-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
-<title>Verifica da solo che nulla esce dal PC · Cedolì</title>
-<meta name="description" content="Prove semplici per controllare con i propri occhi che Cedolì non usa Internet: modalità aereo, firewall di Windows, Monitoraggio risorse, strumenti del browser, codice sorgente.">
+<title>Privacy: nessun dato esce dal PC · Cedolì</title>
+<meta name="description" content="Cedolì non usa Internet: niente account, niente cloud. Prove semplici per controllarlo da soli: modalità aereo, firewall di Windows, Monitoraggio risorse, strumenti del browser, codice sorgente.">
 <link rel="icon" href="icona.svg" type="image/svg+xml">
 <link rel="stylesheet" href="sito.css">
 <script src="sito.js"></script>
@@ -26,11 +27,11 @@
       </svg>
       <span>Cedolì</span>
     </a>
-    <nav class="menu" aria-label="Sezioni">
-      <a href="./#funzioni" class="hide-sm">Cosa fa</a>
+    <nav class="menu" aria-label="Pagine">
+      <a href="funzioni.html">Cosa fa</a>
       <a href="verifica.html" aria-current="page">Privacy</a>
-      <a href="./#scarica">Scarica</a>
-      <a href="./#sostieni" class="hide-sm">Sostieni</a>
+      <a href="scarica.html">Scarica</a>
+      <a href="sostieni.html" class="hide-sm">Sostieni</a>
       <a href="legale.html" class="hide-sm">Note legali</a>
       <select class="theme" aria-label="Tema">
         <option value="">Tema automatico</option>
@@ -43,11 +44,34 @@
 
 <main>
 
+<section id="privacy" class="privacy first">
+  <div class="wrap">
+    <span class="eyebrow">Privacy</span>
+    <h1>Nessun dato esce dal computer</h1>
+    <p class="intro">Una busta paga dice quanto guadagni, dove lavori e dove vivi. Per questo Cedolì è fatta per non avere bisogno di Internet, e non chiede di fidarsi sulla parola.</p>
+    <div class="grid">
+      <ul class="checks">
+        <li>Non usa Internet: funziona anche in modalità aereo.</li>
+        <li>Niente account, niente registrazione, niente cloud.</li>
+        <li>La pagina nel browser è servita dal tuo PC (<code>127.0.0.1</code>) e non è raggiungibile da altri.</li>
+        <li>I cedolini restano in una cartella sul tuo computer: per cancellare tutto basta eliminarla.</li>
+        <li>Nome, codice fiscale, IBAN e indirizzo non vengono nemmeno letti nei dati dell'app.</li>
+        <li>Nessun controllo automatico degli aggiornamenti: anche quello vorrebbe dire contattare Internet.</li>
+      </ul>
+      <div>
+        <h3>Non serve fidarsi sulla parola</h3>
+        <p>Qui sotto ci sono prove semplici per controllarlo con i tuoi occhi. Le prime tre non richiedono nessuna competenza tecnica e usano solo strumenti già presenti in Windows.</p>
+        <p class="small">Cosa è e cosa non è Cedolì, e perché quasi tutta la solita informativa privacy qui non si applica: <a href="legale.html#privacy">note legali</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <section>
   <div class="wrap">
-    <span class="eyebrow">Non serve fidarsi sulla parola</span>
-    <h1>Verifica da solo che nulla esce dal PC</h1>
-    <p class="lead">Ognuna di queste prove basta da sola. Le prime tre non richiedono nessuna competenza tecnica e usano solo strumenti già presenti in Windows.</p>
+    <h2>Verifica da solo</h2>
+    <p class="intro">Ognuna di queste prove basta da sola.</p>
 
     <div class="steps">
       <div class="card">
@@ -99,12 +123,13 @@ unshare -rn bp storico cedolini/*.pdf -o storico.html</code></pre>
     <h2>Cosa resta sul tuo computer</h2>
     <p class="intro">I PDF che carichi vengono copiati in una cartella personale, così lo storico si ricostruisce a ogni apertura. Per cancellare tutto basta eliminarla.</p>
     <ul class="checks">
-      <li>Windows: <code>%LOCALAPPDATA%\BustaPagaBeautify</code> (incollalo nella barra degli indirizzi di Esplora file)</li>
-      <li>macOS: <code>~/Library/Application Support/BustaPagaBeautify</code></li>
-      <li>Linux: <code>~/.local/share/BustaPagaBeautify</code></li>
+      <li>Windows: <code>%LOCALAPPDATA%\Cedoli</code> (incollalo nella barra degli indirizzi di Esplora file)</li>
+      <li>macOS: <code>~/Library/Application Support/Cedoli</code></li>
+      <li>Linux: <code>~/.local/share/Cedoli</code></li>
     </ul>
+    <p class="small">Con la versione 0.9.0 o precedenti la cartella si chiama ancora <code>BustaPagaBeautify</code>: le versioni nuove la rinominano da sole al primo avvio.</p>
     <p class="note">E questo sito? Non usa cookie, tracker né statistiche, e una regola nella pagina (Content-Security-Policy) vieta al browser di caricare qualsiasi cosa da altri siti: puoi controllarlo con F12 anche qui. È ospitato su GitHub Pages, che come ogni server registra gli accessi.</p>
-    <p><a class="btn" href="./#scarica">Scarica Cedolì</a></p>
+    <p><a class="btn" href="scarica.html">Scarica Cedolì</a></p>
   </div>
 </section>
 
@@ -112,8 +137,11 @@ unshare -rn bp storico cedolini/*.pdf -o storico.html</code></pre>
 
 <footer>
   <div class="wrap">
-    <div><strong>Cedolì</strong> · uso personale gratuito · <a href="./">pagina principale</a> · <a href="legale.html">note legali e privacy</a></div>
-    <div>Le spiegazioni sono indicative e possono sbagliare: non sono consulenza del lavoro né fiscale.</div>
+    <div class="foot-support"><span>Cedolì è gratuita e senza pubblicità. Se ti è utile, puoi sostenerla.</span><a class="btn-cafe" href="https://ko-fi.com/busta_chiara"><svg width="20" height="16" viewBox="0 0 26 20" aria-hidden="true"><path d="M2 3h17v9a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M19 6h2.5a3.3 3.3 0 0 1 0 6.6H19" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M10.5 14s-3.6-2.2-3.6-4.4c0-1.2.8-2 1.8-2 .8 0 1.4.4 1.8 1 .4-.6 1-1 1.8-1 1 0 1.8.8 1.8 2 0 2.2-3.6 4.4-3.6 4.4z" fill="currentColor"/></svg>Offrimi un caffè</a></div>
+    <nav class="foot-nav" aria-label="Tutte le pagine"><a href="./">Home</a><a href="funzioni.html">Cosa fa</a><a href="verifica.html">Privacy</a><a href="scarica.html">Scarica</a><a href="sostieni.html">Sostieni</a><a href="legale.html">Note legali e privacy</a></nav>
+    <div><strong>Cedolì</strong> · uso personale gratuito · il codice si può leggere per verificarlo, non riutilizzare (<a href="https://github.com/FabioCuccaro/cedoli/blob/main/LICENSE.md">licenza</a>).</div>
+    <div>Le spiegazioni sono indicative e possono sbagliare: non sono consulenza del lavoro né fiscale e fanno fede i numeri del cedolino. Per una verifica chiedi all'ufficio del personale, a un consulente del lavoro o a un CAF.</div>
+    <div>Questo sito non usa cookie, tracker né statistiche e non carica nulla da altri siti. È ospitato su GitHub Pages, che come ogni server registra gli accessi (<a href="https://docs.github.com/it/site-policy/privacy-policies/github-general-privacy-statement">informativa di GitHub</a>). La scelta del tema resta solo nel tuo browser.</div>
   </div>
 </footer>
 

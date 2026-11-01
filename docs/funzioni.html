@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Il browser stesso vieta a questa pagina di caricare qualsiasi cosa da altri siti. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; media-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Cosa fa · Cedolì</title>
+<meta name="description" content="Cosa fa Cedolì: spiega ogni voce della busta paga, ricalcola contributi e IRPEF, segnala i numeri che non tornano e tiene lo storico mese per mese.">
+<link rel="icon" href="icona.svg" type="image/svg+xml">
+<link rel="stylesheet" href="sito.css">
+<script src="sito.js"></script>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./">
+      <svg class="logo" width="30" height="30" viewBox="0 0 64 64" aria-hidden="true">
+        <rect class="b" width="64" height="64" rx="14"></rect>
+        <rect class="o" x="19" y="22" width="7" height="16" rx="1.5"></rect>
+        <rect class="o" x="28.5" y="15" width="7" height="23" rx="1.5"></rect>
+        <rect class="o" x="38" y="9" width="7" height="29" rx="1.5"></rect>
+        <path d="M12 30 H52 V49 A4 4 0 0 1 48 53 H16 A4 4 0 0 1 12 49 Z" fill="#ffffff"></path>
+        <path class="s" d="M12.5 31 L32 43.5 L51.5 31" fill="none" stroke-width="2.6" stroke-linejoin="round"></path>
+      </svg>
+      <span>Cedolì</span>
+    </a>
+    <nav class="menu" aria-label="Pagine">
+      <a href="funzioni.html" aria-current="page">Cosa fa</a>
+      <a href="verifica.html">Privacy</a>
+      <a href="scarica.html">Scarica</a>
+      <a href="sostieni.html" class="hide-sm">Sostieni</a>
+      <a href="legale.html" class="hide-sm">Note legali</a>
+      <select class="theme" aria-label="Tema">
+        <option value="">Tema automatico</option>
+        <option value="light">Tema chiaro</option>
+        <option value="dark">Tema scuro</option>
+      </select>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section id="funzioni" class="first">
+  <div class="wrap">
+    <span class="eyebrow">Cosa fa</span>
+    <h1>Il cedolino, raccontato in italiano semplice</h1>
+    <p class="intro">La busta paga è piena di sigle e numeri. Cedolì la legge come farebbe un collega paziente e te la racconta in italiano semplice.</p>
+    <div class="cards">
+      <div class="card"><div class="ico">Aa</div><h3>Spiega ogni voce</h3><p>Retribuzione, contributi, IRPEF, detrazioni, addizionali, TFR, ferie e permessi, con un nome comprensibile e due righe di spiegazione.</p></div>
+      <div class="card"><div class="ico">=</div><h3>Controlla che i conti tornino</h3><p>Ricostruisce il passaggio dal lordo al netto e ricalcola contributi, IRPEF e detrazione con le regole dell'anno.</p></div>
+      <div class="card"><div class="ico">!</div><h3>Ti dice cosa chiedere</h3><p>Quando un numero non torna lo mette in evidenza, con la differenza in euro e cosa domandare all'ufficio del personale.</p></div>
+      <div class="card"><div class="ico">↗</div><h3>Tiene lo storico</h3><p>Netto e trattenute mese per mese, tredicesima e quattordicesima comprese, e le voci che spiegano cosa è cambiato rispetto al mese prima.</p></div>
+      <div class="card"><div class="ico">⤓</div><h3>Storico in un file</h3><p>Salvi lo storico in un'unica pagina da aprire senza l'app, da un altro computer, da un NAS o dal telefono.</p></div>
+      <div class="card"><div class="ico">◐</div><h3>Chiara anche di sera</h3><p>Tema chiaro e scuro, che segue il sistema o si sceglie dal menu.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="come-appare">
+  <div class="wrap">
+    <h2>Come funziona</h2>
+    <p class="intro">Si apre nel browser, ma la pagina la serve il tuo computer: non c'è nessun sito dietro.</p>
+    <div class="tour">
+      <div class="step">
+        <div class="text"><h3>1. Trascini i PDF</h3><p>Quelli che scarichi dal portale dell'azienda, uno o molti insieme, in qualsiasi ordine. I doppioni vengono riconosciuti e ignorati, e ogni cedolino mostra subito competenze, netto ed esito dei controlli.</p></div>
+        <figure class="shot">
+          <img class="light-only" src="img/app-elenco.png" width="1100" height="760" alt="Elenco dei cedolini con la zona di caricamento" loading="lazy">
+          <img class="dark-only" src="img/app-elenco-scuro.png" width="1100" height="760" alt="Elenco dei cedolini, tema scuro" loading="lazy">
+        </figure>
+      </div>
+      <div class="step">
+        <div class="text"><h3>2. Leggi il mese</h3><p>Riepilogo, le cose da sapere di questo mese (bonus, conguagli, rimborsi), il passaggio dal lordo al netto, i controlli di coerenza con formula e valori, e tutte le voci spiegate.</p></div>
+        <figure class="shot">
+          <img class="light-only" src="img/app-mese.png" width="1100" height="1400" alt="Report di un mese" loading="lazy">
+          <img class="dark-only" src="img/app-mese-scuro.png" width="1100" height="1400" alt="Report di un mese, tema scuro" loading="lazy">
+        </figure>
+      </div>
+      <div class="step">
+        <div class="text"><h3>3. Guardi l'andamento</h3><p>Il grafico di netto e trattenute, il filtro per anno e, per ogni mese, cosa è cambiato. Quando arriva il cedolino nuovo lo trascini e lo storico si aggiorna da solo.</p></div>
+        <figure class="shot">
+          <img class="light-only" src="img/app-storico.png" width="1100" height="1400" alt="Storico dei cedolini con il grafico mese per mese" loading="lazy">
+          <img class="dark-only" src="img/app-storico-scuro.png" width="1100" height="1400" alt="Storico dei cedolini, tema scuro" loading="lazy">
+        </figure>
+      </div>
+    </div>
+    <p class="next"><a class="btn" href="scarica.html">Scarica Cedolì</a> <a class="btn secondary" href="verifica.html">Perché i dati restano sul tuo PC</a></p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-support"><span>Cedolì è gratuita e senza pubblicità. Se ti è utile, puoi sostenerla.</span><a class="btn-cafe" href="https://ko-fi.com/busta_chiara"><svg width="20" height="16" viewBox="0 0 26 20" aria-hidden="true"><path d="M2 3h17v9a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M19 6h2.5a3.3 3.3 0 0 1 0 6.6H19" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M10.5 14s-3.6-2.2-3.6-4.4c0-1.2.8-2 1.8-2 .8 0 1.4.4 1.8 1 .4-.6 1-1 1.8-1 1 0 1.8.8 1.8 2 0 2.2-3.6 4.4-3.6 4.4z" fill="currentColor"/></svg>Offrimi un caffè</a></div>
+    <nav class="foot-nav" aria-label="Tutte le pagine"><a href="./">Home</a><a href="funzioni.html">Cosa fa</a><a href="verifica.html">Privacy</a><a href="scarica.html">Scarica</a><a href="sostieni.html">Sostieni</a><a href="legale.html">Note legali e privacy</a></nav>
+    <div><strong>Cedolì</strong> · uso personale gratuito · il codice si può leggere per verificarlo, non riutilizzare (<a href="https://github.com/FabioCuccaro/cedoli/blob/main/LICENSE.md">licenza</a>).</div>
+    <div>Le spiegazioni sono indicative e possono sbagliare: non sono consulenza del lavoro né fiscale e fanno fede i numeri del cedolino. Per una verifica chiedi all'ufficio del personale, a un consulente del lavoro o a un CAF.</div>
+    <div>Questo sito non usa cookie, tracker né statistiche e non carica nulla da altri siti. È ospitato su GitHub Pages, che come ogni server registra gli accessi (<a href="https://docs.github.com/it/site-policy/privacy-policies/github-general-privacy-statement">informativa di GitHub</a>). La scelta del tema resta solo nel tuo browser.</div>
+  </div>
+</footer>
+
+</body>
+</html>

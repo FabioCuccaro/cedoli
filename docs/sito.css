@@ -192,3 +192,24 @@ dl.rows dd { margin: 0; color: var(--muted); font-size: 16px; }
 /* Video dimostrativo della home */
 .demo .shot { max-width: 960px; }
 .demo video { display: block; width: 100%; height: auto; background: var(--bg); }
+
+/* Sito su più pagine */
+section.first { padding-top: 48px; }
+.cards.three { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+a.card.link { display: flex; flex-direction: column; text-decoration: none; color: var(--text); transition: border-color .15s, transform .15s; }
+a.card.link:hover { border-color: var(--accent); transform: translateY(-2px); }
+a.card.link p { flex: 1; }
+.card .more { margin-top: 14px; font-weight: 650; color: var(--accent); font-size: 15px; }
+.cta-band { background: var(--soft); text-align: center; }
+.cta-band .intro { margin-left: auto; margin-right: auto; }
+.cta-band .cta { justify-content: center; }
+p.next { margin-top: 40px; display: flex; gap: 12px; flex-wrap: wrap; }
+.foot-nav { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-bottom: 8px; font-weight: 600; }
+.foot-nav a { color: var(--text); text-decoration: none; }
+.foot-nav a:hover { color: var(--accent); }
+.steps { grid-template-columns: minmax(0, 1fr); }
+
+/* Invito discreto a sostenere il progetto, in fondo a ogni pagina */
+.foot-support { display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap; padding: 14px 18px; margin-bottom: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--muted); font-size: 15px; }
+a.btn-cafe { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--accent); color: var(--accent); text-decoration: none; font-weight: 650; font-size: 15px; white-space: nowrap; }
+a.btn-cafe:hover { background: var(--accent); color: var(--on-accent); }

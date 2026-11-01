@@ -26,11 +26,11 @@
       </svg>
       <span>Cedolì</span>
     </a>
-    <nav class="menu" aria-label="Sezioni">
-      <a href="./#funzioni" class="hide-sm">Cosa fa</a>
+    <nav class="menu" aria-label="Pagine">
+      <a href="funzioni.html">Cosa fa</a>
       <a href="verifica.html">Privacy</a>
-      <a href="./#scarica">Scarica</a>
-      <a href="./#sostieni" class="hide-sm">Sostieni</a>
+      <a href="scarica.html">Scarica</a>
+      <a href="sostieni.html" class="hide-sm">Sostieni</a>
       <a href="legale.html" class="hide-sm" aria-current="page">Note legali</a>
       <select class="theme" aria-label="Tema">
         <option value="">Tema automatico</option>
@@ -136,7 +136,7 @@
 
     <h3>Perché può sbagliare</h3>
     <ul>
-      <li><strong>Formati di busta paga</strong>: Cedolì legge solo i formati elencati nella <a href="./#formati">pagina principale</a>. Un formato diverso, o un aggiornamento del gestionale che lo produce, può far leggere male una voce. Quando non riconosce un formato lo dice, invece di indovinare.</li>
+      <li><strong>Formati di busta paga</strong>: Cedolì legge solo i formati elencati nella <a href="scarica.html#formati">pagina principale</a>. Un formato diverso, o un aggiornamento del gestionale che lo produce, può far leggere male una voce. Quando non riconosce un formato lo dice, invece di indovinare.</li>
       <li><strong>PDF scansionati</strong>: servono PDF con il testo selezionabile, come quelli che arrivano dal portale dell'azienda. Una foto o una scansione non si possono leggere.</li>
       <li><strong>Voci rare</strong>: voci particolari del tuo contratto o della tua azienda possono non avere ancora una spiegazione, o averne una troppo generica.</li>
       <li><strong>Regole fiscali</strong>: aliquote, scaglioni e detrazioni sono scritti per ogni anno. Quando cambia la legge, le regole nuove arrivano con una versione successiva dell'app: fino ad allora i ricalcoli dell'anno nuovo possono non tornare.</li>
@@ -191,7 +191,7 @@
       <div><dt>Titolare del trattamento</dt><dd><span class="pill na">Non si applica</span> Il titolare è chi decide perché e come trattare dati personali altrui. L'app funziona solo sul tuo computer e l'autore non vede nulla dei tuoi cedolini, quindi non c'è un titolare per i dati che carichi: li gestisci tu.</dd></div>
       <div><dt>Dati raccolti</dt><dd><span class="pill none">Nessuno</span> Niente nome, email, password, importi, indirizzo IP, browser o pagine visitate. L'app non ha statistiche, telemetria né segnalazione automatica degli errori.</dd></div>
       <div><dt>Finalità e base giuridica</dt><dd><span class="pill na">Non si applica</span> Servono a giustificare un trattamento di dati. Qui l'autore non ne fa.</dd></div>
-      <div><dt>Dove stanno i tuoi cedolini</dt><dd><span class="pill local">Sul tuo PC</span> In una cartella personale (su Windows <code>%LOCALAPPDATA%\BustaPagaBeautify</code>), per ricostruire lo storico a ogni apertura. Restano finché vuoi tu: per cancellare tutto basta eliminare la cartella.</dd></div>
+      <div><dt>Dove stanno i tuoi cedolini</dt><dd><span class="pill local">Sul tuo PC</span> In una cartella personale (su Windows <code>%LOCALAPPDATA%\Cedoli</code>; con la versione 0.9.0 o precedenti si chiama ancora <code>BustaPagaBeautify</code>), per ricostruire lo storico a ogni apertura. Restano finché vuoi tu: per cancellare tutto basta eliminare la cartella.</dd></div>
       <div><dt>Fornitori e intelligenza artificiale</dt><dd><span class="pill none">Nessuno</span> Nessun cloud, nessun servizio di intelligenza artificiale, nessun invio di email automatiche.</dd></div>
       <div><dt>Trasferimenti fuori dall'UE</dt><dd><span class="pill na">Non si applica</span> I dati non lasciano il tuo computer, quindi non vanno né in Europa né altrove.</dd></div>
       <div><dt>Sicurezza</dt><dd>Non ci sono dati in viaggio da cifrare né un server da proteggere: la pagina dell'app è servita solo al tuo PC (<code>127.0.0.1</code>) e non è raggiungibile da altri. La sicurezza dei cedolini è quella del tuo computer: un account Windows con password e, se puoi, la cifratura del disco (BitLocker o Crittografia dispositivo).</dd></div>
@@ -221,8 +221,11 @@
 
 <footer>
   <div class="wrap">
-    <div><strong>Cedolì</strong> · uso personale gratuito · <a href="./">pagina principale</a> · <a href="verifica.html">verifica la privacy</a></div>
-    <div>Le spiegazioni sono indicative e possono sbagliare: non sono consulenza del lavoro né fiscale.</div>
+    <div class="foot-support"><span>Cedolì è gratuita e senza pubblicità. Se ti è utile, puoi sostenerla.</span><a class="btn-cafe" href="https://ko-fi.com/busta_chiara"><svg width="20" height="16" viewBox="0 0 26 20" aria-hidden="true"><path d="M2 3h17v9a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M19 6h2.5a3.3 3.3 0 0 1 0 6.6H19" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M10.5 14s-3.6-2.2-3.6-4.4c0-1.2.8-2 1.8-2 .8 0 1.4.4 1.8 1 .4-.6 1-1 1.8-1 1 0 1.8.8 1.8 2 0 2.2-3.6 4.4-3.6 4.4z" fill="currentColor"/></svg>Offrimi un caffè</a></div>
+    <nav class="foot-nav" aria-label="Tutte le pagine"><a href="./">Home</a><a href="funzioni.html">Cosa fa</a><a href="verifica.html">Privacy</a><a href="scarica.html">Scarica</a><a href="sostieni.html">Sostieni</a><a href="legale.html">Note legali e privacy</a></nav>
+    <div><strong>Cedolì</strong> · uso personale gratuito · il codice si può leggere per verificarlo, non riutilizzare (<a href="https://github.com/FabioCuccaro/cedoli/blob/main/LICENSE.md">licenza</a>).</div>
+    <div>Le spiegazioni sono indicative e possono sbagliare: non sono consulenza del lavoro né fiscale e fanno fede i numeri del cedolino. Per una verifica chiedi all'ufficio del personale, a un consulente del lavoro o a un CAF.</div>
+    <div>Questo sito non usa cookie, tracker né statistiche e non carica nulla da altri siti. È ospitato su GitHub Pages, che come ogni server registra gli accessi (<a href="https://docs.github.com/it/site-policy/privacy-policies/github-general-privacy-statement">informativa di GitHub</a>). La scelta del tema resta solo nel tuo browser.</div>
   </div>
 </footer>
 
