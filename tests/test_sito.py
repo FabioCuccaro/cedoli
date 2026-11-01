@@ -12,9 +12,9 @@ from tests.test_zero_rete import external_problems
 DOCS = Path(__file__).resolve().parents[1] / "docs"
 PAGES = sorted(DOCS.glob("*.html"))
 CSP = "default-src 'none'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'"
-# Link che portano fuori dal sito: solo pagine ufficiali di Busta chiara, Ko-fi e documentazione citata.
+# Link che portano fuori dal sito: solo pagine ufficiali di Cedolì, Ko-fi e documentazione citata.
 ALLOWED = re.compile(
-    r"https://github\.com/FabioCuccaro/busta-chiara(-segnalazioni)?(/|$)"
+    r"https://github\.com/FabioCuccaro/cedoli(-segnalazioni)?(/|$)"
     r"|https://ko-fi\.com/busta_chiara$"
     r"|mailto:bustachiara\.segnalazioni@proton\.me$"
     r"|https://docs\.astral\.sh/uv/"
@@ -71,4 +71,9 @@ def test_release_markers_are_filled():
     assert re.fullmatch(r"[0-9a-f]{64}", re.search(r"<!--sha256-->(.*?)<!--/sha256-->", html)[1])
     assert re.fullmatch(r"\d\d/\d\d/\d{4}", re.search(r"<!--data-->(.*?)<!--/data-->", html)[1])
     assert re.fullmatch(r"\d+ MB", re.search(r"<!--dimensione-->(.*?)<!--/dimensione-->", html)[1])
-    assert "releases/latest/download/BustaChiara-windows.zip" in html
+    assert "releases/latest/download/Cedoli-windows.zip" in html
+
+
+def test_custom_domain():
+    """GitHub Pages serve il sito su cedoli.it: il file CNAME arriva nel repo pubblico con docs/."""
+    assert (DOCS / "CNAME").read_text(encoding="utf-8").strip() == "cedoli.it"

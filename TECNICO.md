@@ -1,6 +1,8 @@
-<img src="packaging/icona.svg" width="72" alt="Logo di Busta chiara: una busta da cui escono tre barre">
+<img src="packaging/icona.svg" width="72" alt="Logo di Cedolì: una busta da cui escono tre barre">
 
-# Busta Chiara
+# Cedolì
+
+Fino alla versione 0.8.0 si chiamava *Busta chiara*: il nome è cambiato perché ne esisteva già uno uguale, un servizio online che carica le buste paga su Internet. I repository pubblici sono `cedoli` e `cedoli-segnalazioni`; la cartella dei dati (`BustaPagaBeautify`) e il comando `bp` non cambiano.
 
 Repository `busta_paga_beautify`, comando `bp`. Legge il PDF di una busta paga italiana **interamente in locale**, ne estrae voci e totali e verifica che i numeri letti ricostruiscano i totali stampati. Nessun dato esce dal computer.
 
@@ -10,7 +12,7 @@ Stato: estrazione con quadratura, spiegazione delle voci, controlli di coerenza,
 
 | Sistema | Come si installa | Come si avvia |
 |---|---|---|
-| **Windows** | nessuna installazione: zip con `BustaChiara.exe` ([dettagli](#windows)) | doppio clic su `BustaChiara.exe` |
+| **Windows** | nessuna installazione: zip con `Cedoli.exe` ([dettagli](#windows)) | doppio clic su `Cedoli.exe` |
 | **Linux** (per esempio Omarchy) | `uv tool install` dal repository ([dettagli](#linux)) | `bp app`, oppure dal launcher delle app |
 | **macOS** e sviluppo | `uv sync` in una copia del repository ([dettagli](#app-nel-browser)) | `uv run bp app` |
 
@@ -64,7 +66,7 @@ Lo storico non è un database da tenere aggiornato: a ogni apertura viene ricalc
 
 **Un formato nuovo, senza condividere il cedolino.** Quando l'app riconosce una busta paga ma non il suo formato, accanto al messaggio compare *Salva struttura anonima*: scarica `struttura_anonima.json` con la sola forma del PDF (posizione e font di ogni parola, intestazioni, codici delle voci, metadati del gestionale). Ogni cifra diventa 9 e ogni parola che non è nel [vocabolario delle buste paga](src/bp/knowledge/vocabolario.txt) diventa X: nomi, indirizzi, azienda, codice fiscale, IBAN, targhe. Il PDF non viene salvato. Chi lo riceve può scrivere il parser e un generatore sintetico del nuovo formato; chi lo manda lo apre e lo controlla prima. Da riga di comando: `bp anonimo cedolino.pdf -o struttura_anonima.json`.
 
-**Mandare la struttura, sempre a mano.** Dopo il salvataggio l'app mostra il testo che il file contiene, riga per riga, così si controlla prima di mandarlo. Poi propone *Apri una segnalazione su GitHub* nel repository pubblico [busta-chiara-segnalazioni](https://github.com/FabioCuccaro/busta-chiara-segnalazioni), che contiene solo i modelli di segnalazione mentre il codice resta privato, e *Invia per email* a bustachiara.segnalazioni@proton.me, per chi preferisce non pubblicare il file (indirizzo in [`contribute.py`](src/bp/contribute.py)). Entrambi aprono solo un messaggio già scritto, nel browser o nel programma di posta: il file lo allega l'utente e nessun dato del cedolino finisce nel testo precompilato. L'app resta senza accesso a internet.
+**Mandare la struttura, sempre a mano.** Dopo il salvataggio l'app mostra il testo che il file contiene, riga per riga, così si controlla prima di mandarlo. Poi propone *Apri una segnalazione su GitHub* nel repository pubblico [cedoli-segnalazioni](https://github.com/FabioCuccaro/cedoli-segnalazioni), che contiene solo i modelli di segnalazione mentre il codice resta privato, e *Invia per email* a bustachiara.segnalazioni@proton.me, per chi preferisce non pubblicare il file (indirizzo in [`contribute.py`](src/bp/contribute.py)). Entrambi aprono solo un messaggio già scritto, nel browser o nel programma di posta: il file lo allega l'utente e nessun dato del cedolino finisce nel testo precompilato. L'app resta senza accesso a internet.
 
 **Dalla struttura al parser.** Chi riceve una struttura anonima la passa a `bp struttura struttura_anonima.json`, che stampa un riepilogo del layout: gestionale e modello, pagine, font, dove stanno le etichette dei totali, se la lettura parziale funziona, la colonna dei codici delle voci, le colonne degli importi e le intestazioni. Con `--pdf` rigenera un PDF sintetico con le stesse parole nelle stesse posizioni, da usare come base per i test; parole molto vicine possono risultare unite. Con `--parser` scrive la bozza del modulo parser con riconoscimento e costanti già compilati. La lettura delle voci va poi scritta a mano. Il PDF sintetico richiede le dipendenze di sviluppo (`uv sync`).
 
@@ -87,7 +89,7 @@ uv sync
 uv run bp app
 ```
 
-Si apre il browser su una pagina servita solo da questo computer (`127.0.0.1`): trascini i PDF, vedi l'elenco dei cedolini, il report di ogni mese e lo storico. I PDF caricati restano in una cartella personale (`%LOCALAPPDATA%\BustaChiaraBeautify` su Windows, `~/Library/Application Support/BustaChiaraBeautify` su macOS, `~/.local/share/BustaChiaraBeautify` su Linux; si cambia con `--cartella`). Un file che non si riesce a leggere non viene tenuto. L'app usa sempre l'indirizzo `http://127.0.0.1:8573/`, quindi si può salvare nei segnalibri; se è già aperta, un secondo avvio apre solo il browser (ma se quella aperta è una versione diversa, per esempio dopo un aggiornamento, la chiude e parte la nuova), e se la porta è occupata da un altro programma ne sceglie una libera. Il tasto *Chiudi l'app* spegne il programma (come chiudere la finestra del terminale o premere Ctrl+C).
+Si apre il browser su una pagina servita solo da questo computer (`127.0.0.1`): trascini i PDF, vedi l'elenco dei cedolini, il report di ogni mese e lo storico. I PDF caricati restano in una cartella personale (`%LOCALAPPDATA%\BustaPagaBeautify` su Windows, `~/Library/Application Support/BustaPagaBeautify` su macOS, `~/.local/share/BustaPagaBeautify` su Linux; si cambia con `--cartella`). Un file che non si riesce a leggere non viene tenuto. L'app usa sempre l'indirizzo `http://127.0.0.1:8573/`, quindi si può salvare nei segnalibri; se è già aperta, un secondo avvio apre solo il browser (ma se quella aperta è una versione diversa, per esempio dopo un aggiornamento, la chiude e parte la nuova), e se la porta è occupata da un altro programma ne sceglie una libera. Il tasto *Chiudi l'app* spegne il programma (come chiudere la finestra del terminale o premere Ctrl+C).
 
 **Quando un file non si legge.** Il file non viene tenuto e l'app dice perché, in parole semplici:
 
@@ -98,25 +100,25 @@ Si apre il browser su una pagina servita solo da questo computer (`127.0.0.1`): 
 | il PDF è protetto da password | aprirlo, salvarlo senza password e ricaricarlo |
 | il PDF non contiene testo | è una scansione o una foto: serve il PDF originale dal portale |
 | non sembra una busta paga | controllare di aver scelto il file giusto |
-| sembra una busta paga, ma di un formato che Busta chiara non sa ancora leggere | il gestionale non è tra i [layout supportati](#layout-supportati) |
+| sembra una busta paga, ma di un formato che Cedolì non sa ancora leggere | il gestionale non è tra i [layout supportati](#layout-supportati) |
 | formato riconosciuto, ma la lettura si è interrotta | un caso che il parser non prevede: va segnalato |
 
 Un file illeggibile che si trova già nella cartella dell'archivio (per esempio copiato a mano) non blocca l'app: compare in fondo all'elenco, sotto *File che non si riescono a leggere*, e si può rimuovere. Se una pagina non si riesce a generare, l'app mostra un messaggio di errore invece di una pagina vuota.
 
 ### Windows
 
-GitHub costruisce `BustaChiara.exe` a ogni modifica di `main` (workflow `windows`, in [`.github/workflows/windows.yml`](.github/workflows/windows.yml)) e lo prova su un cedolino sintetico:
+GitHub costruisce `Cedoli.exe` a ogni modifica di `main` (workflow `windows`, in [`.github/workflows/windows.yml`](.github/workflows/windows.yml)) e lo prova su un cedolino sintetico:
 
-- **ultima versione di `main`**: tab *Actions* → workflow *windows* → l'ultima esecuzione → artifact `BustaChiara-windows` (serve l'accesso al repository; resta disponibile 7 giorni);
+- **ultima versione di `main`**: tab *Actions* → workflow *windows* → l'ultima esecuzione → artifact `Cedoli-windows` (serve l'accesso al repository; resta disponibile 7 giorni);
 - **versione da distribuire**: segui [Rilasciare una versione](#rilasciare-una-versione); lo zip compare tra le *Releases*.
 
-Lo zip contiene `BustaChiara.exe` e [`LEGGIMI.txt`](packaging/LEGGIMI.txt), le istruzioni per i colleghi. Il doppio clic apre l'app come `bp app`; non servono installazione né permessi di amministratore. L'eseguibile non è firmato, quindi al primo avvio Windows mostra "Windows ha protetto il PC" (si supera con *Ulteriori informazioni* → *Esegui comunque*). Con argomenti si comporta come `bp` (`BustaChiara.exe report cedolino.pdf -o report.html`).
+Lo zip contiene `Cedoli.exe` e [`LEGGIMI.txt`](packaging/LEGGIMI.txt), le istruzioni per i colleghi. Il doppio clic apre l'app come `bp app`; non servono installazione né permessi di amministratore. L'eseguibile non è firmato, quindi al primo avvio Windows mostra "Windows ha protetto il PC" (si supera con *Ulteriori informazioni* → *Esegui comunque*). Con argomenti si comporta come `bp` (`Cedoli.exe report cedolino.pdf -o report.html`).
 
 Per costruirlo in locale (anche su macOS o Linux, per provarlo):
 
 ```sh
 uv sync --group build
-cd packaging && uv run pyinstaller --noconfirm --distpath ../dist --workpath ../build BustaChiara.spec
+cd packaging && uv run pyinstaller --noconfirm --distpath ../dist --workpath ../build Cedoli.spec
 ```
 
 ### Linux
@@ -131,11 +133,11 @@ bp app
 uv tool upgrade busta-paga-beautify   # dopo ogni merge su main
 ```
 
-Per averlo nel launcher, crea `~/.local/share/applications/busta-chiara.desktop`:
+Per averlo nel launcher, crea `~/.local/share/applications/cedoli.desktop`:
 
 ```ini
 [Desktop Entry]
-Name=Busta chiara
+Name=Cedolì
 Exec=sh -c '"$HOME/.local/bin/bp" app'
 Terminal=false
 Type=Application
@@ -218,14 +220,14 @@ Il gestionale stima ogni mese il reddito dell'anno: imponibile fiscale progressi
 
 Non serve fidarsi sulla parola. Ognuno di questi controlli basta da solo; le stesse istruzioni, per Windows, sono in `LEGGIMI.txt` dentro lo zip.
 
-**1. Senza Internet.** Stacca il cavo o attiva la modalità aereo, poi apri Busta chiara, carica i cedolini, guarda report e storico, scarica lo storico. Funziona tutto: l'app non ha bisogno della rete.
+**1. Senza Internet.** Stacca il cavo o attiva la modalità aereo, poi apri Cedolì, carica i cedolini, guarda report e storico, scarica lo storico. Funziona tutto: l'app non ha bisogno della rete.
 
-**2. Bloccala nel firewall (Windows).** Apri *Windows Defender Firewall con sicurezza avanzata* (cercalo nel menu Start) → *Regole connessioni in uscita* → *Nuova regola…* → *Programma* → scegli `BustaChiara.exe` → *Blocca la connessione* → tutti i profili → nome "Busta chiara". Da quel momento Windows impedisce al programma qualsiasi connessione verso Internet o la rete locale, e l'app continua a funzionare uguale. Il firewall non blocca il traffico interno al PC (`127.0.0.1`), cioè quello tra il programma e il browser.
+**2. Bloccala nel firewall (Windows).** Apri *Windows Defender Firewall con sicurezza avanzata* (cercalo nel menu Start) → *Regole connessioni in uscita* → *Nuova regola…* → *Programma* → scegli `Cedoli.exe` → *Blocca la connessione* → tutti i profili → nome "Cedolì". Da quel momento Windows impedisce al programma qualsiasi connessione verso Internet o la rete locale, e l'app continua a funzionare uguale. Il firewall non blocca il traffico interno al PC (`127.0.0.1`), cioè quello tra il programma e il browser.
 
-**3. Guarda le connessioni mentre la usi (Windows).** Premi Win+R, scrivi `resmon` e Invio: è *Monitoraggio risorse*, già incluso in Windows. Nella scheda *Rete* spunta `BustaChiara.exe`: in *Connessioni TCP* l'indirizzo remoto è sempre `127.0.0.1` e in *Porte di ascolto* l'indirizzo è `127.0.0.1` (solo questo computer), mai `0.0.0.0` o un indirizzo esterno. In alternativa, in PowerShell con l'app aperta:
+**3. Guarda le connessioni mentre la usi (Windows).** Premi Win+R, scrivi `resmon` e Invio: è *Monitoraggio risorse*, già incluso in Windows. Nella scheda *Rete* spunta `Cedoli.exe`: in *Connessioni TCP* l'indirizzo remoto è sempre `127.0.0.1` e in *Porte di ascolto* l'indirizzo è `127.0.0.1` (solo questo computer), mai `0.0.0.0` o un indirizzo esterno. In alternativa, in PowerShell con l'app aperta:
 
 ```powershell
-Get-NetTCPConnection -OwningProcess (Get-Process BustaChiara).Id -ErrorAction SilentlyContinue |
+Get-NetTCPConnection -OwningProcess (Get-Process Cedoli).Id -ErrorAction SilentlyContinue |
   Select-Object LocalAddress, LocalPort, RemoteAddress, RemotePort, State
 ```
 
@@ -244,29 +246,29 @@ unshare -rn bp storico cedolini/*.pdf -o storico.html
 
 ## Licenza
 
-Busta chiara è gratuita per uso personale ma non è open source: vedi [`LICENSE.md`](LICENSE.md), che nello zip si chiama `LICENZA.md`. In breve:
+Cedolì è gratuita per uso personale ma non è open source: vedi [`LICENSE.md`](LICENSE.md), che nello zip si chiama `LICENZA.md`. In breve:
 
 - l'app ufficiale si usa gratis per le proprie buste paga e lo zip si può passare ad altri così com'è, senza modifiche e senza farsi pagare;
 - il codice si può leggere ed eseguire solo per verificare come funziona l'app (per esempio che non usi la rete), non riutilizzare in altri programmi, ridistribuire o usare per addestrare modelli di intelligenza artificiale;
 - nessuna garanzia: le spiegazioni sono indicative e non sono consulenza del lavoro né fiscale.
 
-Lo sviluppo resta in questo repository privato. A ogni release il workflow `windows` copia il sorgente della versione (senza cronologia e senza `.github/` e `.claude/`) e lo zip nel repository pubblico [FabioCuccaro/busta-chiara](https://github.com/FabioCuccaro/busta-chiara), da cui chiunque può scaricare l'app e leggere il codice. Lì il README è [`packaging/README_pubblico.md`](packaging/README_pubblico.md), breve e per chi usa l'app; questo README diventa `TECNICO.md`. Va aggiornato quando cambia qualcosa di visibile per chi usa l'app (formati, installazione, privacy). Serve il segreto `BUSTA_CHIARA_PUBBLICO_TOKEN` (token con permesso *Contents: read and write* solo su quel repository); senza, il passo viene saltato con un avviso.
+Lo sviluppo resta in questo repository privato. A ogni release il workflow `windows` copia il sorgente della versione (senza cronologia e senza `.github/` e `.claude/`) e lo zip nel repository pubblico [FabioCuccaro/cedoli](https://github.com/FabioCuccaro/cedoli), da cui chiunque può scaricare l'app e leggere il codice. Lì il README è [`packaging/README_pubblico.md`](packaging/README_pubblico.md), breve e per chi usa l'app; questo README diventa `TECNICO.md`. Va aggiornato quando cambia qualcosa di visibile per chi usa l'app (formati, installazione, privacy). Serve il segreto `BUSTA_CHIARA_PUBBLICO_TOKEN` (token con permesso *Contents: read and write* solo su quel repository); senza, il passo viene saltato con un avviso.
 
 Le donazioni volontarie passano da Ko-fi, su [ko-fi.com/busta_chiara](https://ko-fi.com/busta_chiara): il pulsante *Offrimi un caffè*, in alto nell'app accanto a *Chiudi l'app*, viene da `KOFI` in `src/bp/contribute.py` (vuoto = link nascosto). Ha l'aspetto del pulsante ufficiale di Ko-fi ma è disegnato nella pagina (CSS e SVG), perché l'immagine originale verrebbe scaricata da Internet. È un normale link, si apre solo se lo clicchi.
 
 ## Sito
 
-Il sito di Busta chiara è in [`docs/`](docs/): due pagine statiche, `index.html` (cosa fa, come funziona, privacy, download, formati supportati, sostieni) e `verifica.html` (le prove passo passo per controllare che nulla esca dal PC), più `sito.css`, `sito.js` (solo il selettore del tema), `icona.svg` e gli screenshot di `docs/img/`, gli stessi del README, fatti con cedolini sintetici. Per vederlo in locale basta aprire `docs/index.html` nel browser, oppure `python -m http.server -d docs`.
+Il sito di Cedolì è in [`docs/`](docs/): due pagine statiche, `index.html` (cosa fa, come funziona, privacy, download, formati supportati, sostieni) e `verifica.html` (le prove passo passo per controllare che nulla esca dal PC), più `sito.css`, `sito.js` (solo il selettore del tema), `icona.svg` e gli screenshot di `docs/img/`, gli stessi del README, fatti con cedolini sintetici. Per vederlo in locale basta aprire `docs/index.html` nel browser, oppure `python -m http.server -d docs`.
 
-Mantiene la stessa promessa dell'app: niente cookie, tracker, statistiche, font o script esterni. Ogni pagina ha una Content-Security-Policy che vieta al browser di caricare qualsiasi cosa da altri siti, e `tests/test_sito.py` fallisce se compare una risorsa esterna, uno stile o uno script in linea, un file locale mancante o un link verso un indirizzo non previsto (repository pubblici di Busta chiara, Ko-fi, email delle segnalazioni, documentazione di uv e di GitHub).
+Mantiene la stessa promessa dell'app: niente cookie, tracker, statistiche, font o script esterni. Ogni pagina ha una Content-Security-Policy che vieta al browser di caricare qualsiasi cosa da altri siti, e `tests/test_sito.py` fallisce se compare una risorsa esterna, uno stile o uno script in linea, un file locale mancante o un link verso un indirizzo non previsto (repository pubblici di Cedolì, Ko-fi, email delle segnalazioni, documentazione di uv e di GitHub).
 
-**Pubblicazione.** `docs/` arriva nel repository pubblico [FabioCuccaro/busta-chiara](https://github.com/FabioCuccaro/busta-chiara) con il resto del sorgente, a ogni release, e GitHub Pages lo pubblica su <https://fabiocuccaro.github.io/busta-chiara/> (impostazione da attivare una volta nel repository pubblico: *Settings* → *Pages* → *Deploy from a branch* → `main`, cartella `/docs`). Prima di copiarlo, il workflow `windows` aggiorna in `docs/*.html` i segnaposto `<!--versione-->`, `<!--data-->` (dalla riga del `CHANGELOG.md`), `<!--dimensione-->` e `<!--sha256-->` dello zip appena costruito: il sito mostra sempre l'ultima versione con la sua impronta, senza modifiche a mano. I valori in questo repository sono quelli dell'ultima release al momento della modifica e servono solo per l'anteprima. Il pulsante di download punta a `releases/latest/download/BustaChiara-windows.zip`, che GitHub fa corrispondere all'ultima release.
+**Pubblicazione.** `docs/` arriva nel repository pubblico [FabioCuccaro/cedoli](https://github.com/FabioCuccaro/cedoli) con il resto del sorgente, a ogni release, e GitHub Pages lo pubblica su <https://cedoli.it/> (nel repository pubblico: *Settings* → *Pages* → *Deploy from a branch* → `main`, cartella `/docs`, con *Enforce HTTPS*). Il dominio è registrato su Aruba e viene da `docs/CNAME`: nel DNS ci sono quattro record A verso 185.199.108.153, .109.153, .110.153 e .111.153, un CNAME `www` verso `fabiocuccaro.github.io` e il TXT di verifica del dominio nelle impostazioni Pages dell'account. Il vecchio indirizzo `fabiocuccaro.github.io/cedoli/` rimanda a cedoli.it. Prima di copiarlo, il workflow `windows` aggiorna in `docs/*.html` i segnaposto `<!--versione-->`, `<!--data-->` (dalla riga del `CHANGELOG.md`), `<!--dimensione-->` e `<!--sha256-->` dello zip appena costruito: il sito mostra sempre l'ultima versione con la sua impronta, senza modifiche a mano. I valori in questo repository sono quelli dell'ultima release al momento della modifica e servono solo per l'anteprima. Il pulsante di download punta a `releases/latest/download/Cedoli-windows.zip`, che GitHub fa corrispondere all'ultima release.
 
 ## Versioni
 
-Il numero di versione è uno solo, `version` in `pyproject.toml`, e si vede in fondo all'app, nei report e con `bp --version` (anche `BustaChiara.exe --version`). Tra un rilascio e l'altro `main` ha una versione `.dev0` (per esempio `0.3.0.dev0`), così un eseguibile costruito da `main` non si confonde con quello rilasciato. Le novità di ogni versione sono in [`CHANGELOG.md`](CHANGELOG.md), in italiano semplice per chi usa l'app.
+Il numero di versione è uno solo, `version` in `pyproject.toml`, e si vede in fondo all'app, nei report e con `bp --version` (anche `Cedoli.exe --version`). Tra un rilascio e l'altro `main` ha una versione `.dev0` (per esempio `0.3.0.dev0`), così un eseguibile costruito da `main` non si confonde con quello rilasciato. Le novità di ogni versione sono in [`CHANGELOG.md`](CHANGELOG.md), in italiano semplice per chi usa l'app.
 
-L'app non controlla da sola se esiste una versione nuova: farlo vorrebbe dire contattare Internet, e Busta chiara non lo fa mai. Chi la usa confronta il numero in fondo alla pagina con quello dell'ultima release.
+L'app non controlla da sola se esiste una versione nuova: farlo vorrebbe dire contattare Internet, e Cedolì non lo fa mai. Chi la usa confronta il numero in fondo alla pagina con quello dell'ultima release.
 
 ### Rilasciare una versione
 
@@ -320,11 +322,11 @@ tools/
 docs/                 # sito pubblico (GitHub Pages): index.html, verifica.html, sito.css, sito.js
 └── img/              # screenshot del README e del sito (tema chiaro e scuro), fatti con cedolini sintetici
 packaging/
-├── BustaChiara.py      # avvio dell'eseguibile: senza argomenti apre l'app
-├── BustaChiara.spec    # configurazione PyInstaller
-├── icona.svg         # logo dell'app; BustaChiara.ico (icona dell'eseguibile) è generata da qui
+├── Cedoli.py      # avvio dell'eseguibile: senza argomenti apre l'app
+├── Cedoli.spec    # configurazione PyInstaller
+├── icona.svg         # logo dell'app; Cedoli.ico (icona dell'eseguibile) è generata da qui
 ├── LEGGIMI.txt       # istruzioni per chi riceve lo zip
-└── README_pubblico.md # README del repository pubblico busta-chiara
+└── README_pubblico.md # README del repository pubblico cedoli
 CHANGELOG.md          # novità di ogni versione, per chi usa l'app
 LICENSE.md            # licenza: uso personale gratuito, codice solo da consultare (LICENZA.md nello zip)
 tests/

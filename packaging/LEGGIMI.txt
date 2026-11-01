@@ -1,9 +1,9 @@
-BUSTA CHIARA - la tua busta paga spiegata, interamente sul tuo computer
-=======================================================================
+CEDOLÌ - la tua busta paga spiegata, interamente sul tuo computer
+=================================================================
 
 AVVIO
 1. Estrai lo zip in una cartella qualsiasi (per esempio Documenti).
-2. Fai doppio clic su BustaChiara.exe.
+2. Fai doppio clic su Cedoli.exe.
    La prima volta Windows può mostrare "Windows ha protetto il PC":
    clicca "Ulteriori informazioni" e poi "Esegui comunque".
    L'avviso compare perché il programma non è firmato da un editore registrato.
@@ -12,9 +12,9 @@ AVVIO
 
 Per chiudere il programma usa il tasto "Chiudi l'app" in alto nella pagina,
 oppure chiudi la finestra nera.
-Per riaprirlo fai di nuovo doppio clic su BustaChiara.exe: i cedolini già caricati restano.
-La versione in uso è scritta in fondo alla pagina (per esempio "Busta chiara 0.3.0"):
-quando ricevi uno zip nuovo, sostituisci BustaChiara.exe e i cedolini restano.
+Per riaprirlo fai di nuovo doppio clic su Cedoli.exe: i cedolini già caricati restano.
+La versione in uso è scritta in fondo alla pagina (per esempio "Cedolì 0.3.0"):
+quando ricevi uno zip nuovo, sostituisci Cedoli.exe e i cedolini restano.
 
 OGNI MESE
 Quando arriva il cedolino nuovo, apri il programma e trascina il PDF: elenco e
@@ -26,7 +26,7 @@ ogni cedolino nuovo.
 PRIVACY
 Il programma non usa Internet: la pagina nel browser è servita dal tuo computer
 e non è raggiungibile da altri. I PDF caricati vengono copiati in
-    %LOCALAPPDATA%\BustaChiaraBeautify
+    %LOCALAPPDATA%\BustaPagaBeautify
 (incollalo nella barra degli indirizzi di Esplora file per aprire la cartella).
 Per cancellare tutto basta eliminare quella cartella.
 
@@ -36,10 +36,10 @@ Non serve fidarsi sulla parola. Basta una di queste prove:
   Funziona tutto lo stesso.
 - Firewall: apri "Windows Defender Firewall con sicurezza avanzata" dal menu Start,
   "Regole connessioni in uscita", "Nuova regola...", "Programma", scegli
-  BustaChiara.exe, "Blocca la connessione". Il programma continua a funzionare:
+  Cedoli.exe, "Blocca la connessione". Il programma continua a funzionare:
   il firewall non blocca il dialogo interno tra il programma e il browser.
 - Monitoraggio risorse: premi Win+R, scrivi resmon e premi Invio. Nella scheda
-  "Rete" spunta BustaChiara.exe: tutti gli indirizzi sono 127.0.0.1, cioè
+  "Rete" spunta Cedoli.exe: tutti gli indirizzi sono 127.0.0.1, cioè
   questo computer.
 - Nel browser: premi F12, scheda "Rete", ricarica la pagina. Ogni richiesta
   va a 127.0.0.1.
@@ -55,6 +55,6 @@ Non è consulenza del lavoro né fiscale: fanno fede i numeri del cedolino. Per 
 verifica chiedi all'ufficio del personale, a un consulente del lavoro o a un CAF.
 
 LICENZA
-Busta chiara è gratuita per uso personale. Puoi passare questo zip ad altri così
+Cedolì è gratuita per uso personale. Puoi passare questo zip ad altri così
 com'è, senza modificarlo e senza farti pagare. Non puoi venderla né offrirla come
 servizio a pagamento. Il testo completo è in LICENZA.md, nella stessa cartella.

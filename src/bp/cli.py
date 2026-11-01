@@ -15,7 +15,7 @@ app = typer.Typer(help="Analisi locale delle buste paga. Nessun dato esce dal co
 
 def _version(value: bool) -> None:
     if value:
-        typer.echo(f"Busta chiara {__version__}")
+        typer.echo(f"Cedolì {__version__}")
         raise typer.Exit()
 
 
@@ -38,7 +38,7 @@ def import_file(path: Path):
         detail = str(e).splitlines()[0][:200] if isinstance(e, ValueError) and str(e) else type(e).__name__
         raise extract.ReadError(
             f"formato {parser.NAME} riconosciuto, ma la lettura si è interrotta ({detail}): "
-            f"probabilmente è un caso che Busta chiara non conosce ancora{partial.note(doc)}",
+            f"probabilmente è un caso che Cedolì non conosce ancora{partial.note(doc)}",
             new_format=True,
         ) from e
     return payslip
@@ -195,7 +195,7 @@ def struttura(
 ) -> None:
     """Analizza la struttura anonima di un formato nuovo: riepilogo del layout, PDF sintetico, bozza del parser.
 
-    Per chi mantiene Busta chiara. Il PDF sintetico richiede le dipendenze di sviluppo (uv sync).
+    Per chi mantiene Cedolì. Il PDF sintetico richiede le dipendenze di sviluppo (uv sync).
     """
     from bp import structure
 

@@ -1,9 +1,9 @@
 [project]
 name = "busta-paga-beautify"
-version = "0.8.0"
+version = "0.9.0"
 description = "Legge il PDF di una busta paga italiana, interamente in locale, e ne estrae voci, totali e controlli di quadratura."
 readme = "README.md"
-license = "LicenseRef-BustaChiara"
+license = "LicenseRef-Cedoli"
 license-files = ["LICENSE.md"]
 requires-python = ">=3.12"
 dependencies = [

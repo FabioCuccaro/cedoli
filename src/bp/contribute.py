@@ -1,4 +1,4 @@
-"""Come far arrivare la struttura anonima di un formato nuovo a chi mantiene Busta chiara.
+"""Come far arrivare la struttura anonima di un formato nuovo a chi mantiene Cedolì.
 
 L'app non invia mai nulla: prepara solo i link a un'email o a una segnalazione su GitHub già
 compilate. L'utente salva il file, lo apre, lo controlla e lo allega lui, dal suo programma di posta
@@ -10,16 +10,16 @@ from urllib.parse import quote, urlencode
 from bp import __version__
 
 # Repository pubblico solo per le segnalazioni: il codice resta privato.
-REPO = "https://github.com/FabioCuccaro/busta-chiara-segnalazioni"
+REPO = "https://github.com/FabioCuccaro/cedoli-segnalazioni"
 # Indirizzo a cui mandare le strutture anonime. Vuoto: l'app propone solo la segnalazione su GitHub.
 EMAIL = "bustachiara.segnalazioni@proton.me"
 # Nome della pagina Ko-fi per le donazioni volontarie. Vuoto: l'app non mostra il link.
 KOFI = "busta_chiara"
 
-SUBJECT = "Busta chiara: nuovo formato di busta paga"
+SUBJECT = "Cedolì: nuovo formato di busta paga"
 TEXT = (
     "Ciao,\n\n"
-    "allego la struttura anonima (struttura_anonima.json) di una busta paga che Busta chiara "
+    "allego la struttura anonima (struttura_anonima.json) di una busta paga che Cedolì "
     f"{__version__} non sa ancora leggere. L'ho aperta e controllata: non contiene importi né dati personali.\n\n"
     "Gestionale o portale da cui arriva il cedolino (se lo sai): \n"
 )

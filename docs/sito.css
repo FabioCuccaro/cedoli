@@ -1,4 +1,4 @@
-/* Sito di Busta chiara: stessa palette dell'app (src/bp/report/templates/_stile.css). Nessun font o immagine esterna. */
+/* Sito di Cedolì: stessa palette dell'app (src/bp/report/templates/_stile.css). Nessun font o immagine esterna. */
 :root {
   --bg: #f6f4ef; --surface: #ffffff; --text: #1c1f24; --muted: #5f6670; --line: #e2ded5;
   --accent: #23507a; --accent-2: #e0a43a; --on-accent: #ffffff; --soft: #e8eef4;

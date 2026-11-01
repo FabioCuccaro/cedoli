@@ -21,7 +21,7 @@
     </div>
     {% if not extraction_ok %}
     <div class="card review">
-      <p><strong>Cosa vuol dire "la lettura non quadra".</strong> Busta chiara ha letto i numeri del PDF, ma sommandoli non
+      <p><strong>Cosa vuol dire "la lettura non quadra".</strong> Cedolì ha letto i numeri del PDF, ma sommandoli non
         ritrova i totali stampati: qualche voce è stata letta male o saltata. Il problema è nella lettura, non nella tua busta paga.</p>
       <p>Confronta i numeri di questo report con il PDF prima di fidarti. Di solito succede con un cedolino dalla forma
         diversa dal solito (più pagine, voci molto lunghe, un tipo di cedolino nuovo): vale la pena segnalarlo, così lo si corregge.</p>
@@ -30,7 +30,7 @@
     {% if m.to_review %}
     <div class="card review">
       <p><strong>{{ m.to_review|length }} controll{{ 'o' if m.to_review|length == 1 else 'i' }} da guardare.</strong>
-        Il valore stampato non coincide con quello che Busta chiara ricalcola con le regole note:</p>
+        Il valore stampato non coincide con quello che Cedolì ricalcola con le regole note:</p>
       <ul>
         {% for row in m.to_review %}
         <li>{{ row.c.title or row.c.check_id }}{% if row.diff is not none %}: stampato {{ row.c.expected|euro }} €,
@@ -38,7 +38,7 @@
         {% endfor %}
       </ul>
       <p><strong>Non vuol dire per forza che la busta paga sia sbagliata.</strong> Le cause più comuni, dalla più probabile:
-        un caso che Busta chiara non conosce ancora (una voce nuova, un accordo aziendale, una regola del tuo contratto);
+        un caso che Cedolì non conosce ancora (una voce nuova, un accordo aziendale, una regola del tuo contratto);
         un calcolo che usa dati non stampati sul cedolino (mesi precedenti, un altro datore di lavoro nello stesso anno);
         solo raramente un errore in busta.</p>
       <p><strong>Cosa fare.</strong> Guarda se questo mese ha qualcosa di particolare (assunzione, malattia, conguaglio, premi,
@@ -99,7 +99,7 @@
       {% endif %}
     </p>
     {% if d.remaining and not d.contract %}
-    <p class="hint">Il contratto{% if p.contract.ccnl %} ({{ p.contract.ccnl }}){% endif %} non è tra quelli che Busta chiara conosce:
+    <p class="hint">Il contratto{% if p.contract.ccnl %} ({{ p.contract.ccnl }}){% endif %} non è tra quelli che Cedolì conosce:
       nella stima conto solo la tredicesima. Se il contratto prevede altre mensilità, la stima del gestionale è più alta.</p>
     {% endif %}
     <div class="calc">

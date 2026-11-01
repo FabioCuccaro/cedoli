@@ -71,7 +71,7 @@ def test_cli_version():
     from bp.cli import app
 
     r = CliRunner().invoke(app, ["--version"])
-    assert r.exit_code == 0 and r.output.strip() == f"Busta chiara {__version__}"
+    assert r.exit_code == 0 and r.output.strip() == f"Cedolì {__version__}"
 
 
 def test_report_explains_what_does_not_add_up(tmp_path):

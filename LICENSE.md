@@ -1,8 +1,8 @@
-# Licenza di Busta chiara
+# Licenza di Cedolì
 
 Copyright © 2026 Fabio Cuccaro. Tutti i diritti riservati.
 
-Busta chiara è gratuita per uso personale, e il suo codice si può leggere per controllare che faccia quello che promette, a partire dal fatto che nessun dato esce dal computer. Il codice resta però di Fabio Cuccaro: non si può riutilizzare. Questa licenza spiega cosa è permesso. Tutto ciò che non è permesso qui è vietato.
+Cedolì è gratuita per uso personale, e il suo codice si può leggere per controllare che faccia quello che promette, a partire dal fatto che nessun dato esce dal computer. Il codice resta però di Fabio Cuccaro: non si può riutilizzare. Questa licenza spiega cosa è permesso. Tutto ciò che non è permesso qui è vietato.
 
 ## 1. L'app (eseguibile e pacchetto ufficiali)
 
@@ -33,7 +33,7 @@ Non puoi:
 
 ## 3. Segnalazioni e contributi
 
-Se mandi una segnalazione, una struttura anonima o un suggerimento, permetti a Fabio Cuccaro di usarli liberamente per migliorare Busta chiara. Non nasce alcun diritto sul codice.
+Se mandi una segnalazione, una struttura anonima o un suggerimento, permetti a Fabio Cuccaro di usarli liberamente per migliorare Cedolì. Non nasce alcun diritto sul codice.
 
 ## 4. Donazioni
 
@@ -41,7 +41,7 @@ Le donazioni sono volontarie. Non sono un acquisto e non danno diritti in più, 
 
 ## 5. Nessuna garanzia
 
-L'app è fornita "così com'è", senza garanzie di alcun tipo. Le spiegazioni sono indicative e i controlli sono spunti da verificare: possono sbagliare. Busta chiara non è consulenza del lavoro né fiscale. Fanno fede i numeri del cedolino; per una verifica rivolgiti all'ufficio del personale, a un consulente del lavoro o a un CAF. Nei limiti consentiti dalla legge, Fabio Cuccaro non risponde di danni derivanti dall'uso dell'app.
+L'app è fornita "così com'è", senza garanzie di alcun tipo. Le spiegazioni sono indicative e i controlli sono spunti da verificare: possono sbagliare. Cedolì non è consulenza del lavoro né fiscale. Fanno fede i numeri del cedolino; per una verifica rivolgiti all'ufficio del personale, a un consulente del lavoro o a un CAF. Nei limiti consentiti dalla legge, Fabio Cuccaro non risponde di danni derivanti dall'uso dell'app.
 
 ## 6. Legge applicabile
 

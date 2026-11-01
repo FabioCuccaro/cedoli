@@ -58,7 +58,7 @@ def _address_host(address):
 def _block(what: str) -> None:
     with _lock:
         _violations.append(what)
-    raise NetworkBlocked(f"Busta chiara non deve usare la rete: {what}")
+    raise NetworkBlocked(f"Cedolì non deve usare la rete: {what}")
 
 
 def _audit(event: str, args) -> None:

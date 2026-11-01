@@ -1,6 +1,6 @@
 """Dalla struttura anonima di un formato nuovo alla bozza del suo parser.
 
-Chi mantiene Busta chiara riceve `struttura_anonima.json` (vedi anonymize.py) e con `bp struttura`:
+Chi mantiene Cedolì riceve `struttura_anonima.json` (vedi anonymize.py) e con `bp struttura`:
 - ottiene un riepilogo del layout: gestionale, pagine, font, etichette dei totali, colonne degli importi;
 - rigenera un PDF sintetico con le stesse parole nelle stesse posizioni, da usare come base per i test;
 - scrive lo scheletro del modulo parser, con riconoscimento e costanti già compilati.
@@ -36,7 +36,7 @@ def load(path: str | Path) -> Document:
 def from_dump(dump: dict, path: Path | None = None) -> Document:
     name = path.name if path else "il file"
     if not isinstance(dump, dict) or dump.get("formato") != FORMAT:
-        raise ValueError(f"{name} non è una struttura anonima di Busta chiara")
+        raise ValueError(f"{name} non è una struttura anonima di Cedolì")
     pages = []
     for n, rows in enumerate(dump["pagine"]):
         pages.append([Row([Word(t, x0, x1, r["top"], n, font) for t, x0, x1, font in r["parole"]])

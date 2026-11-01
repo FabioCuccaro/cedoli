@@ -27,9 +27,9 @@ DEFAULT_PORT = 8573
 PING = "busta-paga"
 DOWNLOAD_NAME = "storico_cedolini.html"
 ANON_NAME = "struttura_anonima.json"
-ERROR_PAGE = ('<!doctype html><meta charset="utf-8"><title>Busta chiara</title>'
+ERROR_PAGE = ('<!doctype html><meta charset="utf-8"><title>Cedolì</title>'
               '<p style="font-family:sans-serif;max-width:40em;margin:3em auto">'
-              'Busta chiara ha incontrato un errore imprevisto ({}) e non è riuscita a mostrare questa pagina. '
+              'Cedolì ha incontrato un errore imprevisto ({}) e non è riuscita a mostrare questa pagina. '
               'I tuoi cedolini sono al sicuro nella cartella dell\'archivio. <a href="/">Torna all\'elenco</a></p>')
 # Fisso in basso: lo storico si apre sull'ultimo mese, lontano dall'inizio della pagina.
 BACK_LINK = ('<a href="/" style="position:fixed;left:16px;bottom:16px;z-index:10;padding:8px 14px;'
@@ -204,12 +204,12 @@ def serve(data_dir: Path, port: int = DEFAULT_PORT, open_browser: bool = True) -
     running = running_version(port) if port else None
     if running is not None and running != __version__:
         # Dopo un aggiornamento la vecchia app resta aperta con i file nuovi sotto: la chiudiamo e ripartiamo.
-        print(f"Chiudo Busta chiara {running or 'precedente'} ancora aperta e avvio la {__version__}", flush=True)
+        print(f"Chiudo Cedolì {running or 'precedente'} ancora aperta e avvio la {__version__}", flush=True)
         if close_running(port):
             running = None
     if running is not None:
         url = f"http://127.0.0.1:{port}/"
-        print(f"Busta chiara è già aperta su {url}", flush=True)
+        print(f"Cedolì è già aperta su {url}", flush=True)
         if open_browser:
             webbrowser.open(url)
         return
@@ -218,7 +218,7 @@ def serve(data_dir: Path, port: int = DEFAULT_PORT, open_browser: bool = True) -
     except OSError:  # porta occupata da un altro programma: ne prendiamo una libera
         server = make_server(Archive(data_dir), 0)
     url = f"http://127.0.0.1:{server.server_address[1]}/"
-    print(f"Busta chiara è aperta su {url}")
+    print(f"Cedolì è aperta su {url}")
     print(f"Archivio: {data_dir}")
     print("Per uscire usa il tasto Chiudi nell'app, chiudi questa finestra o premi Ctrl+C.", flush=True)
     if open_browser:

@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
-<title>Verifica da solo che nulla esce dal PC · Busta chiara</title>
-<meta name="description" content="Prove semplici per controllare con i propri occhi che Busta chiara non usa Internet: modalità aereo, firewall di Windows, Monitoraggio risorse, strumenti del browser, codice sorgente.">
+<title>Verifica da solo che nulla esce dal PC · Cedolì</title>
+<meta name="description" content="Prove semplici per controllare con i propri occhi che Cedolì non usa Internet: modalità aereo, firewall di Windows, Monitoraggio risorse, strumenti del browser, codice sorgente.">
 <link rel="icon" href="icona.svg" type="image/svg+xml">
 <link rel="stylesheet" href="sito.css">
 <script src="sito.js"></script>
@@ -24,7 +24,7 @@
         <path d="M12 30 H52 V49 A4 4 0 0 1 48 53 H16 A4 4 0 0 1 12 49 Z" fill="#ffffff"></path>
         <path class="s" d="M12.5 31 L32 43.5 L51.5 31" fill="none" stroke-width="2.6" stroke-linejoin="round"></path>
       </svg>
-      <span>Busta chiara</span>
+      <span>Cedolì</span>
     </a>
     <nav class="menu" aria-label="Sezioni">
       <a href="./#funzioni" class="hide-sm">Cosa fa</a>
@@ -51,22 +51,22 @@
     <div class="steps">
       <div class="card">
         <h3>Usala senza Internet</h3>
-        <p>Stacca il cavo o attiva la modalità aereo. Poi apri Busta chiara, carica i cedolini, guarda report e storico, scarica lo storico.</p>
+        <p>Stacca il cavo o attiva la modalità aereo. Poi apri Cedolì, carica i cedolini, guarda report e storico, scarica lo storico.</p>
         <p>Funziona tutto: l'app non ha bisogno della rete per nessuna funzione.</p>
       </div>
 
       <div class="card">
         <h3>Bloccala nel firewall di Windows</h3>
-        <p>Cerca nel menu Start <em>Windows Defender Firewall con sicurezza avanzata</em> → <em>Regole connessioni in uscita</em> → <em>Nuova regola…</em> → <em>Programma</em> → scegli <code>BustaChiara.exe</code> → <em>Blocca la connessione</em> → tutti i profili → nome "Busta chiara".</p>
+        <p>Cerca nel menu Start <em>Windows Defender Firewall con sicurezza avanzata</em> → <em>Regole connessioni in uscita</em> → <em>Nuova regola…</em> → <em>Programma</em> → scegli <code>Cedoli.exe</code> → <em>Blocca la connessione</em> → tutti i profili → nome "Cedolì".</p>
         <p>Da quel momento Windows impedisce al programma qualsiasi connessione verso Internet o la rete di casa, e l'app continua a funzionare uguale. Il firewall non blocca il dialogo interno al PC (<code>127.0.0.1</code>), cioè quello tra il programma e il browser.</p>
       </div>
 
       <div class="card">
         <h3>Guarda le sue connessioni mentre la usi</h3>
-        <p>Premi Win+R, scrivi <code>resmon</code> e Invio: è <em>Monitoraggio risorse</em>, già incluso in Windows. Nella scheda <em>Rete</em> spunta <code>BustaChiara.exe</code>.</p>
+        <p>Premi Win+R, scrivi <code>resmon</code> e Invio: è <em>Monitoraggio risorse</em>, già incluso in Windows. Nella scheda <em>Rete</em> spunta <code>Cedoli.exe</code>.</p>
         <p>In <em>Connessioni TCP</em> l'indirizzo remoto è sempre <code>127.0.0.1</code>, e in <em>Porte di ascolto</em> l'indirizzo è <code>127.0.0.1</code> (solo questo computer), mai <code>0.0.0.0</code> o un indirizzo esterno.</p>
         <p>Chi preferisce PowerShell, con l'app aperta:</p>
-        <pre><code>Get-NetTCPConnection -OwningProcess (Get-Process BustaChiara).Id -ErrorAction SilentlyContinue |
+        <pre><code>Get-NetTCPConnection -OwningProcess (Get-Process Cedoli).Id -ErrorAction SilentlyContinue |
   Select-Object LocalAddress, LocalPort, RemoteAddress, RemotePort, State</code></pre>
         <p>Ogni riga deve avere <code>127.0.0.1</code> come indirizzo locale e remoto (o <code>0.0.0.0</code> come remoto per la porta in ascolto, che vuol dire "nessuno collegato").</p>
       </div>
@@ -86,8 +86,8 @@ unshare -rn bp storico cedolini/*.pdf -o storico.html</code></pre>
 
       <div class="card">
         <h3>Leggi il codice</h3>
-        <p>Il <a href="https://github.com/FabioCuccaro/busta-chiara">codice sorgente</a> di ogni versione è pubblico. A ogni modifica girano test automatici, su Linux e su Windows, che falliscono se l'app prova a collegarsi a un indirizzo diverso da questo computer, se una pagina prova a caricare qualcosa da Internet, o se nel codice o nell'eseguibile compare una libreria di rete o di telemetria.</p>
-        <p>I dettagli tecnici sono in <a href="https://github.com/FabioCuccaro/busta-chiara/blob/main/TECNICO.md#privacy">TECNICO.md</a>.</p>
+        <p>Il <a href="https://github.com/FabioCuccaro/cedoli">codice sorgente</a> di ogni versione è pubblico. A ogni modifica girano test automatici, su Linux e su Windows, che falliscono se l'app prova a collegarsi a un indirizzo diverso da questo computer, se una pagina prova a caricare qualcosa da Internet, o se nel codice o nell'eseguibile compare una libreria di rete o di telemetria.</p>
+        <p>I dettagli tecnici sono in <a href="https://github.com/FabioCuccaro/cedoli/blob/main/TECNICO.md#privacy">TECNICO.md</a>.</p>
       </div>
     </div>
   </div>
@@ -98,12 +98,12 @@ unshare -rn bp storico cedolini/*.pdf -o storico.html</code></pre>
     <h2>Cosa resta sul tuo computer</h2>
     <p class="intro">I PDF che carichi vengono copiati in una cartella personale, così lo storico si ricostruisce a ogni apertura. Per cancellare tutto basta eliminarla.</p>
     <ul class="checks">
-      <li>Windows: <code>%LOCALAPPDATA%\BustaChiaraBeautify</code> (incollalo nella barra degli indirizzi di Esplora file)</li>
-      <li>macOS: <code>~/Library/Application Support/BustaChiaraBeautify</code></li>
-      <li>Linux: <code>~/.local/share/BustaChiaraBeautify</code></li>
+      <li>Windows: <code>%LOCALAPPDATA%\BustaPagaBeautify</code> (incollalo nella barra degli indirizzi di Esplora file)</li>
+      <li>macOS: <code>~/Library/Application Support/BustaPagaBeautify</code></li>
+      <li>Linux: <code>~/.local/share/BustaPagaBeautify</code></li>
     </ul>
     <p class="note">E questo sito? Non usa cookie, tracker né statistiche, e una regola nella pagina (Content-Security-Policy) vieta al browser di caricare qualsiasi cosa da altri siti: puoi controllarlo con F12 anche qui. È ospitato su GitHub Pages, che come ogni server registra gli accessi.</p>
-    <p><a class="btn" href="./#scarica">Scarica Busta chiara</a></p>
+    <p><a class="btn" href="./#scarica">Scarica Cedolì</a></p>
   </div>
 </section>
 
@@ -111,7 +111,7 @@ unshare -rn bp storico cedolini/*.pdf -o storico.html</code></pre>
 
 <footer>
   <div class="wrap">
-    <div><strong>Busta chiara</strong> · uso personale gratuito · <a href="./">pagina principale</a></div>
+    <div><strong>Cedolì</strong> · uso personale gratuito · <a href="./">pagina principale</a></div>
     <div>Le spiegazioni sono indicative e possono sbagliare: non sono consulenza del lavoro né fiscale.</div>
   </div>
 </footer>

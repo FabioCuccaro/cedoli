@@ -108,7 +108,7 @@ def test_unknown_contract_explains_the_estimate(pdf):
     d = monthly_deduction(p)
     assert d.contract is None and d.remaining == ["9 mesi", "tredicesima"]
     from bp.report import render
-    assert "non è tra quelli che Busta chiara conosce" in render(p)
+    assert "non è tra quelli che Cedolì conosce" in render(p)
 
 
 def test_monthly_deduction_projection(pdf):

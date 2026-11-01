@@ -18,7 +18,7 @@ WORD_Y_TOLERANCE = 1.5
 class ReadError(ValueError):
     """Un cedolino che non si riesce a leggere, con un messaggio comprensibile da chi usa l'app.
 
-    `new_format`: il PDF sembra una busta paga che Busta chiara non sa ancora leggere, quindi ha senso
+    `new_format`: il PDF sembra una busta paga che Cedolì non sa ancora leggere, quindi ha senso
     proporre di salvarne la struttura anonima.
     """
 

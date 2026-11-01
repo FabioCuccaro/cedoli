@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Busta chiara</title>
+<title>Cedolì</title>
 {% include "_testa.html" %}
 <style>
 {% include "_stile.css" %}
@@ -30,7 +30,7 @@ a.support svg { flex: 0 0 auto; }
 <body>
 {% from "_marchio.html" import bar %}
 <main>
-  {% set quit %}{% if donate %}<a class="support" href="{{ donate }}" target="_blank" rel="noopener" title="Busta chiara è gratuita: se ti è utile puoi sostenerla con una donazione volontaria su Ko-fi. Si apre nel browser."><svg width="26" height="20" viewBox="0 0 26 20" aria-hidden="true"><path d="M2 3h17v9a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6z" fill="#fff" stroke="#202020" stroke-width="2.4" stroke-linejoin="round"/><path d="M19 6h2.5a3.3 3.3 0 0 1 0 6.6H19" fill="none" stroke="#202020" stroke-width="2.4"/><path d="M10.5 15s-4.3-2.6-4.3-5.3c0-1.4 1-2.4 2.2-2.4.9 0 1.6.5 2.1 1.2.5-.7 1.2-1.2 2.1-1.2 1.2 0 2.2 1 2.2 2.4 0 2.7-4.3 5.3-4.3 5.3z" fill="#ff5e5b"/></svg>Offrimi un caffè</a>{% endif %}<button class="quit" id="quit" title="Spegne l'app su questo computer. Per riaprirla, lanciala di nuovo.">Chiudi l'app</button>{% endset %}
+  {% set quit %}{% if donate %}<a class="support" href="{{ donate }}" target="_blank" rel="noopener" title="Cedolì è gratuita: se ti è utile puoi sostenerla con una donazione volontaria su Ko-fi. Si apre nel browser."><svg width="26" height="20" viewBox="0 0 26 20" aria-hidden="true"><path d="M2 3h17v9a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6z" fill="#fff" stroke="#202020" stroke-width="2.4" stroke-linejoin="round"/><path d="M19 6h2.5a3.3 3.3 0 0 1 0 6.6H19" fill="none" stroke="#202020" stroke-width="2.4"/><path d="M10.5 15s-4.3-2.6-4.3-5.3c0-1.4 1-2.4 2.2-2.4.9 0 1.6.5 2.1 1.2.5-.7 1.2-1.2 2.1-1.2 1.2 0 2.2 1 2.2 2.4 0 2.7-4.3 5.3-4.3 5.3z" fill="#ff5e5b"/></svg>Offrimi un caffè</a>{% endif %}<button class="quit" id="quit" title="Spegne l'app su questo computer. Per riaprirla, lanciala di nuovo.">Chiudi l'app</button>{% endset %}
   {{ bar(quit) }}
   <h1>Le tue buste paga</h1>
   <p class="sub">Tutto resta su questo computer: i PDF vengono letti qui e salvati solo nella cartella indicata in fondo alla pagina.</p>
@@ -86,7 +86,7 @@ a.support svg { flex: 0 0 auto; }
   {% endif %}
 
   <footer>
-    Busta chiara {{ version }} · Archivio: <code>{{ data_dir }}</code><br>
+    Cedolì {{ version }} · Archivio: <code>{{ data_dir }}</code><br>
     Strumento informativo gratuito per uso personale: le spiegazioni sono indicative e possono sbagliare. Non è consulenza del lavoro né fiscale: per una verifica chiedi all'ufficio del personale, a un consulente del lavoro o a un CAF.
   </footer>
 </main>
@@ -144,7 +144,7 @@ a.support svg { flex: 0 0 auto; }
     }).join("\n\n");
     d.append(s, pre);
     var p = document.createElement("p");
-    p.textContent = "2. Se va bene, mandalo. Il messaggio si apre già scritto ma senza allegato: aggiungi tu struttura_anonima.json, il file che hai appena salvato (di solito in Download). Non allegare il PDF. Busta chiara non invia nulla da sola. ";
+    p.textContent = "2. Se va bene, mandalo. Il messaggio si apre già scritto ma senza allegato: aggiungi tu struttura_anonima.json, il file che hai appena salvato (di solito in Download). Non allegare il PDF. Cedolì non invia nulla da sola. ";
     [["email", "Invia per email (allega il file)"], ["issue", "Apri una segnalazione su GitHub (allega il file)"]].forEach(function (k) {
       if (!send[k[0]]) return;
       var l = document.createElement("a");
@@ -194,7 +194,7 @@ a.support svg { flex: 0 0 auto; }
     var main = document.querySelector("main"), brand = main.querySelector(".brandbar");
     brand.querySelector(".right").remove();
     main.replaceChildren(brand);
-    main.insertAdjacentHTML("beforeend", "<h1>Busta chiara è chiusa</h1>" +
+    main.insertAdjacentHTML("beforeend", "<h1>Cedolì è chiusa</h1>" +
       "<p class=\"sub\">Puoi chiudere questa scheda. Per riaprire l'app lanciala di nuovo dal menu o con un doppio clic.</p>");
   });
 

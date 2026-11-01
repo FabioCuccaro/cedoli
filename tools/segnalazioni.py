@@ -1,8 +1,8 @@
-"""Pagina locale per chi mantiene Busta chiara: le strutture anonime ricevute, raggruppate per formato.
+"""Pagina locale per chi mantiene Cedolì: le strutture anonime ricevute, raggruppate per formato.
 
     uv run tools/segnalazioni.py            # apre http://127.0.0.1:8574/
 
-Legge le segnalazioni aperte del repository pubblico busta-chiara-segnalazioni e ne scarica gli
+Legge le segnalazioni aperte del repository pubblico cedoli-segnalazioni e ne scarica gli
 allegati (.json o .zip), più i file messi a mano in data/segnalazioni/email/ (quelli arrivati per
 email). Tutto finisce in data/segnalazioni/, che non va mai nel repository. Per ogni formato mostra
 il riepilogo di `bp struttura` e con "Prepara bozza" scrive in data/formati/<formato>/ il PDF
@@ -30,7 +30,7 @@ from urllib.parse import parse_qs, urlparse
 
 from bp import structure
 
-REPO = "FabioCuccaro/busta-chiara-segnalazioni"
+REPO = "FabioCuccaro/cedoli-segnalazioni"
 API = f"https://api.github.com/repos/{REPO}/issues?state=open&per_page=100"
 ROOT = Path(__file__).resolve().parent.parent / "data"
 PORT = 8574
@@ -58,7 +58,7 @@ class Group:
 
 
 def _get(url: str) -> bytes:
-    headers = {"User-Agent": "busta-chiara-segnalazioni", "Accept": "application/vnd.github+json"}
+    headers = {"User-Agent": "cedoli-segnalazioni", "Accept": "application/vnd.github+json"}
     if token := os.environ.get("GITHUB_TOKEN"):
         headers["Authorization"] = f"Bearer {token}"
     with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=30) as r:
@@ -132,7 +132,7 @@ def prepare(group: Group, root: Path = ROOT) -> Path:
     return out
 
 
-PAGE = """<!doctype html><html lang="it"><meta charset="utf-8"><title>Segnalazioni Busta chiara</title>
+PAGE = """<!doctype html><html lang="it"><meta charset="utf-8"><title>Segnalazioni Cedolì</title>
 <style>
 :root {{ --bg:#f6f4ef; --surface:#fff; --text:#1c1f24; --muted:#5f6670; --line:#e2ded5; --accent:#23507a; --neg:#b24a33; }}
 @media (prefers-color-scheme: dark) {{ :root {{ --bg:#121417; --surface:#1b1e22; --text:#eceae4; --muted:#a3a7ae; --line:#2e3238; --accent:#8cb6e0; --neg:#ec9a85; }} }}

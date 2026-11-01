@@ -150,7 +150,7 @@ def test_launch_after_update_replaces_the_old_app(tmp_path, capsys):
             break
         time.sleep(0.1)
     assert running_version(port) == __version__
-    assert "Chiudo Busta chiara precedente" in capsys.readouterr().out
+    assert "Chiudo Cedolì precedente" in capsys.readouterr().out
     call(f"http://127.0.0.1:{port}/chiudi", b"")
 
 
@@ -191,7 +191,7 @@ def test_version_is_shown(server):
 
     _, base = server
     assert __version__ != "sviluppo"
-    assert f"Busta chiara {__version__}" in call(base + "/")[1]
+    assert f"Cedolì {__version__}" in call(base + "/")[1]
 
 
 def test_new_format_offers_anonymous_structure(server, tmp_path):
@@ -210,7 +210,7 @@ def test_new_format_offers_anonymous_structure(server, tmp_path):
     assert not r["ok"] and r["new_format"]
     # I link per mandare il file non portano nulla del cedolino.
     issue = r["send"]["issue"]
-    assert issue.startswith("https://github.com/FabioCuccaro/busta-chiara-segnalazioni/issues/new?template=nuovo-formato.md")
+    assert issue.startswith("https://github.com/FabioCuccaro/cedoli-segnalazioni/issues/new?template=nuovo-formato.md")
     assert "ROSSI" not in issue and "1.500" not in issue and "2.000" not in issue
     assert not list((tmp_path / "archivio" / "cedolini").iterdir())
 

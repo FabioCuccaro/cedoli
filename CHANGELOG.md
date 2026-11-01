@@ -1,6 +1,11 @@
-# Novità di Busta chiara
+# Novità di Cedolì
 
 Le versioni seguono `MAGGIORE.MINORE.CORREZIONE`. Il numero in uso si vede in fondo all'app e con `bp --version`.
+
+## 0.9.0 (01/11/2026)
+
+- Il sito ha un indirizzo suo: **cedoli.it**.
+- Busta chiara cambia nome e diventa **Cedolì**: esisteva già un servizio online con lo stesso nome, che però carica le buste paga su Internet. L'app resta la stessa, i cedolini già caricati restano dove sono e si vedono subito. Lo zip ora si chiama `Cedoli-windows.zip` e il programma `Cedoli.exe`: dopo averlo estratto puoi cancellare il vecchio `BustaChiara.exe`, e se lo avevi bloccato nel firewall rifai la regola per `Cedoli.exe`.
 
 ## 0.8.0 (01/11/2026)
 

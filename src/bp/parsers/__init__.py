@@ -28,7 +28,7 @@ def find_parser(doc: Document) -> ModuleType:
             return parser
     if looks_like_payslip(doc):
         raise UnsupportedLayout(
-            "sembra una busta paga, ma di un formato che Busta chiara non sa ancora leggere "
+            "sembra una busta paga, ma di un formato che Cedolì non sa ancora leggere "
             f"(formati supportati: {', '.join(p.NAME for p in PARSERS)}){partial.note(doc)}",
             new_format=True,
         )

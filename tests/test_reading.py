@@ -56,7 +56,7 @@ def test_payslip_of_another_software(tmp_path):
     pdf = pdf_with(tmp_path / "b.pdf", ["CEDOLINO PAGA", "TOTALE COMPETENZE 2.000,00",
                                         "TOTALE TRATTENUTE 500,00", "NETTO IN BUSTA 1.500,00"])
     msg = message(pdf)
-    assert "formato che Busta chiara non sa ancora leggere" in msg and "paylul01" in msg
+    assert "formato che Cedolì non sa ancora leggere" in msg and "paylul01" in msg
     assert ("lettura parziale: competenze 2.000,00 €, trattenute 500,00 €, netto 1.500,00 € "
             "(i tre numeri tornano tra loro)") in msg
 

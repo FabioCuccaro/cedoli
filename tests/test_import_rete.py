@@ -1,7 +1,7 @@
 """Garanzia zero rete, controllo statico: il codice dell'app non importa librerie di rete o telemetria.
 
 Il blocco a run time di ``conftest.py`` vede solo il codice che i test eseguono. Questo controllo legge
-tutti i file di ``src/bp`` e l'avvio dell'eseguibile (``packaging/BustaChiara.py``) e fallisce se
+tutti i file di ``src/bp`` e l'avvio dell'eseguibile (``packaging/Cedoli.py``) e fallisce se
 compare un modulo di rete fuori dall'elenco ammesso, un import dinamico o un indirizzo fuori da
 127.0.0.1. Controlla anche le dipendenze dichiarate in ``pyproject.toml``.
 
@@ -14,7 +14,7 @@ import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
-APP_FILES = sorted((ROOT / "src" / "bp").rglob("*.py")) + [ROOT / "packaging" / "BustaChiara.py"]
+APP_FILES = sorted((ROOT / "src" / "bp").rglob("*.py")) + [ROOT / "packaging" / "Cedoli.py"]
 
 # Moduli della libreria standard e librerie note che parlano con la rete, o servono a farlo.
 NETWORK = {
@@ -38,7 +38,7 @@ ALLOWED = {
 
 URL = re.compile(r"\b(?:https?|wss?|ftp)://[^\s\"'<>]*", re.I)
 # Indirizzi ammessi nei testi del codice: il computer stesso e i link che l'utente apre da sé.
-ALLOWED_URLS = ("http://127.0.0.1", "https://github.com/FabioCuccaro/busta-chiara-segnalazioni", "https://ko-fi.com/", "http://www.w3.org/2000/svg")
+ALLOWED_URLS = ("http://127.0.0.1", "https://github.com/FabioCuccaro/cedoli-segnalazioni", "https://ko-fi.com/", "http://www.w3.org/2000/svg")
 
 
 def _imports(tree: ast.AST):
