@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Il browser stesso vieta a questa pagina di caricare qualsiasi cosa da altri siti. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; media-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <title>Cedolì: la busta paga spiegata, sul tuo computer</title>
 <meta name="description" content="App gratuita per Windows e Linux che spiega la busta paga, controlla che i conti tornino e tiene lo storico mese per mese. Funziona senza Internet: nessun dato esce dal PC.">
@@ -59,6 +59,20 @@
       <img class="light-only" src="img/app-mese.png" width="1100" height="1400" alt="Report di un mese in Cedolì: competenze, trattenute, netto e controlli">
       <img class="dark-only" src="img/app-mese-scuro.png" width="1100" height="1400" alt="Report di un mese in Cedolì, tema scuro" loading="lazy">
       <figcaption>Le immagini mostrano cedolini inventati.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="video" class="demo">
+  <div class="wrap">
+    <h2>In 30 secondi</h2>
+    <p class="intro">Trascini il PDF, leggi il mese spiegato, vedi se qualche numero non torna e ritrovi tutto nello storico. Il video non ha audio e usa cedolini inventati.</p>
+    <figure class="shot">
+      <video controls muted playsinline preload="none" poster="video/cedoli-demo.jpg" width="1280" height="720">
+        <source src="video/cedoli-demo.mp4" type="video/mp4">
+        <a href="video/cedoli-demo.mp4">Scarica il video dimostrativo</a>
+      </video>
+      <figcaption>Il video si scarica solo quando premi play (meno di 1 MB) e arriva da questo stesso sito.</figcaption>
     </figure>
   </div>
 </section>
@@ -126,6 +140,7 @@
         <p>Bastano cinque minuti: usala con il Wi-Fi spento, bloccala nel firewall di Windows, guarda le sue connessioni con Monitoraggio risorse. Funziona uguale.</p>
         <p>Il codice è pubblico e si può leggere, e ogni modifica passa da test automatici che falliscono se l'app prova a usare la rete.</p>
         <p><a class="btn secondary" href="verifica.html">Le prove passo passo</a></p>
+        <p class="small">Cosa è e cosa non è Cedolì, e perché quasi tutta la solita informativa privacy qui non si applica: <a href="legale.html">note legali</a>.</p>
       </div>
     </div>
   </div>
@@ -192,7 +207,7 @@ bp app</code></pre>
 
 <footer>
   <div class="wrap">
-    <div><strong>Cedolì</strong> · uso personale gratuito · il codice si può leggere per verificarlo, non riutilizzare (<a href="https://github.com/FabioCuccaro/cedoli/blob/main/LICENSE.md">licenza</a>).</div>
+    <div><strong>Cedolì</strong> · uso personale gratuito · il codice si può leggere per verificarlo, non riutilizzare (<a href="https://github.com/FabioCuccaro/cedoli/blob/main/LICENSE.md">licenza</a>) · <a href="legale.html">note legali e privacy</a></div>
     <div>Le spiegazioni sono indicative e possono sbagliare: non sono consulenza del lavoro né fiscale e fanno fede i numeri del cedolino. Per una verifica chiedi all'ufficio del personale, a un consulente del lavoro o a un CAF.</div>
     <div>Questo sito non usa cookie, tracker né statistiche e non carica nulla da altri siti. È ospitato su GitHub Pages, che come ogni server registra gli accessi (<a href="https://docs.github.com/it/site-policy/privacy-policies/github-general-privacy-statement">informativa di GitHub</a>). La scelta del tema resta solo nel tuo browser.</div>
   </div>
