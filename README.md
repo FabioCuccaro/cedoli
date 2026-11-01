@@ -6,7 +6,7 @@
 
 Gratuita per uso personale.
 
-**[Scarica l'ultima versione per Windows](https://github.com/FabioCuccaro/busta-chiara/releases/latest)**
+**[Scarica l'ultima versione per Windows](https://github.com/FabioCuccaro/busta-chiara/releases/latest)** · [sito di Busta chiara](https://fabiocuccaro.github.io/busta-chiara/)
 
 <a href='https://ko-fi.com/O3Z529TU5Z' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi5.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 

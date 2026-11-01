@@ -254,6 +254,14 @@ Lo sviluppo resta in questo repository privato. A ogni release il workflow `wind
 
 Le donazioni volontarie passano da Ko-fi, su [ko-fi.com/busta_chiara](https://ko-fi.com/busta_chiara): il pulsante *Offrimi un caffè*, in alto nell'app accanto a *Chiudi l'app*, viene da `KOFI` in `src/bp/contribute.py` (vuoto = link nascosto). Ha l'aspetto del pulsante ufficiale di Ko-fi ma è disegnato nella pagina (CSS e SVG), perché l'immagine originale verrebbe scaricata da Internet. È un normale link, si apre solo se lo clicchi.
 
+## Sito
+
+Il sito di Busta chiara è in [`docs/`](docs/): due pagine statiche, `index.html` (cosa fa, come funziona, privacy, download, formati supportati, sostieni) e `verifica.html` (le prove passo passo per controllare che nulla esca dal PC), più `sito.css`, `sito.js` (solo il selettore del tema), `icona.svg` e gli screenshot di `docs/img/`, gli stessi del README, fatti con cedolini sintetici. Per vederlo in locale basta aprire `docs/index.html` nel browser, oppure `python -m http.server -d docs`.
+
+Mantiene la stessa promessa dell'app: niente cookie, tracker, statistiche, font o script esterni. Ogni pagina ha una Content-Security-Policy che vieta al browser di caricare qualsiasi cosa da altri siti, e `tests/test_sito.py` fallisce se compare una risorsa esterna, uno stile o uno script in linea, un file locale mancante o un link verso un indirizzo non previsto (repository pubblici di Busta chiara, Ko-fi, email delle segnalazioni, documentazione di uv e di GitHub).
+
+**Pubblicazione.** `docs/` arriva nel repository pubblico [FabioCuccaro/busta-chiara](https://github.com/FabioCuccaro/busta-chiara) con il resto del sorgente, a ogni release, e GitHub Pages lo pubblica su <https://fabiocuccaro.github.io/busta-chiara/> (impostazione da attivare una volta nel repository pubblico: *Settings* → *Pages* → *Deploy from a branch* → `main`, cartella `/docs`). Prima di copiarlo, il workflow `windows` aggiorna in `docs/*.html` i segnaposto `<!--versione-->`, `<!--data-->` (dalla riga del `CHANGELOG.md`), `<!--dimensione-->` e `<!--sha256-->` dello zip appena costruito: il sito mostra sempre l'ultima versione con la sua impronta, senza modifiche a mano. I valori in questo repository sono quelli dell'ultima release al momento della modifica e servono solo per l'anteprima. Il pulsante di download punta a `releases/latest/download/BustaChiara-windows.zip`, che GitHub fa corrispondere all'ultima release.
+
 ## Versioni
 
 Il numero di versione è uno solo, `version` in `pyproject.toml`, e si vede in fondo all'app, nei report e con `bp --version` (anche `BustaChiara.exe --version`). Tra un rilascio e l'altro `main` ha una versione `.dev0` (per esempio `0.3.0.dev0`), così un eseguibile costruito da `main` non si confonde con quello rilasciato. Le novità di ogni versione sono in [`CHANGELOG.md`](CHANGELOG.md), in italiano semplice per chi usa l'app.
@@ -309,7 +317,8 @@ src/bp/
 └── cli.py            # comandi bp import / report / storico / app / inspect / verifica / anonimo / struttura
 tools/
 └── segnalazioni.py   # pagina locale delle segnalazioni ricevute (usa la rete, fuori dall'app)
-docs/img/             # screenshot del README (tema chiaro e scuro), fatti con cedolini sintetici
+docs/                 # sito pubblico (GitHub Pages): index.html, verifica.html, sito.css, sito.js
+└── img/              # screenshot del README e del sito (tema chiaro e scuro), fatti con cedolini sintetici
 packaging/
 ├── BustaChiara.py      # avvio dell'eseguibile: senza argomenti apre l'app
 ├── BustaChiara.spec    # configurazione PyInstaller
@@ -324,6 +333,7 @@ tests/
 ├── conftest.py       # controllo zero rete attivo in tutti i test
 ├── test_zero_rete.py # ogni funzione dell'app senza rete; pagine senza risorse esterne
 ├── test_import_rete.py # nessuna libreria di rete o telemetria nel codice dell'app
+├── test_sito.py      # il sito non carica nulla da fuori e i segnaposto della release sono validi
 └── test_*.py
 ```
 

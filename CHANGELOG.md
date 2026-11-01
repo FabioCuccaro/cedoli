@@ -2,6 +2,10 @@
 
 Le versioni seguono `MAGGIORE.MINORE.CORREZIONE`. Il numero in uso si vede in fondo all'app e con `bp --version`.
 
+## 0.8.0 (01/11/2026)
+
+- Busta chiara ha un sito, fabiocuccaro.github.io/busta-chiara: cosa fa, come funziona, download dell'ultima versione con la sua impronta SHA-256, formati supportati e le prove passo passo per verificare che nessun dato esca dal PC. Come l'app, non usa cookie né tracker e non carica nulla da altri siti.
+
 ## 0.7.1 (31/10/2026)
 
 - Il pulsante per una donazione volontaria ora ha l'aspetto di quello di Ko-fi: azzurro, con la tazza e il cuore, e dice *Offrimi un caffè*. Sta sempre in alto accanto a *Chiudi l'app* ed è disegnato dentro l'app, perché l'immagine originale di Ko-fi verrebbe scaricata da Internet.
