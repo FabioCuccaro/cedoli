@@ -2,6 +2,17 @@
 
 Le versioni seguono `MAGGIORE.MINORE.CORREZIONE`. Il numero in uso si vede in fondo all'app e con `bp --version`.
 
+## 0.12.0 (in preparazione)
+
+- Addizionali regionale e comunale: nel report la riga di dicembre mostra **imponibile** dell'anno e imposta **dovuta** (prima erano chiamati "rata" e "residuo"); nelle righe con la trattenuta il residuo è indicato come **residuo dopo questa rata**, e la spiegazione dice che il totale dell'anno è residuo più rata.
+
+## 0.11.0 (16/11/2026)
+
+- **PDF protetti da password**: se il cedolino è protetto, l'app chiede la password invece di rifiutarlo. La password serve solo ad aprire il file in quel momento e non viene salvata né scritta da nessuna parte; se carichi più cedolini insieme basta scriverla una volta. Nella cartella dell'archivio resta una copia del cedolino senza password, così ai prossimi avvii non va riscritta. Dalla riga di comando la password viene chiesta sul terminale, senza mostrarla.
+- Le segnalazioni dei formati nuovi si mandano a cedoli.segnalazioni@proton.me.
+- In fondo all'app, accanto al numero della versione, c'è il link **Cerca aggiornamenti**: apre nel browser la pagina di download di cedoli.it, dove vedi se c'è una versione più nuova. L'app continua a non collegarsi mai a Internet da sola, nemmeno per controllare gli aggiornamenti.
+- Il sito ha in cima a ogni pagina un avviso **In sviluppo**: Cedolì è ancora in prova e i numeri vanno confrontati con il cedolino.
+
 ## 0.10.0 (01/11/2026)
 
 - La pagina per le donazioni su Ko-fi è ora ko-fi.com/cedoli.

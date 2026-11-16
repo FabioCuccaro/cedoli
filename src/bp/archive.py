@@ -6,7 +6,7 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-from bp import history
+from bp import extract, history
 from bp.models import Payslip
 
 APP_DIR_NAME = "Cedoli"
@@ -44,6 +44,7 @@ class Added:
     message: str
     new: bool = False
     new_format: bool = False  # busta paga di un formato non ancora supportato: si può esportarne la struttura anonima
+    needs_password: bool = False  # PDF protetto: serve la password (o quella data non è giusta)
 
 
 class Archive:
@@ -63,7 +64,14 @@ class Archive:
 
         if sha not in self._cache and sha not in self._errors:
             try:
-                self._cache[sha] = import_file(self._path(sha))
+                p = import_file(self._path(sha))
+                # Il nome del file è l'impronta del PDF così come è stato caricato: per un PDF protetto
+                # il contenuto salvato (senza cifratura) ne ha un'altra, ma l'archivio usa sempre il nome.
+                self._cache[sha] = p if p.file_sha256 == sha else p.model_copy(update={"file_sha256": sha})
+            except extract.PasswordNeeded:
+                # Solo per un file protetto copiato a mano nella cartella: quelli caricati dall'app sono già aperti.
+                self._errors[sha] = ("il PDF è protetto da password: rimuovilo da qui e caricalo dalla pagina, "
+                                     "che ti chiede la password")
             except ValueError as e:
                 self._errors[sha] = str(e)
                 if getattr(e, "new_format", False):
@@ -72,15 +80,21 @@ class Archive:
                 self._errors[sha] = f"errore imprevisto nella lettura ({type(e).__name__})"
         return self._cache.get(sha)
 
-    def add(self, data: bytes) -> Added:
+    def add(self, data: bytes, password: str | None = None) -> Added:
+        """Aggiunge un cedolino. La password di un PDF protetto serve solo ad aprirlo in questo momento:
+        nell'archivio finisce il PDF senza cifratura, e la password non viene scritta da nessuna parte."""
         if not data.startswith(b"%PDF"):
             return Added(None, "non è un PDF: carica il file PDF del cedolino")
         sha = hashlib.sha256(data).hexdigest()
         path = self._path(sha)
         if path.exists() and (p := self._load(sha)):
             return Added(p, "già presente")
+        try:
+            plain = extract.unlock(data, password)
+        except extract.PasswordNeeded as e:
+            return Added(None, str(e), needs_password=True)
         tmp = path.with_suffix(".tmp")
-        tmp.write_bytes(data)
+        tmp.write_bytes(plain)
         tmp.replace(path)
         self._errors.pop(sha, None)
         p = self._load(sha)

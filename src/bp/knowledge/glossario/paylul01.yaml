@@ -267,8 +267,8 @@ addizionali:
   "001":
     nome: "Addizionale regionale IRPEF"
     tipo: addizionale
-    spiega: "Imposta regionale sul reddito dell'anno precedente, calcolata a conguaglio e trattenuta a rate nell'anno successivo. La colonna figurativa mostra il totale ancora da trattenere."
+    spiega: "Imposta regionale sul reddito dell'anno precedente, calcolata a conguaglio e trattenuta a rate nell'anno successivo. A dicembre la riga mostra il reddito dell'anno e l'imposta dovuta, senza trattenuta. Da gennaio mostra la rata del mese e il residuo che resta da trattenere dopo quella rata: il totale è residuo più rata, e può differire di poco dal dovuto di dicembre se nel frattempo il reddito dell'anno è stato ricalcolato."
   "002":
     nome: "Addizionale comunale IRPEF"
     tipo: addizionale
-    spiega: "Imposta comunale sul reddito. Per l'anno precedente si paga il saldo a rate; per l'anno in corso si paga un acconto a rate da marzo."
+    spiega: "Imposta comunale sul reddito. Per l'anno precedente si paga il saldo a rate, già al netto dell'acconto versato; per l'anno in corso si paga un acconto a rate da marzo. Nelle righe con la rata, il residuo è quanto resta da trattenere dopo la rata del mese."

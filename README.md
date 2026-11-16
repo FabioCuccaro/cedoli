@@ -43,6 +43,8 @@ Non serve fidarsi sulla parola: puoi usarla in modalità aereo, oppure bloccarla
 2. Fai doppio clic su `Cedoli.exe`. La prima volta Windows può mostrare "Windows ha protetto il PC": clicca *Ulteriori informazioni* e poi *Esegui comunque*. L'avviso compare perché il programma non è firmato da un editore registrato.
 3. Si apre il browser: trascina i PDF dei cedolini.
 
+**Aggiornare.** Cedolì non controlla da sola se esiste una versione nuova: dovrebbe collegarsi a Internet. In fondo all'app, accanto al numero della versione installata, c'è il link *Cerca aggiornamenti*: apre nel browser la [pagina di download](https://cedoli.it/scarica.html). Se lì il numero è più alto, scarica lo zip nuovo e sostituisci `Cedoli.exe`: i cedolini già caricati restano.
+
 **Linux e macOS** (serve [uv](https://docs.astral.sh/uv/))
 
 ```sh
@@ -54,7 +56,7 @@ bp app
 
 Oggi Cedolì legge i cedolini "Libro unico del lavoro" prodotti da Zucchetti (modelli PAYLUL01 e HR1LULDIP), con i contratti del terziario e dei metalmeccanici.
 
-Se la tua busta paga ha un altro formato, l'app te lo dice e ti mostra almeno competenze, trattenute e netto. Puoi aiutare ad aggiungerlo: l'app prepara una **struttura anonima** del PDF, senza importi né dati personali, che controlli e mandi tu, con una [segnalazione su GitHub](https://github.com/FabioCuccaro/cedoli-segnalazioni) oppure per email a bustachiara.segnalazioni@proton.me.
+Se la tua busta paga ha un altro formato, l'app te lo dice e ti mostra almeno competenze, trattenute e netto. Puoi aiutare ad aggiungerlo: l'app prepara una **struttura anonima** del PDF, senza importi né dati personali, che controlli e mandi tu, con una [segnalazione su GitHub](https://github.com/FabioCuccaro/cedoli-segnalazioni) oppure per email a cedoli.segnalazioni@proton.me.
 
 ## Limiti
 

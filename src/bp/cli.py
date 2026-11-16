@@ -1,6 +1,9 @@
 """Riga di comando `bp`."""
 
 import json
+import os
+import sys
+from collections.abc import Callable
 from pathlib import Path
 
 import typer
@@ -26,9 +29,56 @@ def main(
     pass
 
 
-def import_file(path: Path):
+# Per i PDF protetti quando non c'è un terminale a cui chiedere la password (per esempio in uno script).
+PASSWORD_ENV = "CEDOLI_PASSWORD"
+PASSWORD_ATTEMPTS = 3
+# Password che hanno già aperto un file in questo comando: di solito i cedolini hanno tutti la stessa.
+# Solo in memoria, per la durata del comando.
+_passwords: list[str] = []
+
+
+def _interactive() -> bool:
+    return sys.stdin.isatty()
+
+
+def with_password[T](read: Callable[[Path, str | None], T], path: Path) -> T:
+    """Chiama `read(path, password)`. Se il PDF è protetto prova la variabile CEDOLI_PASSWORD e le
+    password già usate in questo comando, poi la chiede sul terminale senza mostrarla.
+
+    La password non è un'opzione del comando: resterebbe nella cronologia della shell.
+    """
+    try:
+        return read(path, None)
+    except extract.PasswordNeeded:
+        pass
+    known = ([os.environ[PASSWORD_ENV]] if os.environ.get(PASSWORD_ENV) else []) + _passwords
+    for password in known:
+        try:
+            return read(path, password)
+        except extract.PasswordNeeded:
+            pass
+    if not _interactive():
+        raise extract.PasswordNeeded(
+            wrong=bool(known),
+            hint=f"lancia il comando da un terminale per scriverla, oppure mettila nella variabile {PASSWORD_ENV}")
+    for _ in range(PASSWORD_ATTEMPTS):
+        password = typer.prompt(f"Password di {path.name} (Invio per saltarlo)", default="", hide_input=True,
+                                show_default=False, err=True)
+        if not password:
+            break
+        try:
+            result = read(path, password)
+        except extract.PasswordNeeded:
+            typer.echo("  la password non apre questo PDF", err=True)
+            continue
+        _passwords.append(password)
+        return result
+    raise extract.PasswordNeeded(hint="saltato")
+
+
+def import_file(path: Path, password: str | None = None):
     """Legge un cedolino. Qualsiasi problema diventa un ReadError con un messaggio leggibile."""
-    doc = extract.load(path)
+    doc = extract.load(path, password)
     parser = find_parser(doc)
     try:
         payslip = parser.parse(doc)
@@ -53,7 +103,7 @@ def import_cmd(
     failed = False
     for path in pdf:
         try:
-            payslip = import_file(path)
+            payslip = with_password(import_file, path)
         except ValueError as e:  # layout non riconosciuto o non leggibile
             typer.echo(f"✗ {path.name}: {e}", err=True)
             failed = True
@@ -80,7 +130,7 @@ def report(
     from bp.report import render
 
     try:
-        payslip = import_file(pdf)
+        payslip = with_password(import_file, pdf)
     except ValueError as e:
         typer.echo(f"✗ {pdf.name}: {e}", err=True)
         raise typer.Exit(1)
@@ -102,7 +152,7 @@ def storico(
     payslips, failed = [], False
     for path in pdf:
         try:
-            payslip = import_file(path)
+            payslip = with_password(import_file, path)
         except ValueError as e:  # un file illeggibile non blocca lo storico
             typer.echo(f"✗ {path.name}: {e}", err=True)
             failed = True
@@ -144,7 +194,7 @@ def verifica(
     now: dict[str, dict] = {}
     for path in collect(pdf):
         try:
-            payslip = import_file(path)
+            payslip = with_password(import_file, path)
         except ValueError as e:
             typer.echo(f"✗ {path.name}: {e}", err=True)
             continue
@@ -177,7 +227,7 @@ def anonimo(
     from bp.anonymize import anonymize
 
     try:
-        dump = anonymize(extract.load(pdf))
+        dump = anonymize(with_password(extract.load, pdf))
     except ValueError as e:
         typer.echo(f"✗ {pdf.name}: {e}", err=True)
         raise typer.Exit(1)
@@ -222,7 +272,11 @@ def inspect(
 
     L'output contiene i dati del cedolino così come sono: tienilo in data/ e non condividerlo.
     """
-    doc = extract.load(pdf)
+    try:
+        doc = with_password(extract.load, pdf)
+    except ValueError as e:
+        typer.echo(f"✗ {pdf.name}: {e}", err=True)
+        raise typer.Exit(1)
     dump = {
         "metadata": doc.metadata,
         "pages": [

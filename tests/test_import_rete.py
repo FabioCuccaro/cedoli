@@ -38,7 +38,7 @@ ALLOWED = {
 
 URL = re.compile(r"\b(?:https?|wss?|ftp)://[^\s\"'<>]*", re.I)
 # Indirizzi ammessi nei testi del codice: il computer stesso e i link che l'utente apre da sé.
-ALLOWED_URLS = ("http://127.0.0.1", "https://github.com/FabioCuccaro/cedoli-segnalazioni", "https://ko-fi.com/", "http://www.w3.org/2000/svg")
+ALLOWED_URLS = ("http://127.0.0.1", "https://github.com/FabioCuccaro/cedoli-segnalazioni", "https://ko-fi.com/", "https://cedoli.it/scarica.html", "http://www.w3.org/2000/svg")
 
 
 def _imports(tree: ast.AST):
@@ -121,7 +121,8 @@ def test_server_listens_only_on_this_computer():
 def test_dependencies_contain_no_network_library():
     project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]
     names = [re.split(r"[\s<>=!~;\[]", d, maxsplit=1)[0].lower().replace("-", "_") for d in project["dependencies"]]
-    assert names == ["jinja2", "pdfplumber", "pydantic", "pyyaml", "typer"], (
+    # pypdfium2 (già usata da pdfplumber) apre i PDF protetti da password: legge e scrive solo in memoria.
+    assert names == ["jinja2", "pdfplumber", "pydantic", "pypdfium2", "pyyaml", "typer"], (
         "Dipendenze cambiate: controlla che la nuova non usi la rete, poi aggiorna questo elenco")
     assert not [n for n in names if _is_network(n)]
 

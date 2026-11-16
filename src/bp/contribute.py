@@ -12,9 +12,12 @@ from bp import __version__
 # Repository pubblico solo per le segnalazioni: il codice resta privato.
 REPO = "https://github.com/FabioCuccaro/cedoli-segnalazioni"
 # Indirizzo a cui mandare le strutture anonime. Vuoto: l'app propone solo la segnalazione su GitHub.
-EMAIL = "bustachiara.segnalazioni@proton.me"
+EMAIL = "cedoli.segnalazioni@proton.me"
 # Nome della pagina Ko-fi per le donazioni volontarie. Vuoto: l'app non mostra il link.
 KOFI = "cedoli"
+# Pagina di download sul sito. L'app non controlla da sé se c'è una versione nuova: sarebbe una connessione
+# verso Internet. Offre solo questo link, che l'utente apre nel browser per confrontare il numero di versione.
+UPDATES = "https://cedoli.it/scarica.html"
 
 SUBJECT = "Cedolì: nuovo formato di busta paga"
 TEXT = (

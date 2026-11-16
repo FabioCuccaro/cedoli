@@ -47,7 +47,7 @@ L'app è fornita "così com'è", senza garanzie di alcun tipo. Le spiegazioni so
 
 Questa licenza è regolata dalla legge italiana. Restano salvi i diritti che la legge riconosce in modo inderogabile a chi usa il software (per esempio quelli dell'art. 64-ter della legge 633/1941).
 
-Per permessi diversi da questi scrivi a bustachiara.segnalazioni@proton.me.
+Per permessi diversi da questi scrivi a cedoli.segnalazioni@proton.me.
 
 ---
 

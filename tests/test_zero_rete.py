@@ -5,7 +5,8 @@ Due livelli:
   tutti i test; qui sotto ogni funzione dell'app viene usata almeno una volta sotto quel controllo;
 - nelle pagine generate (report, storico, app) nessun elemento può far caricare al browser qualcosa
   da Internet: niente script, stili, immagini, font o richieste verso indirizzi esterni. Restano
-  ammessi i link ``<a>`` che l'utente clicca da sé (segnalazione su GitHub, email).
+  ammessi i link ``<a>`` che l'utente clicca da sé (segnalazione su GitHub, email, donazione, pagina di
+  download per cercare aggiornamenti).
 """
 
 import json
@@ -246,9 +247,10 @@ def external_problems(html: str) -> tuple[list[str], list[str]]:
 
 
 def _allowed_link(href: str) -> bool:
-    """Link che il browser apre solo se l'utente ci clicca: pagine dell'app, segnalazione o donazione volontaria."""
+    """Link che il browser apre solo se l'utente ci clicca: pagine dell'app, segnalazione, donazione volontaria
+    o pagina di download per cercare aggiornamenti."""
     return (_local_ref(href) or href.startswith(contribute.REPO + "/") or href.startswith(f"mailto:{contribute.EMAIL}")
-            or href.startswith("https://ko-fi.com/"))
+            or href.startswith("https://ko-fi.com/") or href == contribute.UPDATES)
 
 
 def test_checker_catches_external_resources():
@@ -288,3 +290,12 @@ def test_new_format_links_open_only_on_click():
     links = contribute.links()
     assert links["issue"].startswith(contribute.REPO + "/issues/new?")
     assert links.get("email", "mailto:").startswith("mailto:")
+
+
+def test_updates_are_only_a_link_to_click():
+    """Cerca aggiornamenti è un normale link al sito, senza parametri: l'app non chiede nulla a Internet e
+    nemmeno il click dice al sito quale versione è installata."""
+    assert contribute.UPDATES == "https://cedoli.it/scarica.html"
+    assert "?" not in contribute.UPDATES and "#" not in contribute.UPDATES
+    src = (Path(contribute.__file__).parent / "report" / "templates" / "app.html").read_text(encoding="utf-8")
+    assert "cedoli.it" not in src.split("<script>", 1)[1]  # nessuno script lo contatta

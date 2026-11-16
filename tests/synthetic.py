@@ -210,8 +210,9 @@ def _index(group: str, name: str) -> int:
     return _KEYS[group].index(name)
 
 
-def build(spec: Spec, path: Path) -> Path:
-    c = Canvas(str(path), pagesize=(W, H))
+def build(spec: Spec, path: Path, encrypt=None) -> Path:
+    """`encrypt`: un `StandardEncryption` di reportlab, per provare i PDF protetti da password."""
+    c = Canvas(str(path), pagesize=(W, H), encrypt=encrypt)
     if spec.metadata:
         c.setKeywords(
             f"ANNO={spec.year};QTMONTH={spec.month:02d};DSMTSAL={spec.kind};COFISCD={FAKE_CF};"

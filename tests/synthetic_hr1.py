@@ -146,8 +146,9 @@ def _boxes(p: _Page, spec: Spec) -> None:
     p.text(791, 445, FAKE_IBAN)
 
 
-def build(spec: Spec, path: Path) -> Path:
-    c = Canvas(str(path), pagesize=(W, H))
+def build(spec: Spec, path: Path, encrypt=None) -> Path:
+    """`encrypt`: un `StandardEncryption` di reportlab, per provare i PDF protetti da password."""
+    c = Canvas(str(path), pagesize=(W, H), encrypt=encrypt)
     c.setKeywords(
         f"HRZ_MODEL=HR1LULDIP;IDCOMPANY=000099;DENAZI=AZIENDA DI ESEMPIO SPA;ANNO={spec.year};"
         f"MESE={spec.month:02d};TIPCED={spec.tipced};DTIPCED={spec.dtipced};CONODIP={FAKE_NAME};"

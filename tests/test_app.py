@@ -1,8 +1,10 @@
 import json
+import re
 import socket
 import threading
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 
 import pytest
@@ -55,6 +57,79 @@ def test_upload_report_history_and_remove(server, tmp_path):
 
     assert call(f"{base}/elimina/{sha}", b"")[0] == 200
     assert "Marzo 2026" not in call(base + "/")[1]
+    assert not list((tmp_path / "archivio" / "cedolini").iterdir())
+
+
+def test_password_protected_pdf_is_opened_and_the_password_is_not_kept(server, tmp_path, capfd):
+    from reportlab.lib.pdfencrypt import StandardEncryption
+
+    _, base = server
+    password = "Segrèta-9f3€"
+    quoted = urllib.parse.quote(password)
+    pdf = synthetic.build(synthetic.normal_month(), tmp_path / "p.pdf", encrypt=StandardEncryption(password)).read_bytes()
+    folder = tmp_path / "archivio"
+
+    # Senza password, o con quella sbagliata, l'app la chiede e non tiene nulla.
+    r = json.loads(call(base + "/carica", pdf)[1])
+    assert not r["ok"] and r["needs_password"] and r["message"] == "il PDF è protetto da password"
+    r = json.loads(call(base + "/carica", pdf, {"X-BP-Password": "sbagliata"})[1])
+    assert not r["ok"] and r["needs_password"] and "non apre" in r["message"]
+    assert not list((folder / "cedolini").iterdir())
+
+    status, body = call(base + "/carica", pdf, {"X-BP-Password": quoted})
+    r = json.loads(body)
+    assert status == 200 and r["ok"] and r["new"] and r["label"] == "Marzo 2026" and not r["needs_password"]
+    # Lo stesso file protetto, una seconda volta: riconosciuto anche senza riscrivere la password.
+    assert json.loads(call(base + "/carica", pdf)[1])["message"] == "già presente"
+
+    home = call(base + "/")[1]
+    sha = home.split('href="/mese/')[1].split('"')[0]
+    month, hist = call(f"{base}/mese/{sha}")[1], call(base + "/storico")[1]
+    assert "Cedolino Marzo 2026" in month and "Storico cedolini" in hist
+
+    # Nell'archivio c'è il PDF senza cifratura, e la password non è da nessuna parte: né nei file
+    # (in nessuna codifica), né nelle risposte, né in quello che l'app stampa.
+    files = [f for f in folder.rglob("*") if f.is_file()]
+    assert [f.name for f in files] == [f"{sha}.pdf"] and b"/Encrypt" not in files[0].read_bytes()
+    forms = [password.encode(), password.encode("utf-16-le"), password.encode("latin-1", "replace"), quoted.encode()]
+    for f in files:
+        assert not any(form in f.read_bytes() for form in forms)
+    out = capfd.readouterr()
+    for text in (body, home, month, hist, out.out, out.err):
+        assert password not in text and quoted not in text
+
+    # Dopo un riavvio l'archivio si rilegge da solo, senza password.
+    again = Archive(folder)
+    assert [p.file_sha256 for p in again.all()] == [sha] and not again.unreadable()
+
+
+def test_protected_pdf_copied_by_hand_is_listed_as_unreadable(server, tmp_path):
+    from reportlab.lib.pdfencrypt import StandardEncryption
+
+    _, base = server
+    pdf = synthetic.build(synthetic.normal_month(), tmp_path / "p.pdf", encrypt=StandardEncryption("segreta"))
+    (tmp_path / "archivio" / "cedolini" / ("1" * 64 + ".pdf")).write_bytes(pdf.read_bytes())
+    home = call(base + "/")[1]
+    assert "File che non si riescono a leggere" in home and "caricalo dalla pagina" in home
+
+
+def test_anonymous_structure_of_a_protected_pdf(server, tmp_path):
+    from reportlab.lib.pdfencrypt import StandardEncryption
+    from reportlab.pdfgen.canvas import Canvas
+
+    _, base = server
+    pdf = tmp_path / "altro.pdf"
+    c = Canvas(str(pdf), encrypt=StandardEncryption("segreta"))
+    for i, text in enumerate(["CEDOLINO PAGA ROSSI MARIO", "TOTALE COMPETENZE 2.000,00", "TOTALE TRATTENUTE 500,00",
+                              "NETTO IN BUSTA 1.500,00"]):
+        c.drawString(72, 700 - 20 * i, text)
+    c.save()
+    data = pdf.read_bytes()
+    r = json.loads(call(base + "/carica", data, {"X-BP-Password": "segreta"})[1])
+    assert not r["ok"] and r["new_format"] and not r["needs_password"]
+    assert call(base + "/anonimo", data)[0] == 422
+    status, body = call(base + "/anonimo", data, {"X-BP-Password": "segreta"})
+    assert status == 200 and "NETTO IN BUSTA 9.999,99" in body and "segreta" not in body
     assert not list((tmp_path / "archivio" / "cedolini").iterdir())
 
 
@@ -192,6 +267,17 @@ def test_version_is_shown(server):
     _, base = server
     assert __version__ != "sviluppo"
     assert f"Cedolì {__version__}" in call(base + "/")[1]
+
+
+def test_check_for_updates_opens_the_download_page(server):
+    """Accanto alla versione c'è il link per cercare aggiornamenti: si apre nel browser, l'app non si collega."""
+    from bp import __version__
+
+    _, base = server
+    html = call(base + "/")[1]
+    link = re.search(r'<a class="updates" href="([^"]+)" target="_blank" rel="noopener noreferrer"[^>]*>Cerca aggiornamenti</a>', html)
+    assert link and link[1] == "https://cedoli.it/scarica.html"
+    assert html.index(f"Cedolì {__version__}") < link.start()
 
 
 def test_new_format_offers_anonymous_structure(server, tmp_path):

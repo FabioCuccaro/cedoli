@@ -116,3 +116,17 @@ def test_disclaimer_on_every_page(tmp_path):
     p = import_file(synthetic.build(synthetic.normal_month(), tmp_path / "c.pdf"))
     for html in (render(p), render_history([p]), render_archive([p], str(tmp_path))):
         assert "Non è consulenza del lavoro né fiscale" in html
+
+
+def test_surtax_rows_say_what_the_numbers_are(tmp_path):
+    # Con la trattenuta: rata del mese e residuo che resta dopo quella rata (il totale è residuo + rata).
+    html = render(import_file(synthetic.build(synthetic.normal_month(), tmp_path / "rata.pdf")))
+    assert "rata 40,00, anno 2025, residuo dopo questa rata 320,00" in html
+
+    # Senza trattenuta (conguaglio di dicembre): reddito dell'anno e imposta dovuta, non una rata.
+    s = synthetic.december_with_conguaglio()
+    s.addizionali = [{"code": "001", "desc": "Addizionale regionale", "year": 2026, "base": "36.000,00",
+                      "fig": "600,00", "note": "REGIONE DI ESEMPIO"}]
+    html = render(import_file(synthetic.build(s, tmp_path / "dovuto.pdf")))
+    assert "imponibile 36.000,00, anno 2026, dovuto 600,00" in html
+    assert "rata 36.000,00" not in html and "residuo dopo questa rata" not in html

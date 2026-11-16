@@ -13,12 +13,19 @@ AVVIO
 Per chiudere il programma usa il tasto "Chiudi l'app" in alto nella pagina,
 oppure chiudi la finestra nera.
 Per riaprirlo fai di nuovo doppio clic su Cedoli.exe: i cedolini già caricati restano.
-La versione in uso è scritta in fondo alla pagina (per esempio "Cedolì 0.3.0"):
-quando ricevi uno zip nuovo, sostituisci Cedoli.exe e i cedolini restano.
+La versione in uso è scritta in fondo alla pagina (per esempio "Cedolì 0.3.0").
+Il programma non controlla da solo se ce n'è una nuova, perché dovrebbe collegarsi
+a Internet: il link "Cerca aggiornamenti", accanto alla versione, apre nel browser
+la pagina cedoli.it/scarica.html. Se lì il numero è più alto, scarica lo zip
+nuovo e sostituisci Cedoli.exe: i cedolini restano.
 
 OGNI MESE
 Quando arriva il cedolino nuovo, apri il programma e trascina il PDF: elenco e
 storico si aggiornano da soli. L'ordine non conta e i doppioni vengono ignorati.
+Se il PDF è protetto da password, la pagina la chiede: scrivila e premi "Apri".
+Il programma la usa solo per aprire il file in quel momento e non la salva da
+nessuna parte. Nella cartella del programma (vedi PRIVACY) resta una copia del
+cedolino senza password, così le volte successive non serve riscriverla.
 Il pulsante "Scarica storico" salva un file da aprire anche senza il programma
 (per esempio da un altro computer o dal telefono): va scaricato di nuovo dopo
 ogni cedolino nuovo.
@@ -44,8 +51,8 @@ Non serve fidarsi sulla parola. Basta una di queste prove:
 - Nel browser: premi F12, scheda "Rete", ricarica la pagina. Ogni richiesta
   va a 127.0.0.1.
 Solo "Apri su GitHub" e "Invia per email", nella pagina di un formato non
-supportato, e "Offrimi un caffè", in alto nella pagina (Ko-fi), portano
-fuori: sono normali link, si aprono solo se li clicchi tu e non contengono nulla
+supportato, "Offrimi un caffè", in alto nella pagina (Ko-fi), e "Cerca
+aggiornamenti", in fondo (cedoli.it), portano fuori: sono normali link, si aprono solo se li clicchi tu e non contengono nulla
 del cedolino.
 
 LIMITI

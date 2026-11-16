@@ -1,10 +1,13 @@
 """Estrazione di parole con coordinate e metadati da un PDF, senza interpretarle."""
 
 import hashlib
+import io
 from dataclasses import dataclass
 from pathlib import Path
 
 import pdfplumber
+import pypdfium2 as pdfium
+import pypdfium2.raw as pdfium_raw
 from pdfminer.pdfdocument import PDFEncryptionError, PDFPasswordIncorrect
 from pdfplumber.utils.exceptions import PdfminerException
 
@@ -25,6 +28,46 @@ class ReadError(ValueError):
     def __init__(self, message: str, new_format: bool = False):
         super().__init__(message)
         self.new_format = new_format
+
+
+class PasswordNeeded(ReadError):
+    """Il PDF è cifrato e senza la password giusta non si apre.
+
+    `wrong`: una password è stata provata e non è quella giusta. La password non entra mai nel
+    messaggio né nell'eccezione: chi la intercetta non può scriverla da nessuna parte.
+    """
+
+    def __init__(self, wrong: bool = False, hint: str = ""):
+        message = "la password non apre questo PDF: controllala e riprova" if wrong else "il PDF è protetto da password"
+        super().__init__(message + (f": {hint}" if hint else ""))
+        self.wrong = wrong
+
+
+def unlock(data: bytes, password: str | None = None) -> bytes:
+    """Il PDF senza la cifratura, in memoria. Un PDF non protetto torna com'è.
+
+    La password serve solo qui, per aprire il file: non viene salvata, scritta in un file o in un
+    messaggio. Un PDF che pdfium non riesce ad aprire per altri motivi torna com'è: sarà la lettura
+    a dire che cosa non va.
+    """
+    try:
+        pdfium.PdfDocument(data).close()
+        return data  # non cifrato, o cifrato solo per limitare stampa e copia: si legge senza password
+    except pdfium.PdfiumError as e:
+        if e.err_code != pdfium_raw.FPDF_ERR_PASSWORD:
+            return data
+    if not password:
+        raise PasswordNeeded()
+    try:
+        pdf = pdfium.PdfDocument(data, password=password)
+    except pdfium.PdfiumError:
+        raise PasswordNeeded(wrong=True) from None
+    try:
+        out = io.BytesIO()
+        pdf.save(out, flags=pdfium_raw.FPDF_REMOVE_SECURITY)
+        return out.getvalue()
+    finally:
+        pdf.close()
 
 
 @dataclass(frozen=True)
@@ -88,11 +131,13 @@ def parse_keywords(raw: str) -> dict[str, str]:
     return out
 
 
-def load(path: str | Path) -> Document:
+def load(path: str | Path, password: str | None = None) -> Document:
+    """Legge il PDF. `password` serve solo per i PDF protetti e non viene conservata."""
     path = Path(path)
     data = path.read_bytes()
+    plain = unlock(data, password)
     try:
-        with pdfplumber.open(path) as pdf:
+        with pdfplumber.open(io.BytesIO(plain)) as pdf:
             meta = {k: str(v) for k, v in (pdf.metadata or {}).items()}
             pages = []
             for n, page in enumerate(pdf.pages):
@@ -103,7 +148,8 @@ def load(path: str | Path) -> Document:
                 pages.append(group_rows(words))
     except PdfminerException as e:
         if e.args and isinstance(e.args[0], (PDFPasswordIncorrect, PDFEncryptionError)):
-            raise ReadError("il PDF è protetto da password: aprilo, salvalo senza password e caricalo di nuovo") from e
+            raise ReadError("il PDF è protetto in un modo che Cedolì non sa aprire: aprilo con un lettore PDF, "
+                            "salvalo senza protezione e caricalo di nuovo") from e
         raise ReadError("il PDF è rovinato o incompleto: prova a scaricarlo di nuovo") from e
     except Exception as e:  # pdfminer non solleva solo le sue eccezioni su file malformati
         raise ReadError("il PDF è rovinato o incompleto: prova a scaricarlo di nuovo") from e

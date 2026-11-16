@@ -16,7 +16,7 @@ CSP = "default-src 'none'; img-src 'self'; media-src 'self'; style-src 'self'; s
 ALLOWED = re.compile(
     r"https://github\.com/FabioCuccaro/cedoli(-segnalazioni)?(/|$)"
     r"|https://ko-fi\.com/cedoli$"
-    r"|mailto:bustachiara\.segnalazioni@proton\.me$"
+    r"|mailto:cedoli\.segnalazioni@proton\.me$"
     r"|https://docs\.astral\.sh/uv/"
     r"|https://docs\.github\.com/"
     r"|https://www\.garanteprivacy\.it/$"
@@ -110,3 +110,16 @@ def test_every_page_offers_a_coffee_without_external_images(page):
     footer = re.search(r"<footer>.*?</footer>", page.read_text(encoding="utf-8"), re.S)[0]
     assert 'class="btn-cafe" href="https://ko-fi.com/cedoli"' in footer
     assert "<img" not in footer
+
+
+def test_every_page_says_the_app_is_in_development():
+    """Finché Cedolì non è pronto all'uso, ogni pagina lo dice subito sotto il menu, con lo stesso avviso."""
+    banners = set()
+    for page in PAGES:
+        html = page.read_text(encoding="utf-8")
+        m = re.search(r'</header>\s*(<div class="dev-banner" role="note">.*?</div>\s*</div>)', html, re.S)
+        assert m, page.name
+        assert "non è ancora rilasciato né pronto all'uso" in m[1]
+        banners.add(m[1])
+    assert len(banners) == 1
+    assert "versione di prova" in (DOCS / "scarica.html").read_text(encoding="utf-8")

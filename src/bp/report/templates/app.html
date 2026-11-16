@@ -24,6 +24,13 @@ button.quit:hover { border-color: var(--neg); color: var(--neg); }
 a.support { display: inline-flex; align-items: center; gap: 8px; background: #72a4f2; color: #fff; border-radius: 12px; padding: 0 14px 0 10px; height: 36px; font-size: 15px; font-weight: 700; text-decoration: none; white-space: nowrap; }
 a.support:hover { filter: brightness(1.06); }
 a.support svg { flex: 0 0 auto; }
+footer a.updates { color: var(--accent); }
+/* Campo di testo con i caratteri coperti, non un campo "password": così il browser non propone di salvarla. */
+input.pw { font: inherit; padding: 4px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: inherit; width: 14em; max-width: 100%; -webkit-text-security: disc; }
+input.pw.shown { -webkit-text-security: none; }
+button.btn { border: 0; cursor: pointer; font: inherit; font-weight: 600; padding: 6px 14px; }
+button.btn:disabled { opacity: .6; }
+#log li.locked .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 6px 0 2px; }
 .ok { color: var(--pos); } .bad { color: var(--neg); } .warn { color: var(--warn); }
 </style>
 </head>
@@ -86,7 +93,7 @@ a.support svg { flex: 0 0 auto; }
   {% endif %}
 
   <footer>
-    Cedolì {{ version }} · Archivio: <code>{{ data_dir }}</code><br>
+    Cedolì {{ version }} · <a class="updates" href="{{ updates }}" target="_blank" rel="noopener noreferrer" title="Apre nel browser la pagina di download di cedoli.it: se lì il numero è più alto di {{ version }}, scarica lo zip nuovo e sostituisci Cedoli.exe (i cedolini restano). L'app non si collega mai a Internet da sola, nemmeno per controllare.">Cerca aggiornamenti</a> · Archivio: <code>{{ data_dir }}</code><br>
     Strumento informativo gratuito per uso personale: le spiegazioni sono indicative e possono sbagliare. Non è consulenza del lavoro né fiscale: per una verifica chiedi all'ufficio del personale, a un consulente del lavoro o a un CAF.
   </footer>
 </main>
@@ -104,7 +111,7 @@ a.support svg { flex: 0 0 auto; }
 
   // Per una busta paga di un formato non ancora supportato: salva solo la struttura, senza dati personali.
   // L'app non invia nulla: dopo il salvataggio mostra cosa contiene il file e i link per mandarlo a mano.
-  function offerAnonymous(li, f, send) {
+  function offerAnonymous(li, f, send, password) {
     var b = document.createElement("button");
     b.className = "del anon";
     b.textContent = "Salva struttura anonima";
@@ -114,7 +121,7 @@ a.support svg { flex: 0 0 auto; }
     help.textContent = "Per aiutare a supportare questo formato puoi salvarne la struttura anonima, controllarla e mandarla tu a chi mantiene l'app.";
     b.addEventListener("click", async function () {
       try {
-        var res = await fetch("/anonimo", { method: "POST", headers: { "X-BP": "1" }, body: f });
+        var res = await fetch("/anonimo", { method: "POST", headers: headers(password), body: f });
         if (!res.ok) { b.textContent = "Non riuscito"; return; }
         var text = await res.text();
         var a = document.createElement("a");
@@ -158,23 +165,111 @@ a.support svg { flex: 0 0 auto; }
     box.append(d, p);
   }
 
+  // PDF protetti da password. La password vive solo in questa pagina, finché resta aperta: viaggia fino
+  // all'app su questo computer in un'intestazione della richiesta e non finisce in nessun file.
+  var changed = false, uploading = 0, locked = [], lastPassword = null;
+
+  function headers(password) {
+    var h = { "X-BP": "1" };
+    if (password) h["X-BP-Password"] = encodeURIComponent(password);
+    return h;
+  }
+
+  async function send(f, password) {
+    var res = await fetch("/carica", { method: "POST", headers: headers(password), body: f });
+    return res.json();
+  }
+
+  function show(li, f, r, password) {
+    li.className = r.ok ? "ok" : "bad";
+    li.textContent = (r.ok ? "✅ " : "❌ ") + f.name + ": " + (r.label ? r.label + ", " : "") + r.message;
+    if (r.new_format) offerAnonymous(li, f, r.send, password);
+    changed = changed || r.new;
+  }
+
+  // Ricarica l'elenco solo quando non c'è più nulla in corso, nemmeno una password da scrivere.
+  function settle() {
+    if (!changed || uploading || locked.length) return;
+    changed = false;
+    note("Aggiorno l'elenco…");
+    setTimeout(function () { location.reload(); }, 800);
+  }
+
+  function askPassword(li, f) {
+    li.className = "locked";
+    li.textContent = "🔒 " + f.name + ": è protetto da password. Scrivila per aprirlo.";
+    var row = document.createElement("div"), input = document.createElement("input");
+    var open = document.createElement("button"), see = document.createElement("button"), skip = document.createElement("button");
+    var help = document.createElement("div");
+    row.className = "row";
+    input.type = "text";
+    input.className = "pw";
+    input.autocomplete = "off";
+    input.spellcheck = false;
+    input.setAttribute("autocapitalize", "off");
+    input.setAttribute("aria-label", "Password di " + f.name);
+    input.placeholder = "Password del PDF";
+    open.className = "btn"; open.textContent = "Apri";
+    see.className = "del"; see.textContent = "Mostra";
+    skip.className = "del"; skip.textContent = "Salta";
+    help.className = "sub";
+    help.textContent = "Serve solo ad aprire il file adesso: Cedolì non la salva e non la scrive da nessuna parte. " +
+      "Nella cartella dell'archivio resta una copia del cedolino senza password, come gli altri.";
+    var entry = { attempt: async function (password, quiet) {
+      var r;
+      try { r = await send(f, password); } catch (e) { if (!quiet) help.textContent = "Il programma non risponde, è ancora aperto?"; return false; }
+      if (r.needs_password) {
+        if (!quiet) { help.textContent = "La password non apre questo PDF: controllala e riprova."; help.className = "sub bad"; input.select(); }
+        return false;
+      }
+      locked.splice(locked.indexOf(entry), 1);
+      show(li, f, r, password);
+      return true;
+    } };
+    async function submit() {
+      var password = input.value;
+      if (!password) { input.focus(); return; }
+      open.disabled = true;
+      if (await entry.attempt(password)) {
+        // Di solito i cedolini hanno tutti la stessa password: la proviamo sugli altri in attesa.
+        lastPassword = password;
+        var others = locked.slice();
+        for (var i = 0; i < others.length; i++) await others[i].attempt(password, true);
+        settle();
+      }
+      open.disabled = false;
+    }
+    open.addEventListener("click", submit);
+    input.addEventListener("keydown", function (e) { if (e.key === "Enter") submit(); });
+    see.addEventListener("click", function () { see.textContent = input.classList.toggle("shown") ? "Nascondi" : "Mostra"; });
+    skip.addEventListener("click", function () {
+      locked.splice(locked.indexOf(entry), 1);
+      li.className = "bad";
+      li.textContent = "❌ " + f.name + ": saltato, è protetto da password";
+      settle();
+    });
+    row.append(input, open, see, skip);
+    li.append(row, help);
+    locked.push(entry);
+    if (locked.length === 1) input.focus();
+  }
+
   async function upload(files) {
     var pdfs = Array.prototype.filter.call(files, function (f) { return /\.pdf$/i.test(f.name) || f.type === "application/pdf"; });
     if (!pdfs.length) { note("Nessun PDF tra i file scelti.", "bad"); return; }
-    var changed = false;
+    uploading++;
     for (var i = 0; i < pdfs.length; i++) {
       var f = pdfs[i];
       try {
-        var res = await fetch("/carica", { method: "POST", headers: { "X-BP": "1" }, body: f });
-        var r = await res.json();
-        var li = note((r.ok ? "✅ " : "❌ ") + f.name + ": " + (r.label ? r.label + ", " : "") + r.message, r.ok ? "ok" : "bad");
-        if (r.new_format) offerAnonymous(li, f, r.send);
-        changed = changed || r.new;
+        var password = lastPassword, r = await send(f, password);
+        var li = note("");
+        if (r.needs_password) askPassword(li, f); else show(li, f, r, password);
       } catch (e) {
         note("❌ " + f.name + ": il programma non risponde, è ancora aperto?", "bad");
       }
     }
-    if (changed) { note("Aggiorno l'elenco…"); setTimeout(function () { location.reload(); }, 800); }
+    uploading--;
+    settle();
   }
 
   input.addEventListener("change", function () { upload(input.files); input.value = ""; });
@@ -199,7 +294,7 @@ a.support svg { flex: 0 0 auto; }
   });
 
   document.addEventListener("click", async function (e) {
-    var b = e.target.closest && e.target.closest("button.del");
+    var b = e.target.closest && e.target.closest("button.del[data-sha]");
     if (!b) return;
     if (!b.classList.contains("confirm")) { b.classList.add("confirm"); b.textContent = "Conferma"; return; }
     await fetch("/elimina/" + b.dataset.sha, { method: "POST", headers: { "X-BP": "1" } });

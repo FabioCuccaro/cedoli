@@ -10,6 +10,7 @@ import sys
 import tempfile
 import threading
 import time
+import urllib.parse
 import urllib.request
 import webbrowser
 from http import HTTPStatus
@@ -67,6 +68,11 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(data)
 
+    def _password(self) -> str | None:
+        """La password di un PDF protetto, scritta dall'utente nella pagina: arriva in un'intestazione
+        (codificata, perché può contenere lettere accentate), si usa per aprire quel file e si dimentica."""
+        return urllib.parse.unquote(self.headers.get("X-BP-Password") or "") or None
+
     def _json(self, status: HTTPStatus, **data) -> None:
         self._send(status, json.dumps(data, ensure_ascii=False), "application/json; charset=utf-8")
 
@@ -120,10 +126,11 @@ class Handler(BaseHTTPRequestHandler):
                                   message="file troppo grande (oltre 20 MB): un cedolino di solito è meno di 1 MB")
             data = self.rfile.read(length)
             with self.lock:
-                added = self.archive.add(data)
+                added = self.archive.add(data, self._password())
             p = added.payslip
             return self._json(HTTPStatus.OK, ok=p is not None, new=added.new, message=added.message,
                               label=month_label(p) if p else None, new_format=added.new_format,
+                              needs_password=added.needs_password,
                               send=contribute.links() if added.new_format else None)
         if self.path == "/anonimo":
             # La struttura anonima di un PDF che non si sa leggere: il file non viene salvato da nessuna parte.
@@ -134,7 +141,8 @@ class Handler(BaseHTTPRequestHandler):
                 path = Path(tmp) / "cedolino.pdf"
                 path.write_bytes(data)
                 try:
-                    dump = anonymize(extract.load(path))
+                    with self.lock:
+                        dump = anonymize(extract.load(path, self._password()))
                 except ValueError as e:
                     return self._json(HTTPStatus.UNPROCESSABLE_ENTITY, ok=False, message=str(e))
             return self._send(HTTPStatus.OK, json.dumps(dump, ensure_ascii=False, indent=1),

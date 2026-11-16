@@ -128,15 +128,18 @@ def _row(line: Line, g) -> dict:
         details.append(f"quantità {number(line.qty)}")
     if line.unit_amount is not None:
         details.append(f"unitario {number(line.unit_amount)}")
+    # Addizionali: la riga con la trattenuta ha rata e residuo; quella senza (conguaglio di
+    # dicembre, calcolo dell'acconto) ha l'imponibile annuo e l'imposta dovuta.
+    instalment = line.section == Section.ADDIZIONALI and line.deduction is not None
     if line.base is not None:
-        details.append(f"{'rata' if line.section == Section.ADDIZIONALI else 'imponibile'} {euro(line.base)}")
+        details.append(f"{'rata' if instalment else 'imponibile'} {euro(line.base)}")
     if line.rate is not None:
         details.append(f"aliquota {number(line.rate)}%")
     if line.year is not None:
         details.append(f"anno {line.year}")
     if line.section == Section.ADDIZIONALI and line.figurative is not None:
         amount, kind = line.deduction, "trattenuta"
-        details.append(f"residuo {euro(line.figurative)}")
+        details.append(f"{'residuo dopo questa rata' if instalment else 'dovuto'} {euro(line.figurative)}")
     return {
         "code": line.code, "printed": line.description, "note": line.note, "name": e.nome,
         "explain": e.spiega, "known": g.known(line), "kind": kind, "amount": amount,
@@ -391,4 +394,5 @@ def render_archive(payslips: list[Payslip], data_dir: str, unreadable: dict[str,
             "anomalies": sum(c.status == CheckStatus.ANOMALOUS for c in p.coherence),
         })
     return _env.get_template("app.html").render(rows=rows, data_dir=data_dir, unreadable=unreadable or {},
-                                                donate=contribute.donate_url())
+                                                donate=contribute.donate_url(),
+                                                updates=contribute.UPDATES)
